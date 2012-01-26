@@ -1480,6 +1480,12 @@ bigargtest(void)
   wait();
 }
 
+void
+gettickstest(void)
+{
+  printf(stdout, "Current Ticks%d\n", getticks());
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -1495,6 +1501,9 @@ main(int argc, char *argv[])
   bsstest();
   sbrktest();
   validatetest();
+
+//My tests
+  gettickstest();
 
   opentest();
   writetest();
