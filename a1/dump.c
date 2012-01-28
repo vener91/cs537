@@ -22,43 +22,43 @@ main(int argc, char *argv[])
 
     // input params
     int c;
-    opterr = 0;
-    while ((c = getopt(argc, argv, "i:")) != -1) {
-	switch (c) {
-	case 'i':
-	    inFile = strdup(optarg);
-	    break;
-	default:
-	    usage(argv[0]);
+	opterr = 0;
+	while ((c = getopt(argc, argv, "i:")) != -1) {
+		switch (c) {
+			case 'i':
+				inFile = strdup(optarg);
+				break;
+			default:
+				usage(argv[0]);
+		}
 	}
-    }
 
-    // open and create output file
-    int fd = open(inFile, O_RDONLY);
-    if (fd < 0) {
-	perror("open");
-	exit(1);
-    }
-
-    rec_t r;
-    while (1) {	
-	int rc;
-	rc = read(fd, &r, sizeof(rec_t));
-	if (rc == 0) // 0 indicates EOF
-	    break;
-	if (rc < 0) {
-	    perror("read");
-	    exit(1);
+	// open and create output file
+	int fd = open(inFile, O_RDONLY);
+	if (fd < 0) {
+		perror("open");
+		exit(1);
 	}
-	printf("key:%9d rec:", r.key);
-	int j;
-	for (j = 0; j < NUMRECS; j++) 
-	    printf("%3d ", r.record[j]);
-	printf("\n");
-    }
-    
-    (void) close(fd);
 
-    return 0;
+	rec_t r;
+	while (1) {	
+		int rc;
+		rc = read(fd, &r, sizeof(rec_t));
+		if (rc == 0) // 0 indicates EOF
+			break;
+		if (rc < 0) {
+			perror("read");
+			exit(1);
+		}
+		printf("key:%d rec:", r.key);
+		int j;
+		for (j = 0; j < NUMRECS; j++) 
+			printf("%3d ", r.record[j]);
+		printf("\n");
+	}
+
+	(void) close(fd);
+
+	return 0;
 }
 

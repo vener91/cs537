@@ -1,4 +1,18 @@
 Ter Chrng Ng (ter@cs.wisc.edu)
 
+---fastsort---
+General ideas
+Disk IO is slow, therefore must start sorting before having all the data loaded to memory
+Naive approach
+Create a thread to read from disk, update elements read in memory
+Create a thread to sort in memory based on the elements (Merge sort)
+
+---Kernel syscall addition---
+Step 1: grep for getpids
+Step 2: add a line or two
+Step 3: grep for word "tick", uptime syscall found
+Step 4: tests
+Step 5: ?????
+Step 6: profit
 
 github.com/vener91/cs537
