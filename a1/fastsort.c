@@ -12,53 +12,34 @@
 
 static int cmprect(const void *p1, const void *p2) {	
 	//Naive method
-	int i;
-	for(i = 0; i < NUMRECS; i++){
-		if((*(rec_t* const*)p1)->record[i] >  (*(rec_t* const *)p2)->record[i]){
-			return 1;
-		}else if((*(rec_t* const*)p1)->record[i] <  (*(rec_t* const*)p2)->record[i] == 1){
-			return -1;
-		}
-	}
-	return 0;
-	/*
-	//Assuming 64 bit machines, uses long
-	rec_t recA = *(*(rec_t* const*)p1);
-	rec_t recB = *(*(rec_t* const*)p2);
-	int64_t recRA = (int64_t)recA.record;
-	int64_t recRB = (int64_t)recB.record;
-	int i;
-	int length = NUMRECS / 2; //since size of int64_t is 2x the size of int
-	for(i = 0; i < length; i++){	
-		if(recRA > recRB ){
-			return 1;
-		}else if(recRB < recRA){
-			return -1;
-		}
-		recRA = (int64_t)(&recRA + sizeof(int64_t));
-		recRB = (int64_t)(&recRB + sizeof(int64_t));
-	}
-	//Compare last 4 bytes
-	if((int64_t)(&recRA - sizeof(int)) > (int64_t)(&recRB - sizeof(int)) ){
+	if((*(rec_t* const*)p1)->key >  (*(rec_t* const *)p2)->key){
 		return 1;
-	}else if(recRB < recRA){
+	}else if((*(rec_t* const*)p1)->key <  (*(rec_t* const*)p2)->key){
 		return -1;
 	}
-
 	return 0;
-	*/
 }
 
 void usage(char *prog) {
-	fprintf(stderr, "Usage: %s -i inputfile -o outputfile", prog);
+	//Removing the path to satisfy the test
+	char* prog_name = NULL;
+	char* pch = strtok (prog, "/");
+	while (pch != NULL) {
+		prog_name = pch;
+		pch = strtok (NULL, "/");
+	}
+	fprintf(stderr, "Usage: %s -i inputfile -o outputfile\n", prog_name);
 	exit(1);
 }
 
 int main(int argc, char *argv[]) {
 	// arguments
-	char *inFile = "/no/such/file";
-	char *outFile = "/no/such/file";
-
+	char *inFile = NULL;
+	char *outFile = NULL;
+	
+	if(argc != 5){
+		usage(argv[0]);
+	}
 	// input params
 	int c;
 	opterr = 0;
@@ -75,6 +56,11 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	//Check for required arguments
+	if(inFile == NULL || outFile == NULL){
+		usage(argv[0]);
+	}
+
 	// open and create output file
 	int fd = open(inFile, O_RDONLY);
 	if (fd < 0) {
@@ -87,6 +73,9 @@ int main(int argc, char *argv[]) {
 	if(fstat(fd,&fileStat) < 0) {
 		fprintf(stderr, "Error: Cannot open file %s\n", inFile);
 		exit(1);
+	}
+	if(fileStat.st_size == 0){
+		//exit(0);
 	}
 	// Put text in memory
 	int sizeOfArray = fileStat.st_size / sizeof(rec_t);
@@ -122,7 +111,6 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 
-	rec_t r;
 	for (i = 0; i < sizeOfArray; i++) {
 		// fill in random rest of records
 		int rc = write(fd, block[i], sizeof(rec_t));
@@ -134,6 +122,6 @@ int main(int argc, char *argv[]) {
 	}
 
 	rc = close(fd);
-	return 0;
+	exit(0);
 }
 

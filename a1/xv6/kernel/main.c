@@ -9,6 +9,7 @@ static void bootothers(void);
 static void mpmain(void);
 void jmpkstack(void)  __attribute__((noreturn));
 void mainc(void);
+static void cinit(void);
 
 // Bootstrap processor starts running C code here.
 // Allocate a real stack and switch to it, first
@@ -55,19 +56,18 @@ mainc(void)
   ideinit();       // disk
   if(!ismp)
     timerinit();   // uniprocessor timer
-  userinit();      // first user process
   bootothers();    // start other processors
 
-  // Finish setting up this processor in mpmain.
-  mpmain();
+  // Finish setting up this processor in
+  cinit();
+  sti();           // enable inturrupts
+  userinit();      // first user process
+  scheduler();     // start running processes
 }
 
-// Common CPU setup code.
-// Bootstrap CPU comes here from mainc().
-// Other CPUs jump here from bootother.S.
+// common cpu init code
 static void
-mpmain(void)
-{
+cinit(void) {
   if(cpunum() != mpbcpu()){
     seginit();
     lapicinit(cpunum());
@@ -76,7 +76,16 @@ mpmain(void)
   cprintf("cpu%d: starting\n", cpu->id);
   idtinit();       // load idt register
   xchg(&cpu->booted, 1); // tell bootothers() we're up
-  scheduler();     // start running processes
+}
+
+// Common CPU setup code.
+// Bootstrap CPU comes here from mainc().
+// Other CPUs jump here from bootother.S.
+static void
+mpmain(void)
+{
+   cinit();
+   scheduler();     // start running processes
 }
 
 // Start the non-boot processors.

@@ -1,0 +1,16 @@
+Test Run By ter on Tue Jan 31 12:43:31 2012
+Native configuration is i686-redhat-linux-gnu
+
+		===  tests ===
+
+Schedule of variations:
+    unix
+
+Running target unix
+Using /usr/share/dejagnu/baseboards/unix.exp as board description file for target.
+Using /usr/share/dejagnu/config/unix.exp as generic interface file for target.
+WARNING: Couldn't find tool config file for unix, using default.
+
+		===  Summary ===
+
+runtest completed at Tue Jan 31 12:43:31 2012

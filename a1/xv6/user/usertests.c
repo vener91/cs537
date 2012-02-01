@@ -324,6 +324,13 @@ exitwait(void)
 }
 
 void
+procs(void)
+{
+
+
+}
+
+void
 mem(void)
 {
   void *m1, *m2;
@@ -1459,9 +1466,8 @@ bsstest(void)
 void
 bigargtest(void)
 {
-  int pid, ppid;
+  int pid;
 
-  ppid = getpid();
   pid = fork();
   if(pid == 0){
     char *args[32+1];
@@ -1481,9 +1487,10 @@ bigargtest(void)
 }
 
 void
-gettickstest(void)
-{
-  printf(stdout, "Current Ticks%d\n", getticks());
+getprocstest(void){
+	int x;
+	x = getprocs();
+	printf(stdout, "procs test: %d", x);
 }
 
 int
@@ -1497,13 +1504,11 @@ main(int argc, char *argv[])
   }
   close(open("usertests.ran", O_CREATE));
 
+  getprocstest();
   bigargtest();
   bsstest();
   sbrktest();
   validatetest();
-
-//My tests
-  gettickstest();
 
   opentest();
   writetest();

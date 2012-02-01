@@ -5,6 +5,8 @@
 #include "mmu.h"
 #include "proc.h"
 #include "sysfunc.h"
+#include "spinlock.h"
+#include "ptable.h"
 
 int
 sys_fork(void)
@@ -42,9 +44,20 @@ sys_getpid(void)
 }
 
 int
-sys_getticks(void)
+sys_getprocs(void)
 {
-  return sys_uptime();
+  	struct proc *p;
+	int count = 0;	
+	// Loop over process table looking for process to run.
+	acquire(&ptable.lock);
+	for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+		if(p->state == RUNNING){
+			count++;
+		}
+		printf(stdout, "proc %s", p->name);
+	}
+	release(&ptable.lock);
+	return count;
 }
 
 int

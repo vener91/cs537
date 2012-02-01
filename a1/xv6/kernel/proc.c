@@ -5,11 +5,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
-
-struct {
-  struct spinlock lock;
-  struct proc proc[NPROC];
-} ptable;
+#include "ptable.h"
 
 static struct proc *initproc;
 
@@ -79,6 +75,7 @@ userinit(void)
   extern char _binary_initcode_start[], _binary_initcode_size[];
   
   p = allocproc();
+  acquire(&ptable.lock);
   initproc = p;
   if((p->pgdir = setupkvm()) == 0)
     panic("userinit: out of memory?");
@@ -97,6 +94,7 @@ userinit(void)
   p->cwd = namei("/");
 
   p->state = RUNNABLE;
+  release(&ptable.lock);
 }
 
 // Grow current process's memory by n bytes.

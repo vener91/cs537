@@ -51,7 +51,7 @@ printint(int xx, int base, int sign)
 void
 cprintf(char *fmt, ...)
 {
-  int i, c, state, locking;
+  int i, c, locking;
   uint *argp;
   char *s;
 
@@ -60,7 +60,6 @@ cprintf(char *fmt, ...)
     acquire(&cons.lock);
 
   argp = (uint*)(void*)(&fmt + 1);
-  state = 0;
   for(i = 0; (c = fmt[i] & 0xff) != 0; i++){
     if(c != '%'){
       consputc(c);

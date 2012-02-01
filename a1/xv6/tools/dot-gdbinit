@@ -29,7 +29,7 @@ echo (gdb) symbol-file kernel/kernel\n
 symbol-file kernel/kernel
 
 echo (gdb) add-symbol-file kernel/bootblock.o 0x7c00\n
-add-symbol-file kernel/bootblock.o 0x7c00
+add-symbol-file kernel/bootblock.out 0x7c00
 
 source tools/gdbutil
 

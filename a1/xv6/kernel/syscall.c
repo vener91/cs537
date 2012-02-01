@@ -77,7 +77,7 @@ argstr(int n, char **pp)
   return fetchstr(proc, addr, pp);
 }
 
-// syscall function declarations moved to syscall.h so compiler
+// syscall function declarations moved to sysfunc.h so compiler
 // can catch definitions that don't match
 
 // array of function pointers to handlers for all the syscalls
@@ -90,7 +90,7 @@ static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_fstat]   sys_fstat,
 [SYS_getpid]  sys_getpid,
-[SYS_getticks]  sys_getticks,
+[SYS_getprocs]  sys_getprocs,
 [SYS_kill]    sys_kill,
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
