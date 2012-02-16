@@ -1,0 +1,133 @@
+Test build PASSED
+Object files remain after 'make clean'.
+Files: mysh
+
+Test basic PASSED
+
+Test blank PASSED
+
+Test multiline PASSED
+
+Test parseargs PASSED
+
+Test parseargs2 PASSED
+
+Test exit PASSED
+
+Test pwd PASSED
+
+Test cd PASSED
+
+Test cd2 PASSED
+
+Test whitespace PASSED
+
+Test whitespace2 PASSED
+
+Test args FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/args/in bogus
+Wrong exit status.
+Expected 1, got 0
+Wrong stderr.
+Expected: "An error has occurred\n"
+Got:      ""
+
+Wrong stdout.
+Expected: ""
+Got:      "uname\nLinux\n"
+
+
+Test args2 PASSED
+
+Test longline FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/longline/in
+Wrong stderr.
+Expected: ""
+Got:      "An error has occurred\n"
+
+Wrong stdout.
+Expected: "echo 000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000512\n000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000512\nuname\nLinux\n"
+Got:      "\nuname\nLinux\n"
+
+
+Test toolong FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/toolong/in
+Wrong stderr.
+Expected: "An error has occurred\n"
+Got:      "An error has occurred\nAn error has occurred\n"
+
+Wrong stdout.
+Expected: "echo 0000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000001111111111222222222233333333334444444444555555555566666666667777777777888888888899999999990000000000111111111122222222223333333333444444444455555555556666666666777777777788888888889999999999000000000011111111112222222222333333333344444444445555555555666666666677777777778888888888999999999900000000000513\nuname\nLinux\n"
+Got:      "3\nuname\nLinux\n"
+
+
+Test badprog PASSED
+
+Test errout PASSED
+
+Test badcd PASSED
+
+Test badpwd FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/badpwd/in
+Wrong stderr.
+Expected: "An error has occurred\n"
+Got:      ""
+
+Wrong stdout.
+Expected: "pwd /u\n"
+Got:      "pwd /u\n/afs/cs.wisc.edu/u/t/e/ter/Desktop/cs537/p2/1a\n"
+
+
+Test badexit FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/badexit/in
+Wrong stderr.
+Expected: "An error has occurred\n"
+Got:      ""
+
+
+Test redirect FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/redirect/in
+Wrong stderr.
+Expected: ""
+Got:      "uname: extra operand `>'\nTry `uname --help' for more information.\n"
+
+Project failed to create file '1.out'.
+
+Test redirect2 FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/redirect2/in
+Wrong stderr.
+Expected: ""
+Got:      "/usr/bin/seq: extra operand `>'\nTry `/usr/bin/seq --help' for more information.\n"
+
+Project failed to create file '1.out'.
+
+Test badredir FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/badredir/in
+Wrong stderr.
+Expected: "An error has occurred\n"
+Got:      "/bin/ls: cannot access >: No such file or directory\n/bin/ls: cannot access /bogus: No such file or directory\n"
+
+
+Test badredir2 FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/badredir2/in
+Wrong stderr.
+Expected: "An error has occurred\n"
+Got:      "/bin/ls: cannot access >: No such file or directory\n/bin/ls: cannot access 1.out: No such file or directory\n/bin/ls: cannot access 2.out: No such file or directory\n"
+
+
+Test interactive FAILED
+./mysh
+Wrong stdout.
+Expected: "mysh> Linux\nmysh> "
+Got:      "/bin/uname\nLinux\nmysh> mysh> "
+
+
+Test fun FAILED
+./mysh /u/c/s/cs537-1/ta/tests/2a/fun/in
+Wrong stdout.
+Expected: "./echo-funtest.c test arg2 arg3\ntest arg2 arg3\n"
+Got:      "./echo-funtest.c test arg2 arg3\n"
+
+
+Passed 16 of 27 tests.
+Overall 16 of 27
