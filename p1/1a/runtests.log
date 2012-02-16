@@ -1,0 +1,247 @@
+
+**********************************************************************
+
+Test build
+build project using make
+
+**********************************************************************
+Trying to clean project using make clean
+make clean
+make: *** No rule to make target `clean'.  Stop.
+Trying to build project using make
+make
+make: *** No targets specified and no makefile found.  Stop.
+make fastsort
+cc     fastsort.c   -o fastsort
+Trying to build using gcc
+gcc -O -Wall -o fastsort fastsort.c
+
+
+test build PASSED
+ (build project using make)
+
+
+**********************************************************************
+
+Test arg
+bad arguments
+
+**********************************************************************
+
+
+test arg PASSED
+ (bad arguments)
+
+
+**********************************************************************
+
+Test arg2
+bad arguments
+
+**********************************************************************
+
+
+test arg2 PASSED
+ (bad arguments)
+
+
+**********************************************************************
+
+Test badin
+bad input file
+
+**********************************************************************
+
+
+test badin PASSED
+ (bad input file)
+
+
+**********************************************************************
+
+Test badout
+bad output file
+
+**********************************************************************
+
+
+test badout PASSED
+ (bad output file)
+
+
+**********************************************************************
+
+Test empty
+empty input file
+
+**********************************************************************
+Generating input file
+/u/c/s/cs537-1/ta/tests/1a/generate -s 0 -n 0 -o /tmp/tmpvGACQR/p/infile
+Running fastsort
+Fastsort completed in 0.00146484375 seconds
+Checking output
+
+
+test empty PASSED
+ (empty input file)
+
+
+**********************************************************************
+
+Test one
+a single record
+
+**********************************************************************
+Generating input file
+/u/c/s/cs537-1/ta/tests/1a/generate -s 0 -n 1 -o /tmp/tmpvGACQR/p/infile
+Running fastsort
+Fastsort completed in 0.00157403945923 seconds
+Checking output
+
+
+test one PASSED
+ (a single record)
+
+
+**********************************************************************
+
+Test five1
+five records
+
+**********************************************************************
+Generating input file
+/u/c/s/cs537-1/ta/tests/1a/generate -s 1 -n 5 -o /tmp/tmpvGACQR/p/infile
+Running fastsort
+Fastsort completed in 0.00168800354004 seconds
+Checking output
+
+
+test five1 PASSED
+ (five records)
+
+
+**********************************************************************
+
+Test five2
+five records
+
+**********************************************************************
+Generating input file
+/u/c/s/cs537-1/ta/tests/1a/generate -s 2 -n 5 -o /tmp/tmpvGACQR/p/infile
+Running fastsort
+Fastsort completed in 0.00152683258057 seconds
+Checking output
+
+
+test five2 PASSED
+ (five records)
+
+
+**********************************************************************
+
+Test medium
+100 records
+
+**********************************************************************
+Generating input file
+/u/c/s/cs537-1/ta/tests/1a/generate -s 3 -n 100 -o /tmp/tmpvGACQR/p/infile
+Running fastsort
+Fastsort completed in 0.00272917747498 seconds
+Checking output
+
+
+test medium PASSED
+ (100 records)
+
+
+**********************************************************************
+
+Test large
+10k records
+
+**********************************************************************
+Generating input file
+/u/c/s/cs537-1/ta/tests/1a/generate -s 4 -n 10000 -o /tmp/tmpvGACQR/p/infile
+Running fastsort
+Fastsort completed in 0.105252981186 seconds
+Checking output
+
+
+test large PASSED
+ (10k records)
+
+
+**********************************************************************
+
+Test verylarge
+100k records
+
+**********************************************************************
+Generating input file
+/u/c/s/cs537-1/ta/tests/1a/generate -s 5 -n 100000 -o /tmp/tmpvGACQR/p/infile
+Running fastsort
+Fastsort completed in 4.7846288681 seconds
+Checking output
+
+
+test verylarge PASSED
+ (100k records)
+
+
+**********************************************************************
+
+Test dup
+duplicate records
+
+**********************************************************************
+Running fastsort
+Fastsort completed in 0.0790820121765 seconds
+Checking output
+
+
+test dup PASSED
+ (duplicate records)
+
+**********************************************************************
+Summary:
+test build PASSED
+ (build project using make)
+
+test arg PASSED
+ (bad arguments)
+
+test arg2 PASSED
+ (bad arguments)
+
+test badin PASSED
+ (bad input file)
+
+test badout PASSED
+ (bad output file)
+
+test empty PASSED
+ (empty input file)
+
+test one PASSED
+ (a single record)
+
+test five1 PASSED
+ (five records)
+
+test five2 PASSED
+ (five records)
+
+test medium PASSED
+ (100 records)
+
+test large PASSED
+ (10k records)
+
+test verylarge PASSED
+ (100k records)
+
+test dup PASSED
+ (duplicate records)
+
+Passed 13 of 13 tests.
+Overall 13 of 13

@@ -1,0 +1,15 @@
+Ter Chrng Ng (ter@cs.wisc.edu)
+
+---fastsort---
+Read to memory, start sorting, write out
+Din't have the time to implement the faster sort
+
+---Kernel syscall addition---
+Step 1: grep for getpid
+Step 2: add a line or two in the specific file
+Step 3: add a ptable.h to allow sysproc.c to access the table
+Step 4: write code in sysproc.c to get numberof procs
+Step 5: ?????
+Step 6: profit
+
+github.com/vener91/cs537
