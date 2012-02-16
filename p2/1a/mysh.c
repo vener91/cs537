@@ -10,26 +10,17 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-void usage(char *prog) {
-	//Removing the path to satisfy the test
-	char* prog_name = NULL;
-	char* pch = strtok (prog, "/");
-	while (pch != NULL) {
-		prog_name = pch;
-		pch = strtok (NULL, "/");
-	}
-	fprintf(stderr, "Usage: %s -i inputfile -o outputfile\n", prog_name);
-	exit(1);
-}
-
 int main(int argc, char *argv[]) {
 	//Constants
-	const int MAX_LINE = 512;
+	const int MAX_LINE = 1024;
 	int batch_mode = 0;
 	char error_message[30] = "An error has occurred\n";
 	FILE* target_stream;
 	//Check should I run in batch mode?
-	if(argc >= 2){
+	if(argc >= 3){
+		write(STDERR_FILENO, error_message, strlen(error_message));
+		exit(1);
+	} else if(argc == 2){
 		//Do batch stuff
 		target_stream = fopen(argv[1], "r");
 		if (target_stream == NULL) {
@@ -40,7 +31,6 @@ int main(int argc, char *argv[]) {
 	} else {
 		target_stream = stdin;
 	}
-
 
 	//Housekeeping
 	int done = 1;
@@ -55,11 +45,11 @@ int main(int argc, char *argv[]) {
 		int argsize;
 		char in[MAX_LINE];
 		char* new_argv[512]; //Will not exceed 256 arguments
-		int new_argc = 0;
+		int new_argc = 1;
 		int r; // Result for stuff
 		char* arg;
 
-		if(fgets(in, MAX_LINE + 1, target_stream) == NULL){
+		if(fgets(in, MAX_LINE, target_stream) == NULL){
 			if(feof(target_stream)){
 				//Read till the end of file for batch mode
 				break;
@@ -67,17 +57,18 @@ int main(int argc, char *argv[]) {
 				write(STDERR_FILENO, error_message, strlen(error_message));
 			}
 		}
-		if(strlen(in) == 512){
-			write(STDERR_FILENO, error_message, strlen(error_message));
-			char c;
-			scanf("%c%*[^\n]%*c", &c);
-			continue;
-		}
-
+		
 		if(batch_mode){ //Print stuff out if batch mode
 			write(STDOUT_FILENO, in, strlen(in));
 		}
 
+		if(strlen(in) > 513){
+			write(STDERR_FILENO, error_message, strlen(error_message));
+			continue;
+			//char c;
+			//scanf("%c%*[^\n]%*c", &c);
+		}
+		
 		if(strlen(in) == 1){
 			continue; //Just a return char
 		}
@@ -96,6 +87,9 @@ int main(int argc, char *argv[]) {
 		
 		//Checking for builtin commands
 		if(!strcmp(new_argv[0], "exit")){
+			if (new_argc != 1) {
+				write(STDERR_FILENO, error_message, strlen(error_message));
+			}
 			break;	
 		}else if(!strcmp(new_argv[0], "cd")){
 			//Code for cd
@@ -116,11 +110,15 @@ int main(int argc, char *argv[]) {
 			}
 			continue;
 		}else if(!strcmp(new_argv[0], "pwd")){
-			//Code for pwd
-			char cwd[1024];
-			if (getcwd(cwd, sizeof(cwd)) != NULL){
-				write(1, cwd, strlen(cwd));
-				write(1, "\n", 1); //Lazy hack to pass test
+			if (new_argc == 1) {
+				//Code for pwd
+				char cwd[1024];
+				if (getcwd(cwd, sizeof(cwd)) != NULL){
+					write(1, cwd, strlen(cwd));
+					write(1, "\n", 1); //Lazy hack to pass test
+				}else{
+					write(STDERR_FILENO, error_message, strlen(error_message));
+				}
 			}else{
 				write(STDERR_FILENO, error_message, strlen(error_message));
 			}
@@ -171,4 +169,3 @@ int main(int argc, char *argv[]) {
 
 	exit(0);
 }
-
