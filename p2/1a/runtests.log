@@ -52,12 +52,7 @@ Test badredir2 PASSED
 
 Test interactive PASSED
 
-Test fun FAILED
-./mysh /u/c/s/cs537-1/ta/tests/2a/fun/in
-Wrong stdout.
-Expected: "./echo-funtest.c test arg2 arg3\ntest arg2 arg3\n"
-Got:      "./echo-funtest.c test arg2 arg3\n"
+Test fun PASSED
 
-
-Passed 26 of 27 tests.
-Overall 26 of 27
+Passed 27 of 27 tests.
+Overall 27 of 27

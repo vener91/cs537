@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -165,26 +166,31 @@ int main(int argc, char *argv[]) {
 		//Forking here
   		pid_t child_pid;
   		pid_t gcc_pid;
+		int i = 0;
 		
 		//Do fun feature, c compiler
 		int fun_mode = 0;
 		int arglength = strlen(new_argv[0]);
 		if(new_argv[0][arglength - 1] == 'c' && new_argv[0][arglength - 2] == '.'){
 			
-			char* gcc_argv[5];
+			char* gcc_argv[4];
 			gcc_argv[0] = "gcc";
 			gcc_argv[1] = "-o";
 			gcc_argv[2] = "/tmp/run";
 			gcc_argv[3] = new_argv[0];
-			gcc_argv[4] = NULL;
+
 			//Replace running proggy
 			new_argv[0] = "/tmp/run";
 			//Forking for gcc
 			gcc_pid = fork();
 			//printf("%d\n", child_pid);
 			if(gcc_pid == 0) {
+				for(i = 0; i < 4; i++){
+					write(1, gcc_argv[i], strlen(gcc_argv[i]));
+				}
 				
 				int x = execvp("gcc", gcc_argv);
+				write(1,  strerror(errno), strlen(strerror(errno)));
 				write(STDERR_FILENO, error_message, strlen(error_message));
 				exit(1);
 			}else {
