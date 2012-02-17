@@ -38,14 +38,14 @@ int main(int argc, char *argv[]) {
 	while(done){
 
 		if(!batch_mode){
-			printf("mysh> ");
+			write(1, "mysh> ", 6); //Lazy hack to pass test
 		}
 
 		//Read input variables
 		int argsize;
 		char in[MAX_LINE];
 		char* new_argv[512]; //Will not exceed 256 arguments
-		int new_argc = 1;
+		int new_argc;
 		int r; // Result for stuff
 		char* arg;
 
@@ -75,8 +75,44 @@ int main(int argc, char *argv[]) {
 
 		//Remove old stuff
 		memset(&new_argv, 0, sizeof(new_argv));
-
 		strtok(in, "\n"); //Trick to remove new lines
+		
+		//Redirection detection
+		int redirect_mode = 0;	
+		int bak, new; //File discriptor variables
+		strtok(in, ">");
+		arg = strtok (NULL, ">");
+		if(arg != NULL) {	
+			if(strstr(arg, ">") != NULL){
+				//Found > chars 
+				write(STDERR_FILENO, error_message, strlen(error_message));
+				continue;
+			}else{
+				//Switch stdout
+				//Strip front whitespace
+				while(arg[0] == ' '){
+					arg++;
+				}
+				char* path =  strtok(arg, " "); //Trick to strip trailling whitespace
+				if(strtok(NULL, " ") != NULL){ //Check for multiple redirection files
+					write(STDERR_FILENO, error_message, strlen(error_message));
+					continue;
+				}
+				//Enable redirect mode
+				redirect_mode = 1;
+				
+				fflush(stdout);
+				bak = dup(1);
+				new = open(arg, O_WRONLY|O_CREAT|O_TRUNC, S_IRWXU);
+				if (new < 0) {
+					write(STDERR_FILENO, error_message, strlen(error_message));
+					continue;
+				}
+				dup2(new, 1);
+				close(new);
+			}
+		}
+
 		new_argc = 0;
 		arg = strtok (in, " ");
 		while (arg != NULL) {
@@ -136,18 +172,18 @@ int main(int argc, char *argv[]) {
 		int arglength = strlen(new_argv[0]);
 		if(new_argv[0][arglength - 1] == 'c' && new_argv[0][arglength - 2] == '.'){
 			
-			char* gcc_args[4];
-			gcc_args[0] = "gcc";
-			gcc_args[1] = "-o";
-			gcc_args[2] = "/tmp/run";
-			gcc_args[3] = new_argv[0];
+			char* gcc_argv[4];
+			gcc_argv[0] = "gcc";
+			gcc_argv[1] = "-o";
+			gcc_argv[2] = "/tmp/run";
+			gcc_argv[3] = new_argv[0];
 
 			//Replace running proggy
 			new_argv[0] = "/tmp/run";
 			//Forking for gcc
 			child_pid = fork();
 			if(child_pid == 0) {
-				execvp("gcc", gcc_args);
+				execvp(gcc_argv[0], gcc_argv);
 				write(STDERR_FILENO, error_message, strlen(error_message));
 				exit(1);
 			}else {
@@ -164,6 +200,12 @@ int main(int argc, char *argv[]) {
 			exit(1);
 		}else {
 			wait(&child_status);
+			if(redirect_mode){	
+				fflush(stdout);
+				dup2(bak, 1);
+				close(bak);
+			}
+
 		}
 	}
 
