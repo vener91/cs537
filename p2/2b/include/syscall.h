@@ -24,5 +24,7 @@
 #define SYS_sleep  20
 #define SYS_uptime 21
 #define SYS_getprocs 22
+#define SYS_settickets 23
+#define SYS_getpinfo 24
 
 #endif // _SYSCALL_H_

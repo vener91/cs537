@@ -10,6 +10,8 @@ int sys_exit(void);
 int sys_fork(void);
 int sys_fstat(void);
 int sys_getpid(void);
+int sys_settickets(int num);
+int sys_getpinfo(void);
 int sys_getprocs(void);
 int sys_kill(void);
 int sys_link(void);

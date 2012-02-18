@@ -90,6 +90,8 @@ static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_fstat]   sys_fstat,
 [SYS_getpid]  sys_getpid,
+[SYS_settickets]  sys_settickets,
+[SYS_getpinfo]  sys_getpinfo,
 [SYS_getprocs]  sys_getprocs,
 [SYS_kill]    sys_kill,
 [SYS_link]    sys_link,

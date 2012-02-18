@@ -22,6 +22,8 @@ int mkdir(char*);
 int chdir(char*);
 int dup(int);
 int getpid(void);
+int settickets(int);
+int getpinfo(struct pstat*);
 int getprocs(void);
 char* sbrk(int);
 int sleep(int);

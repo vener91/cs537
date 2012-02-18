@@ -1,0 +1,6 @@
+build - build xv6 using make
+settickets - compile and run a user program with a settickets call
+getpinfo - compile and run a user program with a getpinfo call
+getpinfo2 - check that getpinfo returns some reasonable values
+ticks - check that processes are scheduled at correct ratio
+usertests - run usertests to check for regressions

@@ -7,6 +7,7 @@
 #include "sysfunc.h"
 #include "spinlock.h"
 #include "ptable.h"
+#include "../include/pstat.h"
 
 int
 sys_fork(void)
@@ -106,3 +107,17 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int
+sys_settickets(int num)
+{
+	return 0;
+}
+
+int
+sys_getpinfo(pstat *stats)
+{
+	return 0;
+}
+
+
