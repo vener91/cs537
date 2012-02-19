@@ -1,6 +1,8 @@
 #ifndef _SYSFUNC_H_
 #define _SYSFUNC_H_
 
+#include "pstat.h"
+
 // System call handlers
 int sys_chdir(void);
 int sys_close(void);
@@ -23,5 +25,7 @@ int sys_unlink(void);
 int sys_wait(void);
 int sys_write(void);
 int sys_uptime(void);
+int sys_settickets(void);
+int sys_getpinfo(void);
 
 #endif // _SYSFUNC_H_

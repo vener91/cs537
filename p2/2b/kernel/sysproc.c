@@ -5,6 +5,7 @@
 #include "mmu.h"
 #include "proc.h"
 #include "sysfunc.h"
+#include "pstat.h"
 
 int
 sys_fork(void)
@@ -37,6 +38,18 @@ sys_kill(void)
 
 int
 sys_getpid(void)
+{
+  return proc->pid;
+}
+
+int
+sys_settickets(void)
+{
+  return proc->pid;
+}
+
+int
+sys_getpinfo(void)
 {
   return proc->pid;
 }
