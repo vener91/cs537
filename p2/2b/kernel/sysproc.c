@@ -45,13 +45,28 @@ sys_getpid(void)
 int
 sys_settickets(void)
 {
-  return proc->pid;
+	int num;
+	if(argint(2, &num) < 0){
+		return -1;
+	}
+	//Needs to be higher than 1
+	if(num < 1){
+		return -1;
+	}
+	proc->tickets = num;
+	return 0;
 }
 
 int
 sys_getpinfo(void)
 {
-  return proc->pid;
+  struct pstat* ps;
+	int p;
+	if(argptr(0, (void*)&ps, sizeof(*ps)) < 0){
+		return -1;
+	}
+
+	return 0;
 }
 
 int
