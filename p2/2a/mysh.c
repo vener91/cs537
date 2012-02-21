@@ -65,8 +65,6 @@ int main(int argc, char *argv[]) {
 		if(strlen(in) > 513){
 			write(STDERR_FILENO, error_message, strlen(error_message));
 			continue;
-			//char c;
-			//scanf("%c%*[^\n]%*c", &c);
 		}
 		
 		if(strlen(in) == 1){

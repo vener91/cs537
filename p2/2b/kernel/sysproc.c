@@ -6,6 +6,8 @@
 #include "proc.h"
 #include "sysfunc.h"
 #include "pstat.h"
+#include "spinlock.h"
+#include "ptable.h"
 
 int
 sys_fork(void)
@@ -46,7 +48,7 @@ int
 sys_settickets(void)
 {
 	int num;
-	if(argint(2, &num) < 0){
+	if(argint(0, &num) < 0){
 		return -1;
 	}
 	//Needs to be higher than 1
@@ -60,12 +62,26 @@ sys_settickets(void)
 int
 sys_getpinfo(void)
 {
-  struct pstat* ps;
-	int p;
+	struct pstat* ps;
 	if(argptr(0, (void*)&ps, sizeof(*ps)) < 0){
 		return -1;
 	}
-
+	//Fill er up
+	struct proc *p;
+	// Loop over process table looking for process to run.
+	acquire(&ptable.lock);
+	int i;
+	for(i = 0; i < NPROC; i++){
+		p = &ptable.proc[i];
+		ps->pid[i] = p->pid;
+		if(p->state == UNUSED){ 
+			ps->inuse[i] = 0;
+		}else{
+			ps->inuse[i] = 1;
+		}
+		ps->ticks[i] = p->ticks;
+	}
+	release(&ptable.lock);
 	return 0;
 }
 

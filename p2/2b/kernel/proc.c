@@ -5,11 +5,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
-
-struct {
-  struct spinlock lock;
-  struct proc proc[NPROC];
-} ptable;
+#include "ptable.h" 
 
 static struct proc *initproc;
 
@@ -44,6 +40,8 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
+  p->tickets = 1;
+  p->ticks = 0;
   p->pid = nextpid++;
   release(&ptable.lock);
 
@@ -97,6 +95,7 @@ userinit(void)
   safestrcpy(p->name, "initcode", sizeof(p->name));
   p->cwd = namei("/");
 
+  p->tickets = 1;
   p->state = RUNNABLE;
   release(&ptable.lock);
 }
@@ -245,6 +244,19 @@ wait(void)
   }
 }
 
+unsigned int lfsr113_Bits (void)
+{
+	static unsigned int z1 = 12345, z2 = 12345, z3 = 12345, z4 = 12345;
+	unsigned int b;
+	b  = ((z1 << 6) ^ z1) >> 13;
+	z1 = ((z1 & 4294967294U) << 18) ^ b;
+	b  = ((z2 << 2) ^ z2) >> 27; 
+	z2 = ((z2 & 4294967288U) << 2) ^ b;
+	b  = ((z3 << 13) ^ z3) >> 21;
+	z4 = ((z4 & 4294967168U) << 13) ^ b;
+	return (z1 ^ z2 ^ z3 ^ z4);
+}
+
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
 // Scheduler never returns.  It loops, doing:
@@ -258,22 +270,52 @@ scheduler(void)
   struct proc *p;
 
   for(;;){
+	//unsigned int winning_ticket = lfsr113_Bits();
     // Enable interrupts on this processor.
     sti();
 
-    // Loop over process table looking for process to run.
-    acquire(&ptable.lock);
+    
+	acquire(&ptable.lock);	
+	int tickets;
+	tickets = 0;
+	
+	for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+		if(p->state != RUNNABLE){
+			continue;
+		}
+		//Sum up the tickets
+		tickets = tickets + p->tickets;
+	}
+
+  	if(tickets > 0){
+		
+		int winning_ticket = lfsr113_Bits() ;
+		if(winning_ticket < 0){
+			//panic("got less than zero");
+			winning_ticket = winning_ticket * -1;
+		}
+		tickets = winning_ticket % tickets;
+	}
+	
+	// Loop over process table looking for process to run.
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
       if(p->state != RUNNABLE)
-        continue;
+	      continue;
 
-      // Switch to chosen process.  It is the process's job
+	  // Lottery scheduler
+	  tickets = tickets - p->tickets;
+	  if(tickets > 0){
+		continue;
+	  }
+  
+	  // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
       proc = p;
       switchuvm(p);
       p->state = RUNNING;
-      swtch(&cpu->scheduler, proc->context);
+      p->ticks++;
+	  swtch(&cpu->scheduler, proc->context);
       switchkvm();
 
       // Process is done running for now.
