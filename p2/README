@@ -1,0 +1,10 @@
+-------
+myshell
+
+infinite loop that repeatedly gets a line from a stream and interpret it
+stream is determined by the arguments
+
+--------
+xv6 scheduler
+
+copied a awesome random generator, made changes to schduler, and added some system calls for it
