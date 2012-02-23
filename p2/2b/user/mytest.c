@@ -3,93 +3,75 @@
 #include "user.h"
 #include "pstat.h"
 #include "param.h"
+#define check(exp, msg) if(exp) {} else {\
+   printf(1, "%s:%d check (" #exp ") failed: %s\n", __FILE__, __LINE__, msg);\
+   exit();}
 
-// print usage info of all procresses
-void
-printinfo()
-{
-   struct pstat st;
-
-   int r = getpinfo(&st);
-   if (r != 0) {
-      exit();
-   }
-
-   int i;
-   for(i = 1; i < NPROC; i++) {
-      if (st.inuse[i]) {
-         printf(1, "pid: %d ticks: %d\n", st.pid[i], st.ticks[i]);
-      }
-   }
-}
-
-// spin for a while
 int
 spin() {
-   int i, j;
-   for (i = 0; i < 10000000; i++) {
-      j = i % 11;
+   while (1) {
+      int i, j;
+      for (i = 0; i < 10000000; i++) {
+         j = i % 11;
+      }
    }
-   return j;
 }
 
 int
 main(int argc, char *argv[])
 {
+   int pids[2];
+   int ppid = getpid();
+   int r, i, j;
 
-   if (argc < 3) {
-      printf(1, "Usage: usage ticks tickets1 [tickets2]...\n\n");
-      printf(1, "Spawns subprocesses, each of which will run for \n"
-            "approximately the given number of ticks. For each ticket\n"
-            "ammount given, a child process will spawn and request that\n"
-            "number of tickets.\n");
-      exit();
+   pids[0] = fork();
+   if (pids[0] == 0) {
+      r = settickets(10);
+      if (r != 0) {
+         printf(1, "settickets failed");
+         kill(ppid);
+      }
+      spin();
    }
 
-   int total = 0;
-   int i;
-   for (i = 0; i < argc - 2; i++) {
-      total += atoi(argv[i+2]);
-   }
-   int ret = settickets(total);
-   if (ret < 0) {
-      printf(1, "settickets failed\n");
-      exit();
+   pids[1] = fork();
+   if (pids[1] == 0) {
+      r = settickets(20);
+      if (r != 0) {
+         printf(1, "settickets failed");
+         kill(ppid);
+      }
+      spin();
    }
 
-   // pids of children
-   int pids[NPROC];
+   sleep(1000);
 
-   // spawn children
-   for (i = 0; i < argc - 2; i++) {
-      pids[i] = fork();
-      if (pids[i] == 0) {
-         int ret = settickets(atoi(argv[i + 2]));
-         if (ret < 0) {
-            printf(1, "settickets failed\n");
-            exit();
-         }
-         // spin so we get scheduled
-         while(1) {
-            spin();
+   int ticks[] = {-1, -1};
+   struct pstat st;
+   check(getpinfo(&st) == 0, "getpinfo");
+
+   for(i = 0; i < NPROC; i++) {
+      for(j = 0; j < 2; j++) {
+         if (st.inuse[i] && st.pid[i] == pids[j]) {
+            ticks[j] = st.ticks[i];
          }
       }
    }
 
-   // print usage info
-   int ticks = atoi(argv[1]);
-   int start = uptime();
-   while(uptime() < start + ticks) {
-      sleep(100);
-      printf(1, "time: %d\n", uptime() - start);
-      printinfo();
-   }
-
-   // kill children
-   for (i = 0; i < argc - 2; i++) {
+   for (i = 0; i < 2; i++) {
       kill(pids[i]);
       wait();
    }
 
+   for (i = 0; i < 2; i++) {
+      check(ticks[i] > 0, "each process should have some ticks");
+   }
+
+   float ratio = (float)ticks[0] / (float)ticks[1];
+   printf(1, "ticks 0: %d\n", ticks[0]);
+   printf(1, "ticks 1: %d\n", ticks[1]);
+   check(ratio > .25 && ratio < .75, "ratio should be about 1/2");
+
+   printf(1, "TEST PASSED\n");
    exit();
 }
