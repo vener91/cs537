@@ -19,10 +19,6 @@ typedef struct __header_t {
 int m_error;
 node_t* startOfAlloc = NULL;
 
-//Temp debug variables
-void* start;
-int size;
-
 int Mem_Init(int sizeOfRegion, int debug){
 	if(sizeOfRegion <= 0 || startOfAlloc){
 		m_error = E_BAD_ARGS;
@@ -44,12 +40,8 @@ int Mem_Init(int sizeOfRegion, int debug){
 	// close the device (don't worry, mapping should be unaffected)
 	close(fd);	
 
-	start = memPtr;
-	size = length;
-
 	//Put free list pointer
 	memPtr = memPtr + length - sizeof(node_t);
-	//printf("%p\n", memPtr);
 	startOfAlloc = memPtr;
 	startOfAlloc->size = length - sizeof(node_t);
 	startOfAlloc->next = NULL;
@@ -83,9 +75,7 @@ void *Mem_Alloc(int size){
 	}
 
 	int margin = currBestNode->size + sizeof(node_t) - realSize; //If margin is 8 or less, that means no freeNode
-	//printf("margin=%d p=%p\n", margin, currBestNode);
 	if(margin <= 8){ //tightfit
-		//printf("tightfit\n");
 		size = size + margin;
 		//Change pointers
 		currNode = startOfAlloc;
@@ -109,11 +99,9 @@ void *Mem_Alloc(int size){
 	header_t* newHeader = ptr;
 	newHeader->size = realSize - sizeof(header_t); //Will have problems if sizeof(header_t) != 8
 	newHeader->magic = realSize;
-	//printf("%p %p %d %d\n", newHeader, currBestNode, newHeader->size, newHeader->magic);
 	if(margin > 8){	
 		currBestNode->size = currBestNode->size - realSize;
 	}
-	//printf("%p\n", (void*)(ptr + sizeof(header_t)));
 	return ptr + sizeof(header_t);
 }
 
@@ -126,13 +114,10 @@ int Mem_Free(void *ptr, int coalesce){
 	if(currAlloc->magic != currAlloc->size + sizeof(header_t)){	
 		return -1;
 	}
-
-	//printf("%p - %p - %d - %d\n", startOfAlloc,  currAlloc, currAlloc->size, currAlloc->magic);
 	
 	currAlloc->magic = 0; //Render it invalid
 	void* newFreeNodePtr = ptr + currAlloc->size - sizeof(node_t);
 	node_t* newFreeNode = (node_t*)newFreeNodePtr;
-	//printf("%p\n", newFreeNode);
 	newFreeNode->size = currAlloc->size - sizeof(node_t) + sizeof(header_t);
 	node_t* currNode;
 
@@ -157,7 +142,6 @@ int Mem_Free(void *ptr, int coalesce){
 		//Start coalescing
 		currNode = startOfAlloc;
 		while(currNode != NULL){
-			//printf("%p - %p\n", currNode - currNode->size, currNode->next);
 			if (currNode->next == NULL) {
 				break;
 			}
@@ -171,23 +155,4 @@ int Mem_Free(void *ptr, int coalesce){
 	}
 
 	return 0;
-}
-
-void Mem_Dump_Free(){
-	node_t* currNode = startOfAlloc;
-
-	while(currNode != NULL){
-		printf("%p %d %p\n", currNode, currNode->size, currNode->next);
-		currNode = currNode->next;
-	}
-}
-
-void Mem_Dump(){
-	int* startdump = start;	
-	int i;
-	for (i = 0; i < size/4; i++) {
-		printf("%d - %p - %d", i*4, startdump, (int)*startdump);
-		printf("\n");
-		startdump = startdump + 1;
-	}
 }

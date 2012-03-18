@@ -13,7 +13,6 @@ int Mem_Init(int sizeOfRegion, int debug);
 void *Mem_Alloc(int size);
 int Mem_Free(void *ptr, int coalesce);
 void Mem_Dump();
-void Mem_Dump_Free();
 
 
 #endif // __mem_h__
