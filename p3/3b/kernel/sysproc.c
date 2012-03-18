@@ -41,6 +41,16 @@ sys_getpid(void)
   return proc->pid;
 }
 
+int sys_mprotect(void)
+{
+  return 0;
+}
+
+int sys_munprotect(void)
+{
+  return 0;
+}
+
 int
 sys_sbrk(void)
 {

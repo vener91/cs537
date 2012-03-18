@@ -25,6 +25,8 @@ int getpid(void);
 char* sbrk(int);
 int sleep(int);
 int uptime(void);
+int mprotect(void* addr, int len);
+int munprotect(void* addr, int len);
 
 // user library functions (ulib.c)
 int stat(char*, struct stat*);
