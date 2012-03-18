@@ -114,13 +114,13 @@ kernel/bootblock: kernel/bootasm.o kernel/bootmain.o
 
 bootother: kernel/bootother.o
 	$(LD) $(LDFLAGS) $(KERNEL_LDFLAGS) \
-		--entry=start --section-start=.text=0x7000 \
+		--entry=start --section-start=.text=0x8000 \
 		--output=kernel/bootother.out kernel/bootother.o
 	$(OBJCOPY) -S -O binary kernel/bootother.out $@
 
 initcode: kernel/initcode.o
 	$(LD) $(LDFLAGS) $(KERNEL_LDFLAGS) \
-		--entry=start --section-start=.text=0x0 \
+		--entry=start --section-start=.text=0x0000 \
 		--output=kernel/initcode.out kernel/initcode.o
 	$(OBJCOPY) -S -O binary kernel/initcode.out $@
 

@@ -134,6 +134,7 @@ static struct kmap {
 pde_t*
 setupkvm(void)
 {
+  //Dummy kalloc
   pde_t *pgdir;
   struct kmap *k;
 
@@ -144,7 +145,7 @@ setupkvm(void)
   for(k = kmap; k < &kmap[NELEM(kmap)]; k++)
     if(mappages(pgdir, k->p, k->e - k->p, (uint)k->p, k->perm) < 0)
       return 0;
-
+	  
   return pgdir;
 }
 
@@ -306,7 +307,7 @@ copyuvm(pde_t *pgdir, uint sz)
 
   if((d = setupkvm()) == 0)
     return 0;
-  for(i = 0; i < sz; i += PGSIZE){
+  for(i = PGSIZE; i < sz; i += PGSIZE){ //Change so that it starts from the first page
     if((pte = walkpgdir(pgdir, (void*)i, 0)) == 0)
       panic("copyuvm: pte should exist");
     if(!(*pte & PTE_P))
