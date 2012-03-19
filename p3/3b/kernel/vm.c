@@ -49,7 +49,7 @@ seginit(void)
 // Return the address of the PTE in page table pgdir
 // that corresponds to linear address va.  If create!=0,
 // create any required page table pages.
-static pte_t *
+pte_t*
 walkpgdir(pde_t *pgdir, const void *va, int create)
 {
   pde_t *pde;
@@ -74,7 +74,7 @@ walkpgdir(pde_t *pgdir, const void *va, int create)
 // Create PTEs for linear addresses starting at la that refer to
 // physical addresses starting at pa. la and size might not
 // be page-aligned.
-static int
+int
 mappages(pde_t *pgdir, void *la, uint size, uint pa, int perm)
 {
   char *a, *last;
@@ -302,6 +302,7 @@ copyuvm(pde_t *pgdir, uint sz)
 {
   pde_t *d;
   pte_t *pte;
+  pte_t *new_pte;
   uint pa, i;
   char *mem;
 
@@ -318,6 +319,13 @@ copyuvm(pde_t *pgdir, uint sz)
     memmove(mem, (char*)pa, PGSIZE);
     if(mappages(d, (void*)i, PGSIZE, PADDR(mem), PTE_W|PTE_U) < 0)
       goto bad;
+	new_pte = walkpgdir(d, (void*)i, 0);
+	if((*pte & 0x00000002) == 0)
+	{
+		//NOT Writable
+		*new_pte = *new_pte & 0xFFFFFFFD;
+	} 
+	
   }
   return d;
 
@@ -364,4 +372,35 @@ copyout(pde_t *pgdir, uint va, void *p, uint len)
     va = va0 + PGSIZE;
   }
   return 0;
+}
+
+int mchperm(void* addr, int len, int perm){
+		
+	pde_t *pgdir = proc->pgdir;
+	uint size = len;
+	char *a, *last;
+	pte_t *pte;
+
+  	a = PGROUNDDOWN(addr);
+  	last = PGROUNDDOWN(addr + (size * PGSIZE) - 1);
+
+	for(;;){
+		pte = walkpgdir(pgdir, a, 0);
+		if(pte == 0 || *pte == 0)
+			return -1;
+		uint pa = PTE_ADDR(*pte);
+		if(perm){
+			//Protect
+			*pte = (*pte | PTE_U | PTE_P) & 0xFFFFFFFD;
+		}else{
+			//Unprotect
+			*pte = *pte | PTE_U | PTE_P | PTE_W;
+		}
+		if(a == last)
+			break;
+		a += PGSIZE;
+		pa += PGSIZE;
+	}
+	switchuvm(proc);
+	return 0;
 }

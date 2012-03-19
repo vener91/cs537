@@ -1,0 +1,23 @@
+Ter Chrng Ng (ter@cs.wisc.edu)
+Kah Jing Lee (Kah@cs.wisc.edu)
+
+-------
+memory allocator
+
+There are 2 structure called the free list node and mem header. The free list node is at the bottom of the list to reduce memmoves, and calcualtions.
+Memory is allocated at the top
+
+--------
+xv6
+part 1
+Make file is changed to so that it starts from 0x1000
+A dummy page is added at 0x0
+copyuvm is changed so that it starts reading from the first page
+Relevant changes is made so that the address referenced will always be more than zero in syscall.c
+
+part 2
+Added syscalls and main code at vm.c
+Basically loop though each page that the program specifies and do bitwise operations to ensure that they are writable or unwritable
+Added code to copyuvm to ensure that the attribute is carried over when forking
+
+

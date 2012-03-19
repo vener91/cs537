@@ -71,16 +71,6 @@ found:
   return p;
 }
 
-int mprotect(void * addr, int len)
-{
-	return -1;
-}
-
-int munprotect(void * addr, int len)
-{
-	return -1;
-}
-
 // Set up first user process.
 void
 userinit(void)
@@ -452,5 +442,4 @@ procdump(void)
     cprintf("\n");
   }
 }
-
 

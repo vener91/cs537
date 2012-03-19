@@ -43,12 +43,28 @@ sys_getpid(void)
 
 int sys_mprotect(void)
 {
-  return 0;
+	void *addr;
+	int len;
+	if(argptr(0, (void*)&addr, sizeof(void *)) < 0){
+		return -1;
+	}
+	if(argint(1, &len) < 0){
+		return -1;
+	}
+	return mchperm(addr, len, 1);
 }
 
 int sys_munprotect(void)
 {
-  return 0;
+	void *addr;
+	int len;
+	if(argptr(0, (void*)&addr, sizeof(void *)) < 0){
+		return -1;
+	}
+	if(argint(1, &len) < 0){
+		return -1;
+	}
+	return mchperm(addr, len, 0);
 }
 
 int

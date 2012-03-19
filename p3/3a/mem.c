@@ -121,21 +121,25 @@ int Mem_Free(void *ptr, int coalesce){
 	newFreeNode->size = currAlloc->size - sizeof(node_t) + sizeof(header_t);
 	node_t* currNode;
 
-	currNode = startOfAlloc;
-	//Check if it is newhead
-	if((void*)currNode <= newFreeNodePtr){
-		//Update head
-		newFreeNode->next = (node_t*)startOfAlloc;
-		startOfAlloc = (node_t*)newFreeNode;
-	}else{
-		while(currNode != NULL){
-			if(currNode->next == NULL || (void*)currNode->next < newFreeNodePtr){
-				newFreeNode->next = currNode->next;
-				currNode->next = newFreeNode;	
-				break;
+	if(startOfAlloc){ //Has previous new node
+		currNode = startOfAlloc;
+		//Check if it is newhead
+		if((void*)currNode <= newFreeNodePtr){
+			//Update head
+			newFreeNode->next = (node_t*)startOfAlloc;
+			startOfAlloc = (node_t*)newFreeNode;
+		}else{
+			while(currNode != NULL){
+				if(currNode->next == NULL || (void*)currNode->next < newFreeNodePtr){
+					newFreeNode->next = currNode->next;
+					currNode->next = newFreeNode;	
+					break;
+				}
+				currNode = currNode->next;
 			}
-			currNode = currNode->next;
 		}
+	}else{
+		startOfAlloc = newFreeNode;
 	}
 
 	if(coalesce){
