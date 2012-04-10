@@ -1,5 +1,6 @@
 #include "cs537.h"
 #include "request.h"
+#include <sys/stat.h>
 
 // 
 // server.c: A very, very simple web server
@@ -18,7 +19,7 @@ void usage(char* argv[]){
 	exit(1);
 }
 typedef struct conn_node{
-	int conn; //Connection fd
+	request_t* conn; //Connection fd
 	int size; //For use in SFF
 	struct conn_node* next;
 } conn_node_t;
@@ -28,6 +29,7 @@ typedef struct threadpool_t {
 	pthread_t *threads;	//pointer our threads
 	conn_node_t *buffer_head;	//pointer out buffer head
 	conn_node_t *buffer_tail;	//pointer out buffer tail (for use in FIFO)
+	int max_buffer_size;
 	int buffer_size;
 	pthread_mutex_t buffer_lock;		//lock on the queue list
 	pthread_cond_t buffer_not_empty;	//non empty and empty condidtion vairiables
@@ -56,13 +58,15 @@ void* worker_thread(void* p){
 			pool->buffer_head = curr->next; //Pop one off the buffer  
 		}
 
-		if(pool->buffer_size == 0) {
+		//if(pool->buffer_size < pool->max_buffer_size) {
+		if(pool->buffer_size == pool->max_buffer_size - 1) {
 			//the q is empty again, now signal that its empty.
 			pthread_cond_signal(&(pool->buffer_empty));
 		}
 		pthread_mutex_unlock(&(pool->buffer_lock));
 		requestHandle(curr->conn);
-		Close(curr->conn);
+		Close(curr->conn->fd);
+		free(curr);
 	}
 }
 
@@ -96,6 +100,7 @@ int main(int argc, char *argv[]){
 	pool->buffer_head = NULL;
 	pool->buffer_tail = NULL;
 	pool->buffer_size = 0;
+	pool->max_buffer_size = max_buffer_size;
 
 	pool->threads = (pthread_t*) malloc(sizeof(pthread_t) * pool_size);
 	if(pool->threads == NULL){
@@ -127,29 +132,46 @@ int main(int argc, char *argv[]){
 		//Create nodes
 		
 		conn_node_t* curr = (conn_node_t*) malloc(sizeof(conn_node_t));
+		curr->conn = (request_t*) malloc(sizeof(request_t));
+		curr->conn->fd = Accept(listenfd, (SA *)&clientaddr, (socklen_t *) &clientlen);
+		//Handler init
+		curr->conn = requestInit(curr->conn);  
+		curr->size = curr->conn->size;
 	
 		//Add to buffer
-		if(isFIFO){
-			curr->conn = Accept(listenfd, (SA *)&clientaddr, (socklen_t *) &clientlen);
-			curr->next = NULL; //Since it is always the last
-			pthread_mutex_lock(&(pool->buffer_lock));
-			while(pool->buffer_size >= max_buffer_size){ //Full buffer, blocking connection
-				pthread_mutex_unlock(&(pool->buffer_lock));
-				pthread_cond_wait(&(pool->buffer_empty),&(pool->buffer_lock));
-			}
-			if(pool->buffer_size == 0) {
-				pool->buffer_head = curr;  //set to only one
-				pool->buffer_tail = curr;
-				pthread_cond_signal(&(pool->buffer_not_empty));  //I am not empty.  
-			} else {
-				pool->buffer_tail->next = curr;	//add to end of buffer;
-				pool->buffer_tail = curr;			
-			}
-			pool->buffer_size++;
+		pthread_mutex_lock(&(pool->buffer_lock));
+		while(pool->buffer_size >= pool->max_buffer_size){ //Full buffer, blocking connection
 			pthread_mutex_unlock(&(pool->buffer_lock));
-		}else{
-				
-		}	
+			pthread_cond_wait(&(pool->buffer_empty),&(pool->buffer_lock));
+		}
+		if(pool->buffer_size == 0) {
+			pool->buffer_head = curr;  //set to only one
+			pool->buffer_tail = curr;
+			pthread_cond_signal(&(pool->buffer_not_empty));  //I am not empty.  
+		} else {
+			if(isFIFO){
+				curr->next = NULL; //Since it is always the last
+				pool->buffer_tail->next = curr;	//add to end of buffer;
+				pool->buffer_tail = curr;
+			}else{
+				conn_node_t* currNode = pool->buffer_head;
+				if(currNode->size >= curr->size){
+					curr->next = currNode;
+					pool->buffer_head = curr;
+				}else{
+					while (currNode != NULL){
+						if(currNode->next == NULL || currNode->next->size < curr->size ){
+							curr->next = currNode->next;
+							currNode->next = curr;
+							break;
+						}
+						currNode = currNode->next;
+					}
+				}
+			}
+		}
+		pool->buffer_size++;
+		pthread_mutex_unlock(&(pool->buffer_lock));
 
 	}
 	return 0;

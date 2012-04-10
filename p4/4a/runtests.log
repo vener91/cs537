@@ -1,0 +1,5136 @@
+
+**********************************************************************
+
+Test build
+build project using make
+
+**********************************************************************
+Trying to clean project using make clean
+make clean
+rm -f server.o request.o cs537.o client.o server client output.cgi
+Trying to build project using make
+make
+gcc -g -Wall -o server.o -c server.c
+gcc -g -Wall -o request.o -c request.c
+gcc -g -Wall -o cs537.o -c cs537.c
+gcc -g -Wall -o server server.o request.o cs537.o -lpthread 
+gcc -g -Wall -o client.o -c client.c
+gcc -g -Wall -o client client.o cs537.o
+gcc -g -Wall -o output.cgi output.c
+
+
+test build PASSED
+ (build project using make)
+
+
+**********************************************************************
+
+Test basic
+check if the webserver can serve requests
+
+**********************************************************************
+Starting server on port 7698
+/tmp/tmpoNlOoU/p/server 7698 1 1 FIFO
+/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test basic PASSED
+ (check if the webserver can serve requests)
+
+
+**********************************************************************
+
+Test fifo
+FIFO with dynamic requests and one thread
+
+**********************************************************************
+Starting server on port 5157
+/tmp/tmpoNlOoU/p/server 5157 1 1 FIFO
+/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test fifo PASSED
+ (FIFO with dynamic requests and one thread)
+
+
+**********************************************************************
+
+Test sff
+Smallest file first with dynamic requests and one thread
+
+**********************************************************************
+Starting server on port 5912
+/tmp/tmpoNlOoU/p/server 5912 1 10 SFF
+/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test sff PASSED
+ (Smallest file first with dynamic requests and one thread)
+
+
+**********************************************************************
+
+Test sff2
+Smallest file first with dynamic requests
+
+**********************************************************************
+Starting server on port 6783
+/tmp/tmpoNlOoU/p/server 6783 2 10 SFF
+/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test sff2 PASSED
+ (Smallest file first with dynamic requests)
+
+
+**********************************************************************
+
+Test pool
+check if using a fixed size thread pool
+
+**********************************************************************
+Starting server on port 8157
+/tmp/tmpoNlOoU/p/server 8157 2 8 FIFO
+/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test pool PASSED
+ (check if using a fixed size thread pool)
+
+
+**********************************************************************
+
+Test pool2
+check if using a fixed size thread pool
+
+**********************************************************************
+Starting server on port 7195
+/tmp/tmpoNlOoU/p/server 7195 3 8 FIFO
+/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test pool2 PASSED
+ (check if using a fixed size thread pool)
+
+
+**********************************************************************
+
+Test locks
+many concurrent requests to test locking
+
+**********************************************************************
+Starting server on port 8384
+/tmp/tmpoNlOoU/p/server 8384 8 16 FIFO
+GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+Size: 9 Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 Size: 3 GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 Size: 9 Size: 8 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+Size: 11 Size: 10 Size: 9 GET /output.cgi?0.3 HTTP/1.1
+Size: 9 GET /home.html HTTP/1.1
+Size: 9 Size: 8 Size: 7 Size: 6 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 7 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 6 Size: 5 Size: 4 Size: 3 GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 6 Size: 5 Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 Size: 9 Size: 8 GET /output.cgi?0.3 HTTP/1.1
+Size: 8 Size: 7 Size: 6 GET /home.html HTTP/1.1
+Size: 6 Size: 5 Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 5 Size: 4 Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 GET /home.html HTTP/1.1
+Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 Size: 3 Size: 2 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 Size: 9 Size: 8 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+Size: 9 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+Size: 11 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+Size: 9 Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 Size: 3 Size: 2 GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 5 Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 Size: 7 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 8 GET /home.html HTTP/1.1
+Size: 8 Size: 7 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 6 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+Size: 9 Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 Size: 7 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+Size: 11 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+Size: 11 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 Size: 7 GET /home.html HTTP/1.1
+Size: 7 GET /output.cgi?0.3 HTTP/1.1
+Size: 7 Size: 6 Size: 5 Size: 4 Size: 3 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 9 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 GET /home.html HTTP/1.1
+Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 Size: 3 GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 GET /home.html HTTP/1.1
+Size: 10 Size: 9 Size: 8 Size: 7 Size: 6 Size: 5 GET /output.cgi?0.3 HTTP/1.1
+Size: 5 Size: 4 Size: 3 Size: 2 GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 5 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 Size: 7 Size: 6 GET /home.html HTTP/1.1
+Size: 5 Size: 5 Size: 4 Size: 3 GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 14 Size: 13 Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 GET /home.html HTTP/1.1
+Size: 8 Size: 7 Size: 6 GET /home.html HTTP/1.1
+Size: 6 Size: 5 Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 7 Size: 6 Size: 5 Size: 4 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 5 Size: 4 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 GET /output.cgi?0.3 HTTP/1.1
+Size: 10 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 11 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 Size: 7 Size: 6 GET /home.html HTTP/1.1
+Size: 6 Size: 5 Size: 4 Size: 3 Size: 2 GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 Size: 2 GET /home.html HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 10 Size: 9 Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 10 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 10 GET /output.cgi?0.3 HTTP/1.1
+Size: 10 Size: 9 Size: 8 Size: 7 Size: 6 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 7 Size: 6 Size: 5 Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 Size: 7 Size: 6 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 Size: 9 GET /output.cgi?0.3 HTTP/1.1
+Size: 9 Size: 8 GET /home.html HTTP/1.1
+Size: 8 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 10 Size: 9 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 10 Size: 9 Size: 8 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 Size: 7 GET /home.html HTTP/1.1
+Size: 7 Size: 6 Size: 5 Size: 4 GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 7 Size: 6 Size: 5 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 6 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 7 Size: 6 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 11 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 Size: 9 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 11 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+Size: 9 GET /output.cgi?0.3 HTTP/1.1
+Size: 9 Size: 8 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 11 Size: 10 Size: 9 GET /output.cgi?0.3 HTTP/1.1
+Size: 9 GET /home.html HTTP/1.1
+Size: 9 Size: 8 Size: 7 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 9 Size: 8 Size: 7 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 8 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 11 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1
+Size: 9 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 12 Size: 11 GET /output.cgi?0.3 HTTP/1.1
+Size: 11 Size: 10 Size: 9 GET /home.html HTTP/1.1/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test locks PASSED
+ (many concurrent requests to test locking)
+
+
+**********************************************************************
+
+Test locks2
+many concurrent requests to test locking
+
+**********************************************************************
+Starting server on port 9074
+/tmp/tmpoNlOoU/p/server 9074 32 64 FIFO
+GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 3 GET /in HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 2 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 3 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+Size: 24 Size: 23 GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 Size: 25 Size: 24 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 26 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+Size: 25 GET /in HTTP/1.1
+Size: 25 Size: 24 Size: 23 Size: 22 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 Size: 19 Size: 18 Size: 17 GET /home.html HTTP/1.1
+Size: 17 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 18 Size: 17 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 18 Size: 17 Size: 16 Size: 15 Size: 14 Size: 13 GET /output.cgi?0.2 HTTP/1.1
+Size: 13 Size: 12 Size: 11 Size: 10 Size: 9 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 16 Size: 15 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 16 Size: 15 Size: 14 Size: 13 GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 15 GET /home.html HTTP/1.1
+Size: 15 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 21 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 23 Size: 22 Size: 21 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 24 Size: 23 Size: 23 GET /home.html HTTP/1.1
+Size: 23 Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.2 HTTP/1.1
+Size: 26 Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 Size: 21 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 GET /home.html HTTP/1.1
+Size: 20 Size: 19 Size: 18 Size: 17 GET /in HTTP/1.1
+Size: 17 Size: 16 Size: 15 Size: 14 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 18 Size: 17 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 GET /in HTTP/1.1
+Size: 23 GET /output.cgi?0.3 HTTP/1.1
+Size: 23 Size: 22 Size: 21 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 22 Size: 21 GET /in HTTP/1.1
+Size: 21 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 22 Size: 21 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 23 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 24 Size: 23 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 26 GET /in HTTP/1.1
+Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 21 Size: 20 Size: 19 Size: 18 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+Size: 26 Size: 25 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+Size: 24 GET /home.html HTTP/1.1
+Size: 24 Size: 23 Size: 22 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 26 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.3 HTTP/1.1
+Size: 25 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+Size: 24 Size: 23 Size: 22 Size: 21 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 22 Size: 22 Size: 21 Size: 20 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 22 Size: 21 Size: 20 Size: 19 GET /in HTTP/1.1
+Size: 19 Size: 18 Size: 17 Size: 16 GET /home.html HTTP/1.1
+Size: 15 Size: 15 GET /output.cgi?0.3 HTTP/1.1
+Size: 15 GET /in HTTP/1.1
+Size: 14 Size: 14 GET /in HTTP/1.1
+Size: 14 Size: 13 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 14 GET /output.cgi?0.3 HTTP/1.1
+Size: 14 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 16 Size: 15 Size: 14 Size: 13 Size: 12 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 13 Size: 12 Size: 11 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 13 Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 14 GET /output.cgi?0.2 HTTP/1.1
+Size: 14 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 17 Size: 16 Size: 15 Size: 14 GET /in HTTP/1.1
+Size: 14 Size: 13 Size: 12 Size: 11 Size: 10 Size: 9 Size: 8 Size: 7 GET /in HTTP/1.1
+Size: 7 GET /output.cgi?0.2 HTTP/1.1
+Size: 7 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 9 Size: 8 Size: 7 Size: 6 Size: 5 Size: 4 Size: 3 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 5 GET /output.cgi?0.2 HTTP/1.1
+Size: 5 Size: 4 Size: 3 Size: 2 GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 7 Size: 6 Size: 5 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 9 Size: 8 Size: 7 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 GET /home.html HTTP/1.1
+Size: 23 Size: 22 Size: 21 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 23 GET /output.cgi?0.3 HTTP/1.1
+Size: 23 Size: 22 Size: 21 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 24 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 21 Size: 20 Size: 19 Size: 18 Size: 17 Size: 16 Size: 15 Size: 14 Size: 13 Size: 12 Size: 11 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 13 Size: 12 Size: 11 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 12 Size: 11 Size: 10 GET /output.cgi?0.3 HTTP/1.1
+Size: 10 Size: 9 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+Size: 25 Size: 24 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 25 Size: 24 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 25 Size: 24 Size: 23 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 25 Size: 24 Size: 23 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 GET /home.html HTTP/1.1
+Size: 23 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 24 Size: 23 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 26 Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 Size: 25 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 25 Size: 24 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 26 Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 26 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 24 Size: 24 Size: 23 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 24 Size: 23 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+Size: 25 Size: 24 GET /output.cgi?0.3 HTTP/1.1
+Size: 24 GET /output.cgi?0.2 HTTP/1.1
+Size: 23 GET /output.cgi?0.3 HTTP/1.1
+Size: 24 GET /home.html HTTP/1.1
+Size: 24 Size: 23 Size: 22 Size: 21 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 23 GET /in HTTP/1.1
+Size: 23 Size: 22 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 23 Size: 22 Size: 21 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+Size: 23 Size: 23 Size: 22 Size: 21 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 22 GET /output.cgi?0.3 HTTP/1.1
+Size: 22 Size: 21 Size: 20 Size: 19 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 22 GET /in HTTP/1.1
+Size: 22 GET /output.cgi?0.2 HTTP/1.1
+Size: 22 Size: 21 Size: 20 Size: 19 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 20 Size: 19 Size: 18 Size: 17 Size: 16 GET /in HTTP/1.1
+Size: 15 Size: 15 Size: 14 Size: 13 GET /output.cgi?0.2 HTTP/1.1
+Size: 12 GET /home.html HTTP/1.1
+Size: 13 GET /home.html HTTP/1.1
+Size: 13 Size: 12 GET /output.cgi?0.3 HTTP/1.1
+Size: 12 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 15 Size: 15 Size: 14 Size: 13 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+Size: 26 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 27 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.3 HTTP/1.1
+Size: 25 Size: 25 GET /home.html HTTP/1.1
+Size: 24 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 26 GET /output.cgi?0.2 HTTP/1.1
+Size: 26 Size: 25 Size: 24 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 25 GET /output.cgi?0.2 HTTP/1.1
+Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+Size: 24 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 GET /home.html HTTP/1.1
+Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+Size: 25 Size: 24 Size: 23 GET /output.cgi?0.3 HTTP/1.1
+Size: 23 Size: 22 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 25 GET /home.html HTTP/1.1
+Size: 24 Size: 24 Size: 23 Size: 22 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 23 Size: 22 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+Size: 25 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 27 GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 GET /home.html HTTP/1.1
+Size: 23 Size: 22 Size: 21 Size: 20 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 21 GET /in HTTP/1.1
+Size: 21 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 23 Size: 22 Size: 21 Size: 20 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 21 Size: 20 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 22 Size: 21 Size: 20 Size: 19 Size: 18 Size: 17 GET /output.cgi?0.2 HTTP/1.1
+Size: 17 Size: 16 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 19 Size: 18 Size: 17 Size: 16 Size: 15 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 25 Size: 24 Size: 23 Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+Size: 25 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 24 Size: 23 Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 23 Size: 22 Size: 21 Size: 20 Size: 19 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 21 Size: 20 Size: 19 Size: 18 GET /output.cgi?0.2 HTTP/1.1
+Size: 18 Size: 17 Size: 16 Size: 15 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 17 Size: 16 Size: 15 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 18 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 23 Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 26 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 26 GET /home.html HTTP/1.1
+Size: 26 GET /in HTTP/1.1
+Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 24 Size: 24 Size: 23 GET /home.html HTTP/1.1
+Size: 23 Size: 22 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 25 Size: 24 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 25 Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 Size: 19 Size: 18 Size: 17 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 19 Size: 18 GET /output.cgi?0.2 HTTP/1.1
+Size: 18 Size: 17 Size: 16 GET /in HTTP/1.1
+Size: 16 Size: 15 Size: 14 Size: 13 Size: 12 Size: 11 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+Size: 26 Size: 25 GET /output.cgi?0.3 HTTP/1.1
+Size: 24 GET /output.cgi?0.3 HTTP/1.1
+Size: 25 GET /in HTTP/1.1
+Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+Size: 26 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 24 Size: 23 GET /in HTTP/1.1
+Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 26 Size: 25 GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 Size: 25 GET /output.cgi?0.2 HTTP/1.1
+Size: 24 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 Size: 19 Size: 18 Size: 17 GET /home.html HTTP/1.1
+Size: 17 GET /output.cgi?0.3 HTTP/1.1
+Size: 17 Size: 16 GET /output.cgi?0.2 HTTP/1.1
+Size: 16 Size: 15 Size: 14 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+Size: 26 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 27 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 GET /in HTTP/1.1
+Size: 25 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+Size: 26 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+Size: 25 Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 Size: 19 Size: 18 Size: 17 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 19 Size: 18 Size: 17 Size: 16 GET /in HTTP/1.1
+Size: 16 Size: 15 GET /output.cgi?0.3 HTTP/1.1
+Size: 15 Size: 14 Size: 13 GET /output.cgi?0.2 HTTP/1.1
+Size: 12 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 18 Size: 17 Size: 16 GET /output.cgi?0.3 HTTP/1.1
+Size: 16 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 19 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 21 Size: 20 GET /output.cgi?0.3 HTTP/1.1
+Size: 19 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+Size: 26 Size: 25 Size: 24 GET /output.cgi?0.2 HTTP/1.1
+Size: 23 Size: 23 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 24 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 25 Size: 24 Size: 23 Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 Size: 21 GET /home.html HTTP/1.1
+Size: 21 Size: 20 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 23 Size: 22 Size: 21 Size: 20 Size: 19 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 25 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 25 Size: 24 Size: 23 Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 Size: 19 GET /in HTTP/1.1
+Size: 19 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 23 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 26 Size: 25 GET /output.cgi?0.2 HTTP/1.1
+Size: 24 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 27 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 27 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 25 Size: 24 Size: 23 Size: 22 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 24 Size: 23 Size: 22 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 25 GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 GET /home.html HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 GET /home.html HTTP/1.1
+Size: 23 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 28 Size: 27 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 28 GET /in HTTP/1.1
+Size: 27 Size: 27 GET /home.html HTTP/1.1
+Size: 27 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 28 Size: 27 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 28 Size: 27 Size: 26 Size: 25 GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 26 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 27 GET /home.html HTTP/1.1
+Size: 27 Size: 26 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 23 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 GET /home.html HTTP/1.1
+Size: 27 Size: 26 Size: 25 Size: 24 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 25 Size: 24 Size: 23 GET /output.cgi?0.3 HTTP/1.1
+Size: 22 Size: 22 Size: 21 GET /home.html HTTP/1.1
+Size: 21 Size: 20 Size: 19 Size: 18 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 19 Size: 18 Size: 17 GET /output.cgi?0.2 HTTP/1.1
+Size: 17 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 18 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 19 GET /home.html HTTP/1.1
+Size: 18 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 Size: 21 GET /home.html HTTP/1.1
+Size: 21 Size: 20 Size: 19 GET /home.html HTTP/1.1
+Size: 19 Size: 18 GET /home.html HTTP/1.1
+Size: 18 Size: 17 GET /output.cgi?0.2 HTTP/1.1
+Size: 16 Size: 16 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 19 GET /home.html HTTP/1.1
+Size: 19 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 26 Size: 25 GET /home.html HTTP/1.1
+Size: 24 Size: 23 Size: 23 GET /home.html HTTP/1.1
+Size: 23 GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 24 Size: 23 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 24 Size: 23 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /home.html HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /home.html HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 Size: 21 GET /in HTTP/1.1
+Size: 21 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 Size: 26 Size: 25 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+Size: 25 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 26 Size: 25 Size: 24 Size: 23 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 27 GET /in HTTP/1.1
+Size: 27 Size: 26 GET /output.cgi?0.3 HTTP/1.1
+Size: 26 Size: 25 Size: 24 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 26 Size: 25 Size: 24 Size: 23 Size: 22 GET /output.cgi?0.2 HTTP/1.1
+Size: 22 GET /output.cgi?0.3 HTTP/1.1
+Size: 22 GET /output.cgi?0.2 HTTP/1.1
+Size: 22 GET /home.html HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 24 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 25 Size: 24 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 25 Size: 24 GET /home.html HTTP/1.1
+Size: 24 Size: 23 Size: 22 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 24 Size: 23 Size: 22 Size: 21 Size: 20 Size: 19 Size: 18 Size: 17 GET /output.cgi?0.2 HTTP/1.1
+Size: 17 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 20 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 22 GET /in HTTP/1.1
+Size: 22 GET /home.html HTTP/1.1
+Size: 22 Size: 21 Size: 20 GET /in HTTP/1.1
+Size: 19 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 21 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 22 Size: 21 Size: 20 GET /in HTTP/1.1
+Size: 20 Size: 19 Size: 18 GET /output.cgi?0.2 HTTP/1.1
+Size: 17 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 22 GET /home.html HTTP/1.1
+Size: 22 Size: 21 GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 22 Size: 21 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 22 GET /in HTTP/1.1
+Size: 22 Size: 21 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 22 Size: 21 Size: 20 Size: 19 Size: 18 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 20 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 21 Size: 20 Size: 19 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 21 Size: 20 Size: 19 GET /in HTTP/1.1
+Size: 18 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 20 Size: 19 Size: 18 Size: 17 Size: 16 Size: 15 GET /in HTTP/1.1
+Size: 14 Size: 14 Size: 13 GET /output.cgi?0.3 HTTP/1.1
+Size: 13 Size: 12 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 13 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 15 GET /in HTTP/1.1
+Size: 14 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 19 Size: 18 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 19 GET /home.html HTTP/1.1
+Size: 19 Size: 18 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 19 Size: 18 Size: 17 GET /home.html HTTP/1.1
+Size: 16 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 19 Size: 18 Size: 17 GET /in HTTP/1.1
+Size: 16 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 18 Size: 17 Size: 16 GET /home.html HTTP/1.1
+Size: 15 Size: 15 Size: 14 GET /in HTTP/1.1
+Size: 13 Size: 12 Size: 12 Size: 11 Size: 10 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /in HTTP/1.1
+Size: 13 Size: 12 Size: 11 GET /output.cgi?0.2 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 15 Size: 14 Size: 13 Size: 12 GET /output.cgi?0.2 HTTP/1.1
+Size: 11 Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 12 GET /output.cgi?0.2 HTTP/1.1
+Size: 12 Size: 11 GET /output.cgi?0.2 HTTP/1.1
+Size: 10 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 11 Size: 10 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+Size: 14 GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 15 Size: 14 GET /output.cgi?0.3 HTTP/1.1
+Size: 14 Size: 13 Size: 12 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 13 Size: 12 Size: 11 GET /output.cgi?0.3 HTTP/1.1
+Size: 11 Size: 10 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 11 Size: 10 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 11 Size: 10 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 11 Size: 10 GET /home.html HTTP/1.1
+Size: 10 GET /output.cgi?0.2 HTTP/1.1
+Size: 10 Size: 9 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 10 Size: 9 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 10 Size: 9 Size: 8 GET /output.cgi?0.2 HTTP/1.1
+Size: 7 GET /output.cgi?0.3 HTTP/1.1
+Size: 8 Size: 7 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 8 Size: 7 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 8 Size: 7 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 8 GET /in HTTP/1.1
+Size: 8 Size: 7 Size: 6 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 7 Size: 6 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 7 Size: 6 GET /output.cgi?0.3 HTTP/1.1
+Size: 6 Size: 5 Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 4 GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /in HTTP/1.1
+Size: 6 Size: 5 Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /output.cgi?0.3 HTTP/1.1
+GET /in HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 6 Size: 5 Size: 4 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 6 Size: 5 Size: 4 Size: 3 Size: 2 GET /in HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 5 Size: 4 Size: 3 GET /in HTTP/1.1
+GET /output.cgi?0.2 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 GET /output.cgi?0.2 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /in HTTP/1.1
+Size: 1 GET /output.cgi?0.2 HTTP/1.1
+Size: 1 GET /in H/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test locks2 PASSED
+ (many concurrent requests to test locking)
+
+
+**********************************************************************
+
+Test locks3
+many concurrent requests to test locking
+
+**********************************************************************
+Starting server on port 7094
+/tmp/tmpoNlOoU/p/server 7094 64 128 SFF
+/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test locks3 PASSED
+ (many concurrent requests to test locking)
+
+
+**********************************************************************
+
+Test locks4
+many concurrent requests to test locking
+
+**********************************************************************
+Starting server on port 7811
+/tmp/tmpoNlOoU/p/server 7811 25 27 FIFO
+GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.005 HTTP/1.1
+Size: 2 GET /output.cgi?0.02 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+GET /output.cgi?0.005 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 2 GET /output.cgi?0.005 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.005 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.01 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.01 HTTP/1.1
+Size: 2 GET /output.cgi?0.01 HTTP/1.1
+GET /output.cgi?0.01 HTTP/1.1
+Size: 3 GET /output.cgi?0.02 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 2 GET /output.cgi?0.005 HTTP/1.1
+GET /output.cgi?0.005 HTTP/1.1
+Size: 3 Size: 2 GET /output.cgi?0.02 HTTP/1.1
+Size: 2 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.005 HTTP/1.1
+Size: 3 GET /output.cgi?0.01 HTTP/1.1
+Size: 3 Size: 2 GET /output.cgi?0.01 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 3 GET /output.cgi?0.005 HTTP/1.1
+Size: 3 GET /output.cgi?0.02 HTTP/1.1
+Size: 3 GET /output.cgi?0.02 HTTP/1.1
+Size: 3 GET /output.cgi?0.005 HTTP/1.1
+Size: 3 GET /output.cgi?0.01 HTTP/1.1
+Size: 3 GET /output.cgi?0.02 HTTP/1.1
+Size: 3 Size: 2 GET /output.cgi?0.01 HTTP/1.1
+GET /output.cgi?0.005 HTTP/1.1
+Size: 3 GET /output.cgi?0.01 HTTP/1.1
+Size: 3 GET /output.cgi?0.02 HTTP/1.1
+Size: 3 Size: 2 GET /output.cgi?0.005 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 3 GET /output.cgi?0.01 HTTP/1.1
+Size: 3 GET /output.cgi?0.02 HTTP/1.1
+Size: 3 GET /output.cgi?0.01 HTTP/1.1
+Size: 3 GET /output.cgi?0.005 HTTP/1.1
+Size: 3 GET /output.cgi?0.02 HTTP/1.1
+Size: 3 GET /output.cgi?0.005 HTTP/1.1
+Size: 3 Size: 2 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.01 HTTP/1.1
+Size: 3 Size: 2 GET /output.cgi?0.005 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.01 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+GET /output.cgi?0.01 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+GET /output.cgi?0.01 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 2 GET /output.cgi?0.01 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+GET /output.cgi?0.005 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+GET /output.cgi?0.005 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+GET /output.cgi?0.02 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.02 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.005 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 HTTP/1.1
+Size: 1 GET /output.cgi?0.01 H/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test locks4 PASSED
+ (many concurrent requests to test locking)
+
+
+**********************************************************************
+
+Test fewer
+fewer buffers than threads
+
+**********************************************************************
+Starting server on port 5530
+/tmp/tmpoNlOoU/p/server 5530 16 8 FIFO
+GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 Size: 2 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 Size: 2 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 GET /home.html HTTP/1.1
+Size: 4 Size: 3 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 4 Size: 3 Size: 2 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 3 Size: 2 Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /output.cgi?0.3 HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+Size: 2 GET /home.html HTTP/1.1
+Size: 2 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 2 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test fewer PASSED
+ (fewer buffers than threads)
+
+
+**********************************************************************
+
+Test fewer2
+fewer buffers than threads
+
+**********************************************************************
+Starting server on port 7029
+/tmp/tmpoNlOoU/p/server 7029 32 1 FIFO
+GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 1 Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /home.html HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+GET /output.cgi?0.3 HTTP/1.1
+Size: 1 Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /output.cgi?0.3 HTTP/1.1
+Size: 1 GET /home.html HTTP/1.1
+Size: 1 GET /output.cgi?0/u/c/s/cs537-1/ta/tests/4a/files
+
+
+test fewer2 PASSED
+ (fewer buffers than threads)
+
+**********************************************************************
+Summary:
+test build PASSED
+ (build project using make)
+
+test basic PASSED
+ (check if the webserver can serve requests)
+
+test fifo PASSED
+ (FIFO with dynamic requests and one thread)
+
+test sff PASSED
+ (Smallest file first with dynamic requests and one thread)
+
+test sff2 PASSED
+ (Smallest file first with dynamic requests)
+
+test pool PASSED
+ (check if using a fixed size thread pool)
+
+test pool2 PASSED
+ (check if using a fixed size thread pool)
+
+test locks PASSED
+ (many concurrent requests to test locking)
+
+test locks2 PASSED
+ (many concurrent requests to test locking)
+
+test locks3 PASSED
+ (many concurrent requests to test locking)
+
+test locks4 PASSED
+ (many concurrent requests to test locking)
+
+test fewer PASSED
+ (fewer buffers than threads)
+
+test fewer2 PASSED
+ (fewer buffers than threads)
+
+Passed 13 of 13 tests.
+Overall 13 of 13
