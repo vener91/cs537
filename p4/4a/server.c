@@ -48,7 +48,6 @@ void* worker_thread(void* p){
 		}
 
 		curr = pool->buffer_head;	//set the cur variable.  
-		printf("Size: %d ", pool->buffer_size);
 		pool->buffer_size--; //Reduce 1
 
 		if(pool->buffer_size == 0) {
