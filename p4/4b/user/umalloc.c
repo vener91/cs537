@@ -1,6 +1,7 @@
 #include "types.h"
 #include "stat.h"
 #include "user.h"
+#include "x86.h"
 #include "param.h"
 
 // Memory allocator by Kernighan and Ritchie,
@@ -87,4 +88,31 @@ malloc(uint nbytes)
       if((p = morecore(nunits)) == 0)
         return 0;
   }
+}
+
+void lock_init(lock_t* lock){
+	// 0 indicates that lock is available, 1 that it is held
+	lock->flag = 0;
+}
+
+void lock_acquire(lock_t* lock){
+	while (xchg(&lock->flag, 1) == 1)
+		; // spin-wait (do nothing)	
+}
+
+void lock_release(lock_t* lock){
+	lock->flag = 0;
+}
+
+int thread_create(void (*start_routine)(void*), void *arg){
+	void *newSp = malloc(4096);
+	return clone(start_routine, arg, newSp);
+}
+
+int thread_join(){
+	void *oldSp;
+	int ret;
+	ret = join(&oldSp);
+	free(oldSp);
+	return ret;
 }

@@ -3,6 +3,11 @@
 
 struct stat;
 
+//Being lazy and put lock structure here
+typedef struct lock{
+	uint flag;
+} lock_t;
+
 // system calls
 int fork(void);
 int exit(void) __attribute__((noreturn));
@@ -41,6 +46,13 @@ void* memset(void*, int, uint);
 void* malloc(uint);
 void free(void*);
 int atoi(const char*);
+
+// thread library functions (tlib.c)
+void lock_init(lock_t*);
+void lock_acquire(lock_t*);
+void lock_release(lock_t*);
+int thread_create(void (*start_routine)(void*), void *);
+int thread_join();
 
 #endif // _USER_H_
 

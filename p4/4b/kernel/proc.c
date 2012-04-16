@@ -107,6 +107,7 @@ int
 growproc(int n)
 {
   uint sz;
+  struct proc* p;
   
   sz = proc->sz;
   if(n > 0){
@@ -117,6 +118,13 @@ growproc(int n)
       return -1;
   }
   proc->sz = sz;
+  acquire(&ptable.lock);
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+	  if(p->state == UNUSED || p->pgdir != proc->pgdir)
+		  continue;
+	  p->sz = sz;
+  }
+  release(&ptable.lock);  
   switchuvm(proc);
   return 0;
 }
@@ -124,79 +132,79 @@ growproc(int n)
 // Create a new process copying p as the parent.
 // Sets up stack to return as if from system call.
 // Caller must set state of returned proc to RUNNABLE.
-int
+	int
 fork(void)
 {
-  int i, pid;
-  struct proc *np;
+	int i, pid;
+	struct proc *np;
 
-  // Allocate process.
-  if((np = allocproc()) == 0)
-    return -1;
+	// Allocate process.
+	if((np = allocproc()) == 0)
+		return -1;
 
-  // Copy process state from p.
-  if((np->pgdir = copyuvm(proc->pgdir, proc->sz)) == 0){
-    kfree(np->kstack);
-    np->kstack = 0;
-    np->state = UNUSED;
-    return -1;
-  }
-  np->sz = proc->sz;
-  np->parent = proc;
-  *np->tf = *proc->tf;
+	// Copy process state from p.
+	if((np->pgdir = copyuvm(proc->pgdir, proc->sz)) == 0){
+		kfree(np->kstack);
+		np->kstack = 0;
+		np->state = UNUSED;
+		return -1;
+	}
+	np->sz = proc->sz;
+	np->parent = proc;
+	*np->tf = *proc->tf;
 
-  // Clear %eax so that fork returns 0 in the child.
-  np->tf->eax = 0;
+	// Clear %eax so that fork returns 0 in the child.
+	np->tf->eax = 0;
 
-  for(i = 0; i < NOFILE; i++)
-    if(proc->ofile[i])
-      np->ofile[i] = filedup(proc->ofile[i]);
-  np->cwd = idup(proc->cwd);
- 
-  pid = np->pid;
-  np->state = RUNNABLE;
-  safestrcpy(np->name, proc->name, sizeof(proc->name));
-  return pid;
+	for(i = 0; i < NOFILE; i++)
+		if(proc->ofile[i])
+			np->ofile[i] = filedup(proc->ofile[i]);
+	np->cwd = idup(proc->cwd);
+
+	pid = np->pid;
+	np->state = RUNNABLE;
+	safestrcpy(np->name, proc->name, sizeof(proc->name));
+	return pid;
 }
 
 // Exit the current process.  Does not return.
 // An exited process remains in the zombie state
 // until its parent calls wait() to find out it exited.
-void
+	void
 exit(void)
 {
-  struct proc *p;
-  int fd;
+	struct proc *p;
+	int fd;
 
-  if(proc == initproc)
-    panic("init exiting");
+	if(proc == initproc)
+		panic("init exiting");
 
-  // Close all open files.
-  for(fd = 0; fd < NOFILE; fd++){
-    if(proc->ofile[fd]){
-      fileclose(proc->ofile[fd]);
-      proc->ofile[fd] = 0;
-    }
-  }
+	// Close all open files.
+	for(fd = 0; fd < NOFILE; fd++){
+		if(proc->ofile[fd]){
+			fileclose(proc->ofile[fd]);
+			proc->ofile[fd] = 0;
+		}
+	}
 
-  iput(proc->cwd);
-  proc->cwd = 0;
+	iput(proc->cwd);
+	proc->cwd = 0;
 
-  acquire(&ptable.lock);
+	acquire(&ptable.lock);
 
-  // Parent might be sleeping in wait().
-  wakeup1(proc->parent);
+	// Parent might be sleeping in wait().
+	wakeup1(proc->parent);
 
-  // Pass abandoned children to init.
-  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-    if(p->parent == proc){
-      p->parent = initproc;
-      if(p->state == ZOMBIE)
-        wakeup1(initproc);
-    }
-  }
+	// Pass abandoned children to init.
+	for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+		if(p->parent == proc){
+			p->parent = initproc;
+			if(p->state == ZOMBIE)
+				wakeup1(initproc);
+		}
+	}
 
-  // Jump into the scheduler, never to return.
+	// Jump into the scheduler, never to return.
   proc->state = ZOMBIE;
   sched();
   panic("zombie exit");
@@ -223,7 +231,11 @@ wait(void)
         pid = p->pid;
         kfree(p->kstack);
         p->kstack = 0;
-        freevm(p->pgdir);
+		if(p->pgdir != proc->pgdir){
+        	freevm(p->pgdir);
+		}else{
+			return pid;
+		}
         p->state = UNUSED;
         p->pid = 0;
         p->parent = 0;
@@ -442,5 +454,96 @@ procdump(void)
     cprintf("\n");
   }
 }
+/*
+struct proc {
+  uint sz;                     // Size of process memory (bytes)
+  pde_t* pgdir;                // Page table
+  char *kstack;                // Bottom of kernel stack for this process
+  enum procstate state;        // Process state
+  volatile int pid;            // Process ID
+  struct proc *parent;         // Parent process
+  struct trapframe *tf;        // Trap frame for current syscall
+  struct context *context;     // swtch() here to run process
+  void *chan;                  // If non-zero, sleeping on chan
+  int killed;                  // If non-zero, have been killed
+  struct file *ofile[NOFILE];  // Open files
+  struct inode *cwd;           // Current directory
+  char name[16];               // Process name (debugging)
+};
+*/
 
+//Thread library
+int clone(void(*fcn)(void*), void *arg, void*stack){
+	if((uint)stack == 0){
+		return -1;
+	}
 
+  	int i, pid;
+	struct proc *np;
+	//struct proc *currProc = proc;
+
+	if(proc == NULL)
+		return -1;
+  	// Allocate process. (copied from fork())
+  	if((np = allocproc()) == 0)
+		return -1;
+
+	// Copy process state from currProc
+	np->pgdir 	= proc->pgdir;
+	np->sz 		= proc->sz;
+	np->parent 	= proc;
+	np->sz = proc->sz;
+	np->parent = proc;
+	*np->tf = *proc->tf;
+	np->stack = stack;
+	//stack = (void*)(stack - 4096);
+	//Copy the current frame into the stacks
+	void *startCopy = (void *)proc->tf->ebp + 16;
+	void *endCopy = (void *)proc->tf->esp;
+	uint copySize = (uint) (startCopy - endCopy);
+
+	np->tf->esp = (uint) (stack - copySize);//Swap to our address space
+	np->tf->ebp = (uint) (stack - 16);
+
+	memmove(stack - copySize, endCopy, copySize);
+	
+	void** targ;
+	targ = (void*) np->tf->esp;
+	*targ = arg;
+	np->tf->esp = np->tf->esp - sizeof(void*);
+	targ = (void*) np->tf->esp;
+	*targ = (void*)0xffffffff;
+	np->tf->eip = (uint)fcn; //Set return address to worker
+
+	// Clear %eax so that fork returns 0 in the child.
+	np->tf->eax = 0;
+
+	for(i = 0; i < NOFILE; i++)
+		if(proc->ofile[i])
+			np->ofile[i] = filedup(proc->ofile[i]);
+	np->cwd = idup(proc->cwd);
+
+	pid = np->pid;
+	np->state = RUNNABLE;
+	safestrcpy(np->name, proc->name, sizeof(proc->name));
+	return pid;
+}
+
+int join(void **stack){
+	int pid;
+	struct proc* p;
+	pid = wait();
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+		if(p->pid == pid){
+			*stack = p->stack;
+			p->state = UNUSED;
+			p->pid = 0;
+			p->parent = 0;
+			p->name[0] = 0;
+			p->killed = 0;
+			release(&ptable.lock);
+			return pid;
+		}
+	}
+	return -1;
+}
