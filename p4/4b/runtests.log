@@ -230,15 +230,15 @@ ld  -m    elf_i386 -nostdlib --omagic \
 dd if=/dev/zero of=xv6.img count=10000
 10000+0 records in
 10000+0 records out
-5120000 bytes (5.1 MB) copied, 0.0209712 s, 244 MB/s
+5120000 bytes (5.1 MB) copied, 0.0208753 s, 245 MB/s
 dd if=kernel/bootblock of=xv6.img conv=notrunc
 1+0 records in
 1+0 records out
-512 bytes (512 B) copied, 1.8205e-05 s, 28.1 MB/s
+512 bytes (512 B) copied, 1.7687e-05 s, 28.9 MB/s
 dd if=kernel/kernel of=xv6.img seek=1 conv=notrunc
 254+1 records in
 254+1 records out
-130466 bytes (130 kB) copied, 0.000414171 s, 315 MB/s
+130386 bytes (130 kB) copied, 0.000416241 s, 313 MB/s
 gcc -c  -iquote include -Wall -Werror -ggdb  -o tools/mkfs.o tools/mkfs.c
 gcc  tools/mkfs.o -o tools/mkfs
 mkdir -p fs
@@ -699,32 +699,32 @@ usertests starting
 bigarg test: ok
 bss test: ok
 sbrk test
-pid 6 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xa0000--kill proc
+pid 6 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xa0000--kill proc
 pid 7 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xac350--kill proc
-pid 8 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xb86a0--kill proc
+pid 8 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xb86a0--kill proc
 pid 9 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xc49f0--kill proc
 pid 10 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xd0d40--kill proc
 pid 11 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xdd090--kill proc
-pid 12 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xe93e0--kill proc
-pid 13 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xf5730--kill proc
-pid 14 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x101a80--kill proc
+pid 12 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xe93e0--kill proc
+pid 13 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xf5730--kill proc
+pid 14 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x101a80--kill proc
 pid 15 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x10ddd0--kill proc
 pid 16 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x11a120--kill proc
 pid 17 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x126470--kill proc
-pid 18 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1327c0--kill proc
-pid 19 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x13eb10--kill proc
-pid 20 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x14ae60--kill proc
-pid 21 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1571b0--kill proc
+pid 18 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1327c0--kill proc
+pid 19 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x13eb10--kill proc
+pid 20 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x14ae60--kill proc
+pid 21 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1571b0--kill proc
 pid 22 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x163500--kill proc
-pid 23 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x16f850--kill proc
+pid 23 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x16f850--kill proc
 pid 24 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x17bba0--kill proc
-pid 25 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x187ef0--kill proc
+pid 25 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x187ef0--kill proc
 pid 26 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x194240--kill proc
 pid 27 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1a0590--kill proc
-pid 28 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1ac8e0--kill proc
-pid 29 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1b8c30--kill proc
-pid 30 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1c4f80--kill proc
-pid 31 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1d12d0--kill proc
+pid 28 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1ac8e0--kill proc
+pid 29 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1b8c30--kill proc
+pid 30 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1c4f80--kill proc
+pid 31 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1d12d0--kill proc
 pid 32 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1dd620--kill proc
 sbrk test ok
 validate test: ok

@@ -496,17 +496,9 @@ int clone(void(*fcn)(void*), void *arg, void*stack){
 	np->parent = proc;
 	*np->tf = *proc->tf;
 	np->stack = stack;
-	//stack = (void*)(stack - 4096);
-	//Copy the current frame into the stacks
-	void *startCopy = (void *)proc->tf->ebp + 16;
-	void *endCopy = (void *)proc->tf->esp;
-	uint copySize = (uint) (startCopy - endCopy);
 
-	np->tf->esp = (uint) (stack - copySize);//Swap to our address space
-	np->tf->ebp = (uint) (stack - 16);
-
-	memmove(stack - copySize, endCopy, copySize);
-	
+	//creating virtual main
+	np->tf->esp = (uint)(stack - sizeof(void*));
 	void** targ;
 	targ = (void*) np->tf->esp;
 	*targ = arg;
