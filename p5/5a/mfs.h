@@ -6,6 +6,16 @@
 
 #define MFS_BLOCK_SIZE   (4096)
 
+//Comands
+const char MFS_CMD_INIT 	= 0;
+const char MFS_CMD_SHUTDOWN = 1;
+const char MFS_CMD_LOOKUP 	= 2;
+const char MFS_CMD_STAT 	= 3;
+const char MFS_CMD_WRITE 	= 4;
+const char MFS_CMD_READ 	= 5;
+const char MFS_CMD_CREAT 	= 6;
+const char MFS_CMD_UNLINK 	= 7;
+
 typedef struct __MFS_Stat_t {
     int type;   // MFS_DIRECTORY or MFS_REGULAR
     int size;   // bytes
@@ -17,6 +27,12 @@ typedef struct __MFS_DirEnt_t {
     int  inum;      // inode number of entry (-1 means entry not used)
 } MFS_DirEnt_t;
 
+typedef struct __MFS_Protocol_t {
+    char 		cmd;   // Command type
+    int  		ipnum; // inode | parent inode number of entry (-1 means entry not used)
+	int 		ret;
+	char 		datachunk[4096];
+} MFS_Protocol_t;
 
 int MFS_Init(char *hostname, int port);
 int MFS_Lookup(int pinum, char *name);

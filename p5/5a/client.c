@@ -1,39 +1,19 @@
 #include <stdio.h>
 #include "udp.h"
-
-#define BUFFER_SIZE (4096)
-char buffer[BUFFER_SIZE];
+#include "mfs.h"
 
 int
 main(int argc, char *argv[])
 {
-    int sd = UDP_Open(-1);
-    assert(sd > -1);
 
-    struct sockaddr_in saddr;
-    int rc = UDP_FillSockAddr(&saddr, "mumble-10.cs.wisc.edu", 10000);
-    assert(rc == 0);
+	int sd = UDP_Open(-1);
+	assert(sd > -1);
 
-    char message[BUFFER_SIZE];
-    sprintf(message, "hello world");
-    rc = UDP_Write(sd, &saddr, message, BUFFER_SIZE);
-    printf("CLIENT:: sent message (%d)\n", rc);
-    if (rc > 0) {
-	struct sockaddr_in raddr;
-	int rc = UDP_Read(sd, &raddr, buffer, BUFFER_SIZE);
-	printf("CLIENT:: read %d bytes (message: '%s')\n", rc, buffer);
-    }
+	struct sockaddr_in saddr;
+	int rc = UDP_FillSockAddr(&saddr, "localhost", 3000);
+	assert(rc == 0);
 
-    sprintf(message, "hello world");
-    rc = UDP_Write(sd, &saddr, message, BUFFER_SIZE);
-    printf("CLIENT:: sent message (%d)\n", rc);
-    if (rc > 0) {
-	struct sockaddr_in raddr;
-	int rc = UDP_Read(sd, &raddr, buffer, BUFFER_SIZE);
-	printf("CLIENT:: read %d bytes (message: '%s')\n", rc, buffer);
-    }
-
-    return 0;
+	return 0;
 }
 
 
