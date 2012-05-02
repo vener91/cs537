@@ -5,6 +5,7 @@
 #define MFS_REGULAR_FILE (1)
 
 #define MFS_BLOCK_SIZE   (4096)
+#define MFS_BLOCK_STEP_SIZE   (1024)
 
 //Comands
 const char MFS_CMD_INIT 	= 0;
@@ -28,11 +29,23 @@ typedef struct __MFS_DirEnt_t {
 } MFS_DirEnt_t;
 
 typedef struct __MFS_Protocol_t {
-    char 		cmd;   // Command type
-    int  		ipnum; // inode | parent inode number of entry (-1 means entry not used)
-	int 		ret;
-	char 		datachunk[4096];
+    char cmd;   // Command type
+    int  ipnum; // inode | parent inode
+	int  ret;
+	char datachunk[4096];
 } MFS_Protocol_t;
+
+typedef struct __MFS_Inode_t{
+	int size;
+	int type;
+	int data[14];
+} MFS_Inode_t;
+
+typedef struct __MFS_Header_t{
+	int file_count;
+	int block_count;
+	int map[MFS_BLOCK_SIZE];
+} MFS_Header_t;
 
 int MFS_Init(char *hostname, int port);
 int MFS_Lookup(int pinum, char *name);

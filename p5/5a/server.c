@@ -15,6 +15,18 @@ void error(char* msg){
 	exit(1);
 }
 
+void mfs_add_inode(int image_fd){
+}
+
+void mfs_write_header(int image_fd, MFS_Header_t* header){
+	//Writes the header to the file
+	int rc = pwrite(image_fd, header, sizeof(MFS_Header_t), 0);	
+	if(rc < 0){
+		error("Error writing header");
+	}
+	fsync(image_fd);
+}
+
 int
 main(int argc, char *argv[]) {
 	if(argc != 3) {
@@ -38,17 +50,33 @@ main(int argc, char *argv[]) {
 	}
 	//Put image in memory
 	int rc;
-	/*
-	// Put text in memory
-	int sizeOfArray = fileStat.st_size / sizeof(rec_t);
-	Rblock = malloc(fileStat.st_size);
-	rc = read(fd, Rblock, fileStat.st_size);
-	if(rc < 0){
-		error("Cannot open file");
-	}
-	*/
-	rx_protocol = (MFS_Protocol_t*)malloc(sizeof(MFS_Protocol_t));
+	MFS_Header_t* header;
+	int image_size;
+	int blocks_left =  MFS_BLOCK_STEP_SIZE; // Bytes left empty in memory
+	if(fileStat.st_size < sizeof(MFS_Header_t)){
+		//Initialize
+		image_size = sizeof(MFS_Header_t) + (4096 * MFS_BLOCK_STEP_SIZE);
+		header = (MFS_Header_t *)malloc(image_size);
+		MFS_Inode_t* root_inode = (void *)header + sizeof(MFS_Header_t);
+		root_inode->type = MFS_DIRECTORY;
+		header->map[0] = 0;
+		header->block_count = header->file_count = 1; //Root node
+		blocks_left --; //Used a block for root
 
+		mfs_write_header(fd, header);
+	}else{
+		image_size = fileStat.st_size + (4096 * MFS_BLOCK_STEP_SIZE);
+		header = (MFS_Header_t *)malloc(image_size);
+		// Put text in memory
+		rc = read(fd, header, fileStat.st_size);
+		if(rc < 0){
+			error("Cannot open file");
+		}
+	}
+	//Set start block location
+	void* block_ptr = (void *)header + sizeof(MFS_Header_t);
+
+	rx_protocol = (MFS_Protocol_t*)malloc(sizeof(MFS_Protocol_t));
 
 	printf("Server started listening at port %d\n", port);
 	while (1) {
@@ -67,7 +95,17 @@ main(int argc, char *argv[]) {
 				}
 				exit(0);
 			} else if(rx_protocol->cmd == MFS_CMD_CREAT){
-				rx_protocol->ret = 0;
+				//Add a new inode
+				rx_protocol->ret = -1;
+				if(header->file_count < MFS_BLOCK_SIZE && rx_protocol->ipnum < header->file_count){
+					//Check if the dir is empty
+					
+					if(){
+						header->map[header->file_count] = add_inode() ;
+						rx_protocol->ret = 0;
+					}
+				}
+
 				if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
 					error("Unable to send result");
 				}
