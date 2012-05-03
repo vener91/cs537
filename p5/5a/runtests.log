@@ -26,158 +26,24 @@ test build PASSED
 
 **********************************************************************
 
-Test shutdown
-init server and client then call shutdown
-
-**********************************************************************
-Error: Unknown command
-Server started listening at port 31051
-Response cmd: 0
-Server initialized
-Response cmd: -128
-Initializing MFS localhost 
-
-
-test shutdown PASSED
- (init server and client then call shutdown)
-
-
-**********************************************************************
-
 Test creat
 creat a file and check with lookup
 
 **********************************************************************
 Error: Unknown command
+Initializing new file
 Server started listening at port 31051
 Response cmd: 0
 Server initialized
 Response cmd: 6
-Response cmd: -16
+CREAT: pinum: 0 type:0 name:test 
+Blocks left 1023 need 1
+Response cmd: 32
 Initializing MFS localhost 
 
 
 test creat PASSED
  (creat a file and check with lookup)
-
-
-**********************************************************************
-
-Test write
-write then read one block
-
-**********************************************************************
-Initializing MFS localhost 
-test write FAILED
-
-
-test write FAILED
- (write then read one block)
- Corrupt data returned by read
-
-
-**********************************************************************
-
-Test stat
-stat a regular file
-
-**********************************************************************
-Initializing MFS localhost 
-test stat FAILED
-
-
-test stat FAILED
- (stat a regular file)
- Stat gave wrong type
-
-
-**********************************************************************
-
-Test overwrite
-overwrite a block
-
-**********************************************************************
-Initializing MFS localhost 
-test overwrite FAILED
-
-
-test overwrite FAILED
- (overwrite a block)
- Corrupt data returned by read
-
-
-**********************************************************************
-
-Test maxfile
-write largest possible file
-
-**********************************************************************
-Initializing MFS localhost 
-test maxfile FAILED
-
-
-test maxfile FAILED
- (write largest possible file)
- Corrupt data returned by read
-
-
-**********************************************************************
-
-Test maxfile2
-write more blocks than possible
-
-**********************************************************************
-Initializing MFS localhost 
-test maxfile2 FAILED
-
-
-test maxfile2 FAILED
- (write more blocks than possible)
- MFS_Write should fail on inalid block number
-
-
-**********************************************************************
-
-Test sparse
-write first and last block
-
-**********************************************************************
-Initializing MFS localhost 
-test sparse FAILED
-
-
-test sparse FAILED
- (write first and last block)
- Corrupt data returned by read
-
-
-**********************************************************************
-
-Test stat2
-stat a sparse file
-
-**********************************************************************
-Initializing MFS localhost 
-test stat2 FAILED
-
-
-test stat2 FAILED
- (stat a sparse file)
- Stat gave wrong type
-
-
-**********************************************************************
-
-Test dir1
-check root for dot entries
-
-**********************************************************************
-test dir1 FAILED
-
-
-test dir1 FAILED
- (check root for dot entries)
- User interrupted test
 
 **********************************************************************
 Summary:
@@ -185,44 +51,8 @@ test build PASSED
  (build project using make)
  file 'client.o' exists after make clean, removing
 
-test shutdown PASSED
- (init server and client then call shutdown)
-
 test creat PASSED
  (creat a file and check with lookup)
 
-test write FAILED
- (write then read one block)
- Corrupt data returned by read
-
-test stat FAILED
- (stat a regular file)
- Stat gave wrong type
-
-test overwrite FAILED
- (overwrite a block)
- Corrupt data returned by read
-
-test maxfile FAILED
- (write largest possible file)
- Corrupt data returned by read
-
-test maxfile2 FAILED
- (write more blocks than possible)
- MFS_Write should fail on inalid block number
-
-test sparse FAILED
- (write first and last block)
- Corrupt data returned by read
-
-test stat2 FAILED
- (stat a sparse file)
- Stat gave wrong type
-
-test dir1 FAILED
- (check root for dot entries)
- User interrupted test
-
-Passed 3 of 11 tests.
-Skipped 16 tests.
-Overall 3 of 27
+Passed 2 of 2 tests.
+Overall 2 of 2

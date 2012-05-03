@@ -5,7 +5,10 @@
 #define MFS_REGULAR_FILE (1)
 
 #define MFS_BLOCK_SIZE   (4096)
-#define MFS_BLOCK_STEP_SIZE   (1024)
+#define MFS_BYTE_STEP_SIZE   (1024)
+#define MFS_INODE_SIZE   (14)
+#define MFS_MAX_INODES (4096)
+#define MFS_INODES_PER_BLOCK   (14)
 
 //Comands
 const char MFS_CMD_INIT 	= 0;
@@ -25,12 +28,12 @@ typedef struct __MFS_Stat_t {
 
 typedef struct __MFS_DirEnt_t {
     char name[28];  // up to 28 bytes of name in directory (including \0)
-    int  inum;      // inode number of entry (-1 means entry not used)
+	int  inum;      // inode number of entry (-1 means entry not used)
 } MFS_DirEnt_t;
 
 typedef struct __MFS_Protocol_t {
-    char cmd;   // Command type
-    int  ipnum; // inode | parent inode
+	char cmd;   // Command type
+	int  ipnum; // inode | parent inode
 	int  ret;
 	char datachunk[4096];
 } MFS_Protocol_t;
@@ -38,13 +41,17 @@ typedef struct __MFS_Protocol_t {
 typedef struct __MFS_Inode_t{
 	int size;
 	int type;
-	int data[14];
+	int data[MFS_INODE_SIZE];
 } MFS_Inode_t;
 
+typedef struct __MFS_InodeMap_t{
+	int inodes[MFS_INODES_PER_BLOCK];
+} MFS_InodeMap_t;
+
 typedef struct __MFS_Header_t{
-	int file_count;
-	int block_count;
-	int map[MFS_BLOCK_SIZE];
+	int inode_count;
+	int byte_count;
+	int map[MFS_MAX_INODES/MFS_INODES_PER_BLOCK];
 } MFS_Header_t;
 
 int MFS_Init(char *hostname, int port);
