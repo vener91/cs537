@@ -62,45 +62,30 @@ UDP_Write(int fd, struct sockaddr_in *addr, void *buffer, int n){
 }
 
 int
-UDP_Read(int fd, struct sockaddr_in *addr, char *buffer, int n, int server)
+UDP_Read(int fd, struct sockaddr_in *addr, char *buffer, int n, int timeout)
 {
-    int len = sizeof(struct sockaddr_in); 
-	
-    printf("CLIENT start: %d \n", server);
-	if(server == 0) {
-		int retval = 0;
-		while (retval != 1) { 
-			fd_set rfds;
-			struct timeval tv;
+	int len = sizeof(struct sockaddr_in); 
+	// added timeout code
+	int retval = 0;
+	fd_set rfds;	
+	struct timeval tv;
+	FD_ZERO(&rfds);
+	FD_SET(fd, &rfds);
 
-			printf("CLIENT in \n");
-			/* Watch stdin (fd 0) to see when it has input. */
-			FD_ZERO(&rfds);
-			FD_SET(fd, &rfds);
+	tv.tv_sec = timeout;
+	tv.tv_usec = 0;
 
-			/* Wait up to five seconds. */
-			tv.tv_sec = 1;
-			tv.tv_usec = 0;
-
-			retval = select(fd+1, &rfds, NULL, NULL, &tv);
-			/* Don't rely on the value of tv now! */
-
-			if (retval == -1)
-				perror("select()");
-			else if (retval)
-				printf("Data is available now.\n");
-			/* FD_ISSET(0, &rfds) will be true. */
-			else
-				printf("No data within %d seconds.\n", tv.tv_sec);
-		}
-	}
-
-    printf("CLIENT wait \n");
-    int rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
- 	
-    printf("CLIENT pass \n");
-	    // assert(len == sizeof(struct sockaddr_in)); 
-    return rc;
+	retval = select(fd+1, &rfds, NULL, NULL, &tv);
+	int rc = 0;
+	// check if the timeout occurs, if yes return -2;
+	if (retval == -1)
+		perror("select()");
+	else if (retval)
+		rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
+	else
+		return -2;
+	// assert(len == sizeof(struct sockaddr_in)); 
+	return rc;
 }
 
 

@@ -70,15 +70,66 @@ int MFS_Lookup(int pinum, char *name){
 }
 
 int MFS_Stat(int inum, MFS_Stat_t *m){
-	return 0;
+	tx_protocol->cmd = MFS_CMD_STAT;
+	tx_protocol->ipnum = inum;
+	
+	int rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
+	if (rc > 0) {
+		int tries_left = 10;
+		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < -1){
+			tries_left--;
+			if(!tries_left){
+				return -1;
+			}
+		}
+		m->type = (int)rx_protocol->datachunk[0];
+		m->size = (int)rx_protocol->datachunk[1];
+		//Does get something back
+		return rx_protocol->ret;
+	}
+	return -1;
 }
 
 int MFS_Write(int inum, char *buffer, int block){
-	return 0;
+	tx_protocol->cmd = MFS_CMD_WRITE;
+	tx_protocol->ipnum = inum;
+
+	tx_protocol->datachunk[0] = (char)block;
+	strcpy(tx_protocol->datachunk, buffer);
+
+	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
+	if (rc > 0) {
+		int tries_left = 10;
+		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < -1){
+			tries_left--;
+			if(!tries_left){
+				return -1;
+			}
+		}
+		return rx_protocol->ret;
+	}
+	return -1;
 }
 
 int MFS_Read(int inum, char *buffer, int block){
-	return 0;
+	tx_protocol->cmd = MFS_CMD_READ;
+	tx_protocol->ipnum = inum;
+
+	tx_protocol->datachunk[0] = (char)block;
+
+	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
+	if (rc > 0) {
+		int tries_left = 10;
+		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < -1){
+			tries_left--;
+			if(!tries_left){
+				return -1;
+			}
+		}
+		strcpy(rx_protocol->datachunk, buffer);
+		return rx_protocol->ret;
+	}
+	return -1;
 }
 
 int MFS_Creat(int pinum, int type, char *name){
