@@ -10,6 +10,11 @@ rm -f server.o udp.o mfs.o server client lib
 rm libmfs.so
 make
 gcc -Wall -c server.c -o server.o
+server.c: In function ‘main’:
+server.c:233: warning: statement with no effect
+server.c:223: warning: unused variable ‘new_entry’
+server.c: In function ‘mfs_allocate_entry’:
+server.c:90: warning: control reaches end of non-void function
 gcc -Wall -c udp.c -o udp.o
 gcc -o server server.o udp.o 
 gcc -Wall -c mfs.c -o mfs.o
@@ -30,20 +35,12 @@ Test creat
 creat a file and check with lookup
 
 **********************************************************************
-Error: Unknown command
-Initializing new file
-Server started listening at port 31051
-Response cmd: 0
-Server initialized
-Response cmd: 6
-CREAT: pinum: 0 type:0 name:test 
-Blocks left 1023 need 1
-Response cmd: 32
-Initializing MFS localhost 
+test creat FAILED
 
 
-test creat PASSED
+test creat FAILED
  (creat a file and check with lookup)
+ User interrupted test
 
 **********************************************************************
 Summary:
@@ -51,8 +48,9 @@ test build PASSED
  (build project using make)
  file 'client.o' exists after make clean, removing
 
-test creat PASSED
+test creat FAILED
  (creat a file and check with lookup)
+ User interrupted test
 
-Passed 2 of 2 tests.
-Overall 2 of 2
+Passed 1 of 2 tests.
+Overall 1 of 2
