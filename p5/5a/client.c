@@ -12,14 +12,13 @@ main(int argc, char *argv[])
 	struct sockaddr_in saddr;
 	int rc = UDP_FillSockAddr(&saddr, "localhost", 3000);
 	assert(rc == 0);
-	printf("size: %d",sizeof(MFS_DirEnt_t));
-	exit(0);
 
 	MFS_Protocol_t* tx_protocol;
 	MFS_Protocol_t* rx_protocol;
 	tx_protocol = (MFS_Protocol_t*)malloc(sizeof(MFS_Protocol_t));
 	rx_protocol = (MFS_Protocol_t*)malloc(sizeof(MFS_Protocol_t));
 
+	//Test code starts here
 	char* name = "Test woot";
 
 	tx_protocol->cmd = MFS_CMD_CREAT;
@@ -32,7 +31,8 @@ main(int argc, char *argv[])
 		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < -1){
 			tries_left--;
 			if(!tries_left){
-				return -1;
+				printf("Timeout \n");
+				exit(0);
 			}
 		}
 		//Does get something back

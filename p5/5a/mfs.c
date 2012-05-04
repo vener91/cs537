@@ -50,10 +50,9 @@ int MFS_Init(char *hostname, int port){
 }
 
 int MFS_Lookup(int pinum, char *name){
-	tx_protocol->cmd = MFS_CMD_CREAT;
+	tx_protocol->cmd = MFS_CMD_LOOKUP;
 	tx_protocol->ipnum = pinum;
-	tx_protocol->datachunk[0] = (char)MFS_DIRECTORY;
-	strcpy(tx_protocol->datachunk + sizeof(char), name);
+	strcpy(tx_protocol->datachunk, name);
 
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
