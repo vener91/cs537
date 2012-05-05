@@ -193,14 +193,16 @@ main(int argc, char *argv[]) {
 			//Special case for shutdown
 			if(rx_protocol->cmd == MFS_CMD_INIT){
 				printf("Server initialized\n");
-			} else if(rx_protocol->cmd == MFS_CMD_SHUTDOWN){
+			} 
+			else if(rx_protocol->cmd == MFS_CMD_SHUTDOWN){
 				//Close file
 				rc = close(fd);
 				if(rc < 0){
 					error("Cannot open file");
 				}
 				exit(0);
-			} else if(rx_protocol->cmd == MFS_CMD_LOOKUP){
+			} 
+			else if(rx_protocol->cmd == MFS_CMD_LOOKUP){
 				printf("LOOKUP: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
 				rx_protocol->ret = -1;
 				MFS_DirEnt_t* entry;
@@ -228,7 +230,26 @@ main(int argc, char *argv[]) {
 					error("Unable to send result");
 				}
 
-			} else if(rx_protocol->cmd == MFS_CMD_CREAT){
+			} 
+			else if(rx_protocol->cmd == MFS_CMD_READ){
+				//printf("LOOKUP: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
+				rx_protocol->ret = -1;
+				MFS_DirEnt_t* entry;
+				MFS_Inode_t* read_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
+				if(read_inode != NULL && read_inode->type == MFS_REGULAR_FILE){
+					int block = (int)rx_protocol->datachunk[0];
+					if(read_inode->data[block] != -1) {
+						void *data_ptr = read_inode->data[block] + header_ptr;
+						strcpy(rx_protocol->datachunk, data_ptr);			
+						rx_protocol->ret = 0;
+						//printf("datachunk to be returned %s ", rx_protocol->datachunk);
+					}
+				}
+				if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
+					error("Unable to send result");
+				}
+			}
+			else if(rx_protocol->cmd == MFS_CMD_CREAT){
 				printf("CREAT: pinum: %d type:%d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk[0], rx_protocol->datachunk + sizeof(char));
 				//Add a new inode
 				rx_protocol->ret = -1;
