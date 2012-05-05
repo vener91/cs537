@@ -30,12 +30,30 @@ Test creat
 creat a file and check with lookup
 
 **********************************************************************
+Allocating Bytes - left 16384 need 64
+Allocating Bytes - left 16320 need 56
+Map entry 0x62f4e8 0
+Allocating Bytes - left 16264 need 4096
+Initializing new file
+Server started listening at port 31051
+Response cmd: 0
+Server initialized
+Response cmd: 6
+CREAT: pinum: 0 type:0 name:test 
+Allocating Bytes - left 12168 need 4096
+Allocating Bytes - left 8072 need 64
+Allocating Bytes - left 8008 need 56
+Found space - 0x62f4a8 0x62f520
+Allocating Bytes - left 7952 need 64
+Allocating Bytes - left 7888 need 56
+Allocating Bytes - left 7832 need 4096
+Initializing MFS localhost 
 test creat FAILED
 
 
 test creat FAILED
  (creat a file and check with lookup)
- User interrupted test
+ MFS_Lookup returned failure inum=0 name='test'
 
 **********************************************************************
 Summary:
@@ -45,7 +63,7 @@ test build PASSED
 
 test creat FAILED
  (creat a file and check with lookup)
- User interrupted test
+ MFS_Lookup returned failure inum=0 name='test'
 
 Passed 1 of 2 tests.
 Overall 1 of 2

@@ -24,6 +24,8 @@ MFS_Inode_t* mfs_resolve_inode(MFS_Header_t* header, int inode_num){
 	if( header->map[inode_num / MFS_INODES_PER_BLOCK] != -1 ){
 		void* header_ptr = (void*)header;
 		MFS_InodeMap_t* imap = (MFS_InodeMap_t *)(header_ptr + sizeof(MFS_Header_t) + header->map[inode_num / MFS_INODES_PER_BLOCK]);
+		//printf("%p %d %p\n", header_ptr, imap->inodes[1], header_ptr + sizeof(MFS_Header_t) + header->map[inode_num / MFS_INODES_PER_BLOCK]);
+		//printf("Resolving: %d %d %d\n", inode_num, header->map[inode_num / MFS_INODES_PER_BLOCK], imap->inodes[1]);
 		//Check if inodes exist or not
 		if(imap->inodes[inode_num % MFS_INODES_PER_BLOCK] != -1){
 			return (MFS_Inode_t*)(header_ptr + sizeof(MFS_Header_t) + imap->inodes[inode_num % MFS_INODES_PER_BLOCK]); 	
@@ -34,7 +36,8 @@ MFS_Inode_t* mfs_resolve_inode(MFS_Header_t* header, int inode_num){
 
 void* mfs_allocate_space(MFS_Header_t** header, int size, int* offset){
 	printf("Allocating Bytes - left %d need %d\n", mfs_free_bytes, size);
-	void * ptr = *header;
+	fflush(stdout);
+	void *ptr = *header;
 	if(mfs_bytes_not_written == 0){
 		mfs_bytes_start_ptr = ptr + sizeof(MFS_Header_t) + (*header)->byte_count;
 		mfs_bytes_offset = (*header)->byte_count;
@@ -43,15 +46,19 @@ void* mfs_allocate_space(MFS_Header_t** header, int size, int* offset){
 		//I need more space
 		mfs_free_bytes -= size;
 	}else{
+		void* old_header = *header;
 		*header = realloc(*header, sizeof(MFS_Header_t) + (*header)->byte_count + size + mfs_free_bytes + MFS_BYTE_STEP_SIZE );
+		if (old_header != *header) {
+			printf("New header: %p\n", *header);
+		}
 		mfs_free_bytes = mfs_free_bytes + MFS_BYTE_STEP_SIZE;
 	}
 	if(offset != NULL){
 		*offset = (*header)->byte_count;
 	}
 	mfs_bytes_not_written += size;
+	ptr = (void*)ptr + sizeof(MFS_Header_t) + (*header)->byte_count;
 	(*header)->byte_count += size;
-	ptr = ptr + sizeof(MFS_Header_t) + (*header)->byte_count;
 	return ptr;
 }
 
@@ -70,8 +77,10 @@ void mfs_init_inode(MFS_Inode_t* inode, int type, MFS_Inode_t* old_inode){
 }
 
 void mfs_update_inode(MFS_Header_t** header, int inode_num, int new_offset){
-	void* header_ptr = (void*)header;
-	MFS_InodeMap_t* old_imap = (MFS_InodeMap_t *)(header_ptr + sizeof(MFS_Header_t) + (*header)->map[inode_num / MFS_INODES_PER_BLOCK]);
+	MFS_Header_t* headerp = *header;
+	void* header_ptr = (void*)headerp;
+	MFS_InodeMap_t* old_imap = (MFS_InodeMap_t *)(header_ptr + sizeof(MFS_Header_t) + headerp->map[inode_num / MFS_INODES_PER_BLOCK]);
+	//printf("%p %d %p\n", header_ptr, old_imap->inodes[1], (void*)(header_ptr + sizeof(MFS_Header_t) + headerp->map[inode_num / MFS_INODES_PER_BLOCK]));
 	int offset;
 	MFS_InodeMap_t* imap = mfs_allocate_space(header, sizeof(MFS_InodeMap_t), &offset);
 	memcpy(imap, old_imap, sizeof(MFS_InodeMap_t));
@@ -137,7 +146,7 @@ main(int argc, char *argv[]) {
 	MFS_Inode_t* tmp_inode;
 	MFS_InodeMap_t* tmp_imap;
 	MFS_DirEnt_t* tmp_entry;
-	int tmp_offset, tmp_inode_offset;
+	int tmp_offset, tmp_inode_offset, tmp_imap_offset;
 	if(fileStat.st_size < sizeof(MFS_Header_t)){
 		//Initialize
 		image_size = sizeof(MFS_Header_t) + MFS_BYTE_STEP_SIZE;
@@ -145,7 +154,7 @@ main(int argc, char *argv[]) {
 		
 		//Init root dir
 		tmp_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &tmp_inode_offset);
-		tmp_imap = mfs_allocate_space(&header, sizeof(MFS_InodeMap_t), &tmp_offset);
+		tmp_imap = mfs_allocate_space(&header, sizeof(MFS_InodeMap_t), &tmp_imap_offset);
 		tmp_imap->inodes[0] = tmp_inode_offset;
 		mfs_init_inode(tmp_inode, MFS_DIRECTORY, NULL);
 		
@@ -153,11 +162,18 @@ main(int argc, char *argv[]) {
 		for (i = 0; i < MFS_MAX_INODES/MFS_INODES_PER_BLOCK; i++) {
 			header->map[i] = -1;	
 		}
+		printf("Map entry %p %d\n", tmp_imap, tmp_inode_offset);
+
+		for (i = 0; i < MFS_INODES_PER_BLOCK; i++) {
+			tmp_imap->inodes[i] = -1;
+		}
+		tmp_imap->inodes[0] = tmp_inode_offset;
 
 		//Add . dirs
 		tmp_entry = mfs_allocate_space(&header, MFS_BLOCK_SIZE, &tmp_offset);
 		for (i = 0; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
-			(tmp_entry + i)->inum = -1;
+			tmp_entry->inum = -1;
+			tmp_entry++;
 		}
 		tmp_entry->name[0] = '.';
 		tmp_entry->name[1] = '\0';
@@ -165,7 +181,7 @@ main(int argc, char *argv[]) {
 		tmp_inode->data[0] = tmp_offset;
 		
 		//Write to disk
-		header->map[0] = tmp_offset;
+		header->map[0] = tmp_imap_offset;
 		mfs_flush(fd);		
 		mfs_write_header(fd, header);
 		printf("Initializing new file\n");
@@ -241,15 +257,18 @@ main(int argc, char *argv[]) {
 					int done = 0;
 					//Initialize new data block for entries
 					MFS_DirEnt_t* new_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &entry_offset);
-					MFS_Inode_t* new_inode = mfs_allocate_space(&header, sizeof(MFS_INODE_SIZE), &inode_offset);
+					MFS_Inode_t* new_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &inode_offset);
 					mfs_update_inode(&header, rx_protocol->ipnum, inode_offset);
 					mfs_init_inode(new_inode, 0, parent_inode);
 					//Copy new stuff	
 					done = 0;
+					i = 0;
 					while(i < MFS_INODE_SIZE) {
 						if(parent_inode->data[i] != -1){
+							//printf("Parent node %d %d\n", parent_inode->type, MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
 							j = 0;
 							while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
+								//printf("Found space - %p %p\n", block_ptr, block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
 								entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
 								if(entry->inum == -1){
 									//Copy the dir entry
@@ -265,6 +284,7 @@ main(int argc, char *argv[]) {
 							}
 							if(done == 1) break;
 						}else{	
+							printf("Creating new data block\n");
 							//Create new node
 							new_inode->data[i] = entry_offset;
 							entry = (MFS_DirEnt_t*)(new_entry + (j * sizeof(MFS_DirEnt_t)));
@@ -277,7 +297,7 @@ main(int argc, char *argv[]) {
 					}
 					if(done){
 						//Actually create the inode
-						new_inode = mfs_allocate_space(&header, sizeof(MFS_INODE_SIZE), &inode_offset);
+						new_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &inode_offset);
 						mfs_init_inode(new_inode, rx_protocol->datachunk[0], NULL);
 						new_entry->inum = inode_offset;
 
