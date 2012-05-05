@@ -26,13 +26,36 @@ test build PASSED
 
 **********************************************************************
 
+Test shutdown
+init server and client then call shutdown
+
+**********************************************************************
+Allocating Bytes - left 16384 need 64
+Allocating Bytes - left 16320 need 56
+Map entry 0x1b314e8 0
+Allocating Bytes - left 16264 need 4096
+Error: Unknown command
+Initializing new file
+Server started listening at port 31051
+Response cmd: 0
+Server initialized
+Response cmd: 112
+Initializing MFS localhost 
+
+
+test shutdown PASSED
+ (init server and client then call shutdown)
+
+
+**********************************************************************
+
 Test creat
 creat a file and check with lookup
 
 **********************************************************************
 Allocating Bytes - left 16384 need 64
 Allocating Bytes - left 16320 need 56
-Map entry 0x62f4e8 0
+Map entry 0x9e14e8 0
 Allocating Bytes - left 16264 need 4096
 Initializing new file
 Server started listening at port 31051
@@ -43,17 +66,58 @@ CREAT: pinum: 0 type:0 name:test
 Allocating Bytes - left 12168 need 4096
 Allocating Bytes - left 8072 need 64
 Allocating Bytes - left 8008 need 56
-Found space - 0x62f4a8 0x62f520
+Found space - 1 0x9e1540
 Allocating Bytes - left 7952 need 64
 Allocating Bytes - left 7888 need 56
 Allocating Bytes - left 7832 need 4096
+Response cmd: 2
+LOOKUP: pinum: 0 name:test 
+.
+test
+Error: Unknown command
+Response cmd: -32
 Initializing MFS localhost 
-test creat FAILED
 
 
-test creat FAILED
+test creat PASSED
  (creat a file and check with lookup)
- MFS_Lookup returned failure inum=0 name='test'
+
+
+**********************************************************************
+
+Test write
+write then read one block
+
+**********************************************************************
+Allocating Bytes - left 16384 need 64
+Allocating Bytes - left 16320 need 56
+Map entry 0x13ca4e8 0
+Allocating Bytes - left 16264 need 4096
+Initializing new file
+Server started listening at port 31051
+Response cmd: 0
+Server initialized
+Response cmd: 6
+CREAT: pinum: 0 type:0 name:test 
+Allocating Bytes - left 12168 need 4096
+Allocating Bytes - left 8072 need 64
+Allocating Bytes - left 8008 need 56
+Found space - 1 0x13ca540
+Allocating Bytes - left 7952 need 64
+Allocating Bytes - left 7888 need 56
+Allocating Bytes - left 7832 need 4096
+Response cmd: 2
+LOOKUP: pinum: 0 name:test 
+.
+test
+Error: Unknown command
+Response cmd: 4
+test write FAILED
+
+
+test write FAILED
+ (write then read one block)
+ User interrupted test
 
 **********************************************************************
 Summary:
@@ -61,9 +125,16 @@ test build PASSED
  (build project using make)
  file 'client.o' exists after make clean, removing
 
-test creat FAILED
- (creat a file and check with lookup)
- MFS_Lookup returned failure inum=0 name='test'
+test shutdown PASSED
+ (init server and client then call shutdown)
 
-Passed 1 of 2 tests.
-Overall 1 of 2
+test creat PASSED
+ (creat a file and check with lookup)
+
+test write FAILED
+ (write then read one block)
+ User interrupted test
+
+Passed 3 of 4 tests.
+Skipped 23 tests.
+Overall 3 of 27

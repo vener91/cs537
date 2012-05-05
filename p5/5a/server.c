@@ -171,13 +171,13 @@ main(int argc, char *argv[]) {
 
 		//Add . dirs
 		tmp_entry = mfs_allocate_space(&header, MFS_BLOCK_SIZE, &tmp_offset);
-		for (i = 0; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
-			tmp_entry->inum = -1;
-			tmp_entry++;
-		}
 		tmp_entry->name[0] = '.';
 		tmp_entry->name[1] = '\0';
 		tmp_entry->inum = tmp_inode_offset; 
+		for (i = 1; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
+			tmp_entry++;
+			tmp_entry->inum = -1;
+		}
 		tmp_inode->data[0] = tmp_offset;
 		
 		//Write to disk
@@ -227,14 +227,19 @@ main(int argc, char *argv[]) {
 						if(parent_inode->data[i] != -1){
 							j = 0;
 							while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
+								//printf("Parent node %d %d\n", parent_inode->data[i], MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
 								entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
+								if(entry->inum != -1){
+									printf("%s\n",entry->name);
+									fflush(stdout);
+								}
 								if(entry->inum != -1 && strcmp(entry->name, rx_protocol->datachunk) == 0 ){
-									rx_protocol->ret = 0;
+									rx_protocol->ret = entry->inum;
 									break;
 								}
 								j++;
 							}
-							if(rx_protocol->ret == 0) break;
+							if(rx_protocol->ret != -1) break;
 						}
 						i++;
 					}
@@ -268,15 +273,16 @@ main(int argc, char *argv[]) {
 							//printf("Parent node %d %d\n", parent_inode->type, MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
 							j = 0;
 							while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
-								//printf("Found space - %p %p\n", block_ptr, block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
 								entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
 								if(entry->inum == -1){
+									printf("Found space - %d %p\n", j, block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
 									//Copy the dir entry
 									memcpy(new_entry, block_ptr + parent_inode->data[i], MFS_BLOCK_SIZE);
 									new_inode->data[i] = entry_offset;
-									entry = (MFS_DirEnt_t*)(new_entry + (j * sizeof(MFS_DirEnt_t)));
-									entry->inum = inode_offset;			
-									strcpy((new_entry + (j * sizeof(MFS_DirEnt_t)))->name, &(rx_protocol->datachunk[0]));
+									entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
+									entry->inum = inode_offset;	
+									strcpy(entry->name, &(rx_protocol->datachunk[1]));
+									//printf("Name: %s - %s\n",entry->name, &(rx_protocol->datachunk[1]));
 									done = 1;
 									break;
 								}

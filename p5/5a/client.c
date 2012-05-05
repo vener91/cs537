@@ -19,7 +19,7 @@ main(int argc, char *argv[])
 	rx_protocol = (MFS_Protocol_t*)malloc(sizeof(MFS_Protocol_t));
 
 	//Test code starts here
-	char* name = "Test woot";
+	char* name = "test";
 
 	tx_protocol->cmd = MFS_CMD_CREAT;
 	tx_protocol->ipnum = 0;
@@ -33,6 +33,24 @@ main(int argc, char *argv[])
 			if(!tries_left){
 				printf("Timeout \n");
 				exit(0);
+			}
+		}
+		//Does get something back
+		printf("%d\n", rx_protocol->ret);
+	}
+	
+	//LOOKUP
+	tx_protocol->cmd = MFS_CMD_LOOKUP;
+	tx_protocol->ipnum = 0;
+	strcpy(tx_protocol->datachunk, name);
+
+	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
+	if (rc > 0) {
+		int tries_left = 10;
+		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < -1){
+			tries_left--;
+			if(!tries_left){
+				return -1;
 			}
 		}
 		//Does get something back
