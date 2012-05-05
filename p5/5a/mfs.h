@@ -34,6 +34,7 @@ typedef struct __MFS_DirEnt_t {
 typedef struct __MFS_Protocol_t {
 	char cmd;   // Command type
 	int  ipnum; // inode | parent inode
+	int  block; // block number
 	int  ret;
 	char datachunk[4096];
 } MFS_Protocol_t;

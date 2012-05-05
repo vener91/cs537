@@ -93,9 +93,8 @@ int MFS_Stat(int inum, MFS_Stat_t *m){
 int MFS_Write(int inum, char *buffer, int block){
 	tx_protocol->cmd = MFS_CMD_WRITE;
 	tx_protocol->ipnum = inum;
-
-	tx_protocol->datachunk[0] = (char)block;
-	strcpy(tx_protocol->datachunk, buffer);
+	tx_protocol->block = block;
+	memcpy(tx_protocol->datachunk, buffer, MFS_BLOCK_SIZE);
 
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
@@ -114,9 +113,7 @@ int MFS_Write(int inum, char *buffer, int block){
 int MFS_Read(int inum, char *buffer, int block){
 	tx_protocol->cmd = MFS_CMD_READ;
 	tx_protocol->ipnum = inum;
-
-	tx_protocol->datachunk[0] = (char)block;
-
+	tx_protocol->block = block;
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
@@ -126,7 +123,7 @@ int MFS_Read(int inum, char *buffer, int block){
 				return -1;
 			}
 		}
-		strcpy(rx_protocol->datachunk, buffer);
+		memcpy(buffer, rx_protocol->datachunk, MFS_BLOCK_SIZE);
 		return rx_protocol->ret;
 	}
 	return -1;
