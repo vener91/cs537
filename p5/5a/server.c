@@ -326,7 +326,6 @@ main(int argc, char *argv[]) {
 					MFS_Inode_t* new_parent_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &parent_inode_offset);
 					mfs_init_inode(new_parent_inode, 0, parent_inode);
 					mfs_update_inode(&header, rx_protocol->ipnum, parent_inode_offset);
-					
 
 					//Copy new stuff	
 					done = 0;
