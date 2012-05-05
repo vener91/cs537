@@ -344,89 +344,96 @@ main(int argc, char *argv[]) {
 				printf("CREAT: pinum: %d type:%d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk[0], rx_protocol->datachunk + sizeof(char));
 				mfs_ensure(&header, &block_ptr, 16384);
 				rx_protocol->ret = -1;
-
-				new_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &inode_offset);
-				mfs_init_inode(new_inode, rx_protocol->datachunk[0], NULL);
-				int new_inode_inum = mfs_new_inum(&header, inode_offset);
-
+				
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
+				int exist = mfs_lookup(block_ptr, parent_inode, &(rx_protocol->datachunk[1]));
 
-				if(parent_inode != NULL && parent_inode->type == MFS_DIRECTORY && strlen(&(rx_protocol->datachunk[1])) <= 28 && new_inode_inum != -1){
-					//Check if the dir is full
-					MFS_DirEnt_t* entry;
-					int done = 0;
-					//Initialize new data block for entries
-					MFS_DirEnt_t* new_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &entry_offset);
+				if(exist == -1){
 
-					MFS_Inode_t* new_parent_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &parent_inode_offset);
-					mfs_init_inode(new_parent_inode, 0, parent_inode);
-					mfs_update_inode(&header, rx_protocol->ipnum, parent_inode_offset);
+					new_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &inode_offset);
+					mfs_init_inode(new_inode, rx_protocol->datachunk[0], NULL);
+					int new_inode_inum = mfs_new_inum(&header, inode_offset);
 
-					//Copy new stuff	
-					done = 0;
-					i = 0;
-					while(i < MFS_INODE_SIZE) {
-						if(parent_inode->data[i] != -1){
-							//printf("Parent node %d %d\n", parent_inode->type, MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
-							j = 0;
-							while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
-								entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
-								if(entry->inum == -1){
-									//printf("Found space - %d %p\n", j, block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
-									//Copy the dir entry
-									memcpy(new_entry, block_ptr + parent_inode->data[i], MFS_BLOCK_SIZE);
-									new_parent_inode->data[i] = entry_offset;
-									new_entry[j].inum = new_inode_inum;	
-									strcpy(new_entry[j].name, &(rx_protocol->datachunk[1]));
-									//printf("Name: %s - %s\n",entry->name, &(rx_protocol->datachunk[1]));
-									done = 1;
-									break;
+
+					if(parent_inode != NULL && parent_inode->type == MFS_DIRECTORY && strlen(&(rx_protocol->datachunk[1])) <= 28 && new_inode_inum != -1){
+						//Check if the dir is full
+						MFS_DirEnt_t* entry;
+						int done = 0;
+						//Initialize new data block for entries
+						MFS_DirEnt_t* new_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &entry_offset);
+
+						MFS_Inode_t* new_parent_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &parent_inode_offset);
+						mfs_init_inode(new_parent_inode, 0, parent_inode);
+						mfs_update_inode(&header, rx_protocol->ipnum, parent_inode_offset);
+
+						//Copy new stuff	
+						done = 0;
+						i = 0;
+						while(i < MFS_INODE_SIZE) {
+							if(parent_inode->data[i] != -1){
+								//printf("Parent node %d %d\n", parent_inode->type, MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
+								j = 0;
+								while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
+									entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
+									if(entry->inum == -1){
+										//printf("Found space - %d %p\n", j, block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
+										//Copy the dir entry
+										memcpy(new_entry, block_ptr + parent_inode->data[i], MFS_BLOCK_SIZE);
+										new_parent_inode->data[i] = entry_offset;
+										new_entry[j].inum = new_inode_inum;	
+										strcpy(new_entry[j].name, &(rx_protocol->datachunk[1]));
+										//printf("Name: %s - %s\n",entry->name, &(rx_protocol->datachunk[1]));
+										done = 1;
+										break;
+									}
+									j++;
 								}
-								j++;
+								if(done == 1) break;
+							}else{	
+								//printf("Creating new data block\n");
+								//Create new node
+								//Initialize
+								for (j = 0; j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t); j++) {
+									new_entry[j].inum = -1;
+								}
+								new_parent_inode->data[i] = entry_offset;
+								new_entry[0].inum = new_inode_inum;			
+								strcpy(new_entry[0].name, &(rx_protocol->datachunk[1]));
+								done = 1;
+								break;
 							}
-							if(done == 1) break;
-						}else{	
-							//printf("Creating new data block\n");
-							//Create new node
-							//Initialize
-							for (j = 0; j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t); j++) {
-								new_entry[j].inum = -1;
-							}
-							new_parent_inode->data[i] = entry_offset;
-							new_entry[0].inum = new_inode_inum;			
-							strcpy(new_entry[0].name, &(rx_protocol->datachunk[1]));
-							done = 1;
-							break;
+							i++;
 						}
-						i++;
-					}
-					if(done){
-						//Actually create the inode
-						//Add .. and . dirs
-						if(new_inode->type == MFS_DIRECTORY){
-							MFS_DirEnt_t* new_dir_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &new_dir_offset);
-							for (i = 0; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
-								(new_dir_entry + i)->inum = -1;
-							}
-							new_dir_entry[0].name[0] = '.';
-							new_dir_entry[0].name[1] = '\0';
-							new_dir_entry[0].inum = new_inode_inum; 
-							new_dir_entry[1].name[0] = '.';
-							new_dir_entry[1].name[1] = '.';
-							new_dir_entry[1].name[2] = '\0';
-							new_dir_entry[1].inum = rx_protocol->ipnum; 
-						}	
+						if(done){
+							//Actually create the inode
+							//Add .. and . dirs
+							if(new_inode->type == MFS_DIRECTORY){
+								MFS_DirEnt_t* new_dir_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &new_dir_offset);
+								for (i = 0; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
+									(new_dir_entry + i)->inum = -1;
+								}
+								new_dir_entry[0].name[0] = '.';
+								new_dir_entry[0].name[1] = '\0';
+								new_dir_entry[0].inum = new_inode_inum; 
+								new_dir_entry[1].name[0] = '.';
+								new_dir_entry[1].name[1] = '.';
+								new_dir_entry[1].name[2] = '\0';
+								new_dir_entry[1].inum = rx_protocol->ipnum; 
+							}	
 
-						//Write to block
-						header->inode_count++;
-						mfs_flush(fd);
-						mfs_write_header(fd, header);
-						rx_protocol->ret = 0;
+							//Write to block
+							header->inode_count++;
+							mfs_flush(fd);
+							mfs_write_header(fd, header);
+							rx_protocol->ret = 0;
+						}else{
+							mfs_reset(header);
+						}
 					}else{
 						mfs_reset(header);
 					}
 				}else{
-					mfs_reset(header);
+					rx_protocol->ret = 0;
 				}
 
 			} else {
