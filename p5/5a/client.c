@@ -26,12 +26,12 @@ main(int argc, char *argv[])
 	strcpy(tx_buffer, "This is just a test!");
 	strcpy(tx_buffer2, "Is this a test?");
 	
-	rc = MFS_Write(inum, tx_buffer, 0);
+	rc = MFS_Write(inum, tx_buffer, 2);
 	if(rc == -1){
 		printf("Failed at Write\n");
 		exit(0);
 	}
-	MFS_Read(inum, rx_buffer, 0);
+	MFS_Read(inum, rx_buffer, 1);
 	if(rc == -1){
 		printf("Failed at Write\n");
 		exit(0);
@@ -41,12 +41,12 @@ main(int argc, char *argv[])
 		printf("Failed at Write - Strings does not match\n");
 		exit(0);
 	}
-	rc = MFS_Write(inum, tx_buffer2, 0);
+	rc = MFS_Write(inum, tx_buffer2, 2);
 	if(rc == -1){
 		printf("Failed at Write\n");
 		exit(0);
 	}
-	MFS_Read(inum, rx_buffer, 0);
+	MFS_Read(inum, rx_buffer, 2);
 	if(rc == -1){
 		printf("Failed at Write\n");
 		exit(0);

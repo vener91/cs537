@@ -331,10 +331,13 @@ main(int argc, char *argv[]) {
 					void* new_block = mfs_allocate_space(&header, MFS_BLOCK_SIZE, &block_offset);
 
 					memcpy(new_block, rx_protocol->datachunk, MFS_BLOCK_SIZE);
-					if(new_inode->data[rx_protocol->block] == -1){
+					i = rx_protocol->block;
+					while(new_inode->data[i] == -1 && i >= 0){
 						new_inode->size += MFS_BLOCK_SIZE;
+						new_inode->data[i] = block_offset; 
+						i--;
 					}
-					new_inode->data[rx_protocol->block] = block_offset;
+					new_inode->data[rx_protocol->block] = block_offset; 
 					mfs_update_inode(&header, rx_protocol->ipnum, inode_offset);
 					mfs_flush(fd);
 					rx_protocol->ret = 0;
