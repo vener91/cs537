@@ -5,7 +5,7 @@
 
 MFS_Protocol_t* rx_protocol;
 int mfs_bytes_not_written = 0;
-int mfs_free_bytes; // Bytes left empty in memory
+int mfs_free_bytes = 0; // Bytes left empty in memory
 int mfs_bytes_offset; // Bytes left empty in memory
 void* mfs_bytes_start_ptr; // Bytes left empty in memory
 
@@ -19,30 +19,32 @@ void error(char* msg){
 	exit(1);
 }
 
+
 MFS_Inode_t* mfs_resolve_inode(MFS_Header_t* header, int inode_num){
 	if( header->map[inode_num / MFS_INODES_PER_BLOCK] != -1 ){
-		int* imap = (int *)(header + sizeof(MFS_Header_t) + header->map[inode_num / MFS_INODES_PER_BLOCK]);
+		void* header_ptr = (void*)header;
+		MFS_InodeMap_t* imap = (MFS_InodeMap_t *)(header_ptr + sizeof(MFS_Header_t) + header->map[inode_num / MFS_INODES_PER_BLOCK]);
 		//Check if inodes exist or not
-		if(imap[inode_num % MFS_INODES_PER_BLOCK] != -1){
-			return (MFS_Inode_t*)(header + sizeof(MFS_Header_t) + imap[inode_num % MFS_INODES_PER_BLOCK]); 	
+		if(imap->inodes[inode_num % MFS_INODES_PER_BLOCK] != -1){
+			return (MFS_Inode_t*)(header_ptr + sizeof(MFS_Header_t) + imap->inodes[inode_num % MFS_INODES_PER_BLOCK]); 	
 		}
 	}
 	return NULL;
 }
 
 void* mfs_allocate_space(MFS_Header_t** header, int size, int* offset){
-	printf("Bytes left %d need %d\n", mfs_free_bytes, size);
+	printf("Allocating Bytes - left %d need %d\n", mfs_free_bytes, size);
 	void * ptr = *header;
 	if(mfs_bytes_not_written == 0){
 		mfs_bytes_start_ptr = ptr + sizeof(MFS_Header_t) + (*header)->byte_count;
 		mfs_bytes_offset = (*header)->byte_count;
 	}
-	if(mfs_free_bytes < size){
+	if(mfs_free_bytes > size){
 		//I need more space
-		mfs_free_bytes =- size;
+		mfs_free_bytes -= size;
 	}else{
-		*header = realloc(*header, sizeof(MFS_Header_t) + (*header)->byte_count + mfs_free_bytes + MFS_BYTE_STEP_SIZE );
-		mfs_free_bytes = mfs_free_bytes - size + MFS_BYTE_STEP_SIZE;
+		*header = realloc(*header, sizeof(MFS_Header_t) + (*header)->byte_count + size + mfs_free_bytes + MFS_BYTE_STEP_SIZE );
+		mfs_free_bytes = mfs_free_bytes + MFS_BYTE_STEP_SIZE;
 	}
 	if(offset != NULL){
 		*offset = (*header)->byte_count;
@@ -65,6 +67,15 @@ void mfs_init_inode(MFS_Inode_t* inode, int type, MFS_Inode_t* old_inode){
 	}else{
 		memcpy(inode, old_inode, sizeof(MFS_Inode_t));
 	}
+}
+
+void mfs_update_inode(MFS_Header_t** header, int inode_num, int new_offset){
+	void* header_ptr = (void*)header;
+	MFS_InodeMap_t* old_imap = (MFS_InodeMap_t *)(header_ptr + sizeof(MFS_Header_t) + (*header)->map[inode_num / MFS_INODES_PER_BLOCK]);
+	int offset;
+	MFS_InodeMap_t* imap = mfs_allocate_space(header, sizeof(MFS_InodeMap_t), &offset);
+	memcpy(imap, old_imap, sizeof(MFS_InodeMap_t));
+	imap->inodes[inode_num % MFS_INODES_PER_BLOCK] = new_offset; 	
 }
 
 void mfs_write_block(int image_fd, void* start_ptr, int offset, int size){
@@ -124,16 +135,18 @@ main(int argc, char *argv[]) {
 
 	//Temp variables
 	MFS_Inode_t* tmp_inode;
-	MFS_InodeMap_t* tmp_inodemap;
-	int tmp_offset;
+	MFS_InodeMap_t* tmp_imap;
+	MFS_DirEnt_t* tmp_entry;
+	int tmp_offset, tmp_inode_offset;
 	if(fileStat.st_size < sizeof(MFS_Header_t)){
 		//Initialize
 		image_size = sizeof(MFS_Header_t) + MFS_BYTE_STEP_SIZE;
 		header = (MFS_Header_t *)malloc(image_size);
 		
 		//Init root dir
-		tmp_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), NULL);
-		tmp_inodemap = mfs_allocate_space(&header, sizeof(MFS_InodeMap_t), &tmp_offset);
+		tmp_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &tmp_inode_offset);
+		tmp_imap = mfs_allocate_space(&header, sizeof(MFS_InodeMap_t), &tmp_offset);
+		tmp_imap->inodes[0] = tmp_inode_offset;
 		mfs_init_inode(tmp_inode, MFS_DIRECTORY, NULL);
 		
 		//Init header
@@ -141,9 +154,19 @@ main(int argc, char *argv[]) {
 			header->map[i] = -1;	
 		}
 
+		//Add . dirs
+		tmp_entry = mfs_allocate_space(&header, MFS_BLOCK_SIZE, &tmp_offset);
+		for (i = 0; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
+			(tmp_entry + i)->inum = -1;
+		}
+		tmp_entry->name[0] = '.';
+		tmp_entry->name[1] = '\0';
+		tmp_entry->inum = tmp_inode_offset; 
+		tmp_inode->data[0] = tmp_offset;
+		
 		//Write to disk
 		header->map[0] = tmp_offset;
-		
+		mfs_flush(fd);		
 		mfs_write_header(fd, header);
 		printf("Initializing new file\n");
 	}else{
@@ -156,7 +179,8 @@ main(int argc, char *argv[]) {
 		}
 	}
 	//Set start block location
-	//void* block_ptr = (void *)header + sizeof(MFS_Header_t);
+	void* header_ptr = (void*)header;
+	void* block_ptr = header_ptr + sizeof(MFS_Header_t);
 
 	rx_protocol = (MFS_Protocol_t*)malloc(sizeof(MFS_Protocol_t));
 
@@ -187,7 +211,7 @@ main(int argc, char *argv[]) {
 						if(parent_inode->data[i] != -1){
 							j = 0;
 							while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
-								entry = (MFS_DirEnt_t*)(header + sizeof(MFS_Header_t) + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
+								entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
 								if(entry->inum != -1 && strcmp(entry->name, rx_protocol->datachunk) == 0 ){
 									rx_protocol->ret = 0;
 									break;
@@ -209,67 +233,106 @@ main(int argc, char *argv[]) {
 				//Add a new inode
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
+
 				if(parent_inode != NULL && parent_inode->type == MFS_DIRECTORY){
 					//Check if the dir is full
 					int entry_offset, inode_offset, new_dir_offset;
 					MFS_DirEnt_t* entry;
+					int done = 0;
 					//Initialize new data block for entries
 					MFS_DirEnt_t* new_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &entry_offset);
 					MFS_Inode_t* new_inode = mfs_allocate_space(&header, sizeof(MFS_INODE_SIZE), &inode_offset);
+					mfs_update_inode(&header, rx_protocol->ipnum, inode_offset);
 					mfs_init_inode(new_inode, 0, parent_inode);
 					//Copy new stuff	
+					done = 0;
 					while(i < MFS_INODE_SIZE) {
 						if(parent_inode->data[i] != -1){
 							j = 0;
 							while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
-								entry = (MFS_DirEnt_t*)(header + sizeof(MFS_Header_t) + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
+								entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
 								if(entry->inum == -1){
 									//Copy the dir entry
-									memcpy(new_entry, header + sizeof(MFS_Header_t) + parent_inode->data[i], MFS_BLOCK_SIZE);
-									new_inode->data[i] = inode_offset;
+									memcpy(new_entry, block_ptr + parent_inode->data[i], MFS_BLOCK_SIZE);
+									new_inode->data[i] = entry_offset;
+									entry = (MFS_DirEnt_t*)(new_entry + (j * sizeof(MFS_DirEnt_t)));
+									entry->inum = inode_offset;			
 									strcpy((new_entry + (j * sizeof(MFS_DirEnt_t)))->name, &(rx_protocol->datachunk[0]));
+									done = 1;
 									break;
 								}
 								j++;
 							}
-						}else{
+							if(done == 1) break;
+						}else{	
 							//Create new node
-							new_inode->data[i] = inode_offset;
+							new_inode->data[i] = entry_offset;
+							entry = (MFS_DirEnt_t*)(new_entry + (j * sizeof(MFS_DirEnt_t)));
+							entry->inum = inode_offset;			
 							strcpy((new_entry + (0 * sizeof(MFS_DirEnt_t)))->name, &(rx_protocol->datachunk[0]));
+							done = 1;
+							break;
 						}
 						i++;
 					}
+					if(done){
+						//Actually create the inode
+						new_inode = mfs_allocate_space(&header, sizeof(MFS_INODE_SIZE), &inode_offset);
+						mfs_init_inode(new_inode, rx_protocol->datachunk[0], NULL);
+						new_entry->inum = inode_offset;
 
-					//Actually create the inode
-					new_inode = mfs_allocate_space(&header, sizeof(MFS_INODE_SIZE), &inode_offset);
-					mfs_init_inode(new_inode, rx_protocol->datachunk[0], NULL);
-					new_entry->inum = inode_offset;
-					//Add to map
-					i = 0;
-					while(i < MFS_MAX_INODES/MFS_INODES_PER_BLOCK){
-						header->map[i];
-						i++;
+						//Add to map
+						i = 0;
+						done = 0;
+						while(i < MFS_MAX_INODES/MFS_INODES_PER_BLOCK){
+							if(header->map[i] != -1){
+								tmp_imap = (MFS_InodeMap_t*)(block_ptr + header->map[i]);			
+								for (j = 0; j < MFS_INODES_PER_BLOCK; j++) {
+									if(tmp_imap->inodes[j] == -1){
+										mfs_update_inode(&header, (i * MFS_MAX_INODES/MFS_INODES_PER_BLOCK) + j, inode_offset );
+										done = 1;
+										break;
+									}
+								}
+								if(done == 1) break;
+							}else{
+								//Create new node
+								tmp_imap = mfs_allocate_space(&header, sizeof(MFS_InodeMap_t), &tmp_offset);
+								for (j = 0; j < MFS_INODES_PER_BLOCK; j++) {
+									tmp_imap->inodes[j] = -1;	
+								}
+								tmp_imap->inodes[0] = inode_offset;
+								header->map[i] = tmp_offset;
+								done = 1;
+								break;
+							}
+							i++;
+						}
+
+
+						//Add .. and . dirs
+						if(rx_protocol->datachunk[0] == MFS_DIRECTORY){
+							MFS_DirEnt_t* new_dir_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &new_dir_offset);
+							for (i = 0; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
+								(new_dir_entry + i)->inum = -1;
+							}
+							new_dir_entry->name[0] = '.';
+							new_dir_entry->name[1] = '\0';
+							new_dir_entry->inum = new_dir_offset; 
+							(new_dir_entry + 1)->name[0] = '.';
+							(new_dir_entry + 1)->name[1] = '.';
+							(new_dir_entry + 1)->name[2] = '\0';
+							(new_dir_entry + 1)->inum = inode_offset; 
+						}	
+
+						//Write to block
+						header->inode_count++;
+						mfs_flush(fd);
+						mfs_write_header(fd, header);
+						rx_protocol->ret = 0;
+					}else{
+						mfs_reset(header);
 					}
-					
-
-					//Add .. and . dirs
-					if(rx_protocol->datachunk[0] == MFS_DIRECTORY){
-						MFS_DirEnt_t* new_dir_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &new_dir_offset);
-						new_dir_entry->name[0] = '.';
-						new_dir_entry->name[1] = '\0';
-						new_dir_entry->inum = new_dir_offset; 
-						new_dir_entry += sizeof(MFS_DirEnt_t);
-						new_dir_entry->name[0] = '.';
-						new_dir_entry->name[1] = '.';
-						new_dir_entry->name[2] = '\0';
-						new_dir_entry->inum = inode_offset; 
-					}	
-
-					//Write to block
-					header->inode_count++;
-					mfs_flush(fd);
-					mfs_write_header(fd, header);
-					rx_protocol->ret = 0;
 				}
 
 				if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){

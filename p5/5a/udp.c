@@ -61,9 +61,7 @@ UDP_Write(int fd, struct sockaddr_in *addr, void *buffer, int n){
     return rc;
 }
 
-int
-UDP_Read(int fd, struct sockaddr_in *addr, char *buffer, int n, int timeout)
-{
+int UDP_Read(int fd, struct sockaddr_in *addr, void *buffer, int n, int timeout){
 	int len = sizeof(struct sockaddr_in); 
 	// added timeout code
 	int retval = 0;

@@ -10,11 +10,6 @@ rm -f server.o udp.o mfs.o server client lib
 rm libmfs.so
 make
 gcc -Wall -c server.c -o server.o
-server.c: In function ‘main’:
-server.c:233: warning: statement with no effect
-server.c:223: warning: unused variable ‘new_entry’
-server.c: In function ‘mfs_allocate_entry’:
-server.c:90: warning: control reaches end of non-void function
 gcc -Wall -c udp.c -o udp.o
 gcc -o server server.o udp.o 
 gcc -Wall -c mfs.c -o mfs.o

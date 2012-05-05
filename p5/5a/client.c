@@ -36,7 +36,7 @@ main(int argc, char *argv[])
 			}
 		}
 		//Does get something back
-		return rx_protocol->ret;
+		printf("%d\n", rx_protocol->ret);
 	}
 	return 0;
 }
