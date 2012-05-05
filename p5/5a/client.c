@@ -21,8 +21,10 @@ main(int argc, char *argv[])
 	}
 	
 	char* tx_buffer = malloc(MFS_BLOCK_SIZE);
+	char* tx_buffer2 = malloc(MFS_BLOCK_SIZE);
 	char* rx_buffer = malloc(MFS_BLOCK_SIZE);
 	strcpy(tx_buffer, "This is just a test!");
+	strcpy(tx_buffer2, "Is this a test?");
 	
 	rc = MFS_Write(inum, tx_buffer, 0);
 	if(rc == -1){
@@ -36,6 +38,21 @@ main(int argc, char *argv[])
 	}
 	if(strcmp(rx_buffer, tx_buffer) != 0){
 		printf("%s - %s\n", rx_buffer, tx_buffer);
+		printf("Failed at Write - Strings does not match\n");
+		exit(0);
+	}
+	rc = MFS_Write(inum, tx_buffer2, 0);
+	if(rc == -1){
+		printf("Failed at Write\n");
+		exit(0);
+	}
+	MFS_Read(inum, rx_buffer, 0);
+	if(rc == -1){
+		printf("Failed at Write\n");
+		exit(0);
+	}
+	if(strcmp(rx_buffer, tx_buffer2) != 0){
+		printf("%s - %s\n", rx_buffer, tx_buffer2);
 		printf("Failed at Write - Strings does not match\n");
 		exit(0);
 	}

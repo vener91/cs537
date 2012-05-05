@@ -66,6 +66,18 @@ void* mfs_allocate_space(MFS_Header_t** header, int size, int* offset){
 	return ptr;
 }
 
+void mfs_ensure(MFS_Header_t** header, void** block_ptr, int size){
+	if(mfs_free_bytes <= size){
+		void* old_header = *header;
+		*header = realloc(*header, sizeof(MFS_Header_t) + (*header)->byte_count + size + mfs_free_bytes + MFS_BYTE_STEP_SIZE );
+		mfs_free_bytes = mfs_free_bytes + MFS_BYTE_STEP_SIZE;
+		*block_ptr = (void*)(*header) + sizeof(MFS_Header_t);
+		if (old_header != *header) {
+			printf("New header: %p\n", *header);
+		}
+	}
+}
+
 void mfs_init_inode(MFS_Inode_t* inode, int type, MFS_Inode_t* old_inode){
 	if(old_inode == NULL){	
 		inode->size = 0;
@@ -308,6 +320,7 @@ main(int argc, char *argv[]) {
 				}
 			} else if(rx_protocol->cmd == MFS_CMD_WRITE){
 				printf("WRITE: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
+				mfs_ensure(&header, &block_ptr, 16384);
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				int block_offset;
@@ -329,6 +342,7 @@ main(int argc, char *argv[]) {
 
 			} else if(rx_protocol->cmd == MFS_CMD_CREAT){
 				printf("CREAT: pinum: %d type:%d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk[0], rx_protocol->datachunk + sizeof(char));
+				mfs_ensure(&header, &block_ptr, 16384);
 				rx_protocol->ret = -1;
 
 				new_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &inode_offset);
