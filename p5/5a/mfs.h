@@ -5,7 +5,7 @@
 #define MFS_REGULAR_FILE (1)
 
 #define MFS_BLOCK_SIZE   (4096)
-#define MFS_BYTE_STEP_SIZE   (1024)
+#define MFS_BYTE_STEP_SIZE   (16384)
 #define MFS_INODE_SIZE   (14)
 #define MFS_MAX_INODES (4096)
 #define MFS_INODES_PER_BLOCK   (14)
