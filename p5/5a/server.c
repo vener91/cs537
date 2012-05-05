@@ -19,7 +19,6 @@ void error(char* msg){
 	exit(1);
 }
 
-
 MFS_Inode_t* mfs_resolve_inode(MFS_Header_t* header, int inode_num){
 	if( header->map[inode_num / MFS_INODES_PER_BLOCK] != -1 ){
 		void* header_ptr = (void*)header;
@@ -95,6 +94,33 @@ void mfs_write_block(int image_fd, void* start_ptr, int offset, int size){
 	fsync(image_fd);
 }
 
+int mfs_lookup(void* block_ptr, MFS_Inode_t* inode, char* name){
+	int i = 0,j;
+	if(inode != NULL && inode->type == MFS_DIRECTORY){
+		while(i < MFS_INODE_SIZE) {
+			if(inode->data[i] != -1){
+				j = 0;
+				while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
+					//printf("Parent node %d %d\n", inode->data[i], MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
+					MFS_DirEnt_t* entry = (MFS_DirEnt_t*)(block_ptr + inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
+					/*
+					if(entry->inum != -1 ){
+						printf("%s - %s\n", entry->name, name);
+						fflush(stdout);
+					}
+					*/
+					if(entry->inum != -1 && strcmp(entry->name, name) == 0 ){
+						return entry->inum;
+					}
+					j++;
+				}
+			}
+			i++;
+		}
+	}
+	return -1;
+}
+
 void mfs_reset(MFS_Header_t* header){
 	header->byte_count -= mfs_bytes_not_written;
 	mfs_bytes_not_written = 0;
@@ -151,18 +177,18 @@ main(int argc, char *argv[]) {
 		//Initialize
 		image_size = sizeof(MFS_Header_t) + MFS_BYTE_STEP_SIZE;
 		header = (MFS_Header_t *)malloc(image_size);
-		
+
 		//Init root dir
 		tmp_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &tmp_inode_offset);
 		tmp_imap = mfs_allocate_space(&header, sizeof(MFS_InodeMap_t), &tmp_imap_offset);
 		tmp_imap->inodes[0] = tmp_inode_offset;
 		mfs_init_inode(tmp_inode, MFS_DIRECTORY, NULL);
-		
+
 		//Init header
 		for (i = 0; i < MFS_MAX_INODES/MFS_INODES_PER_BLOCK; i++) {
 			header->map[i] = -1;	
 		}
-		printf("Map entry %p %d\n", tmp_imap, tmp_inode_offset);
+		//printf("Map entry %p %d\n", tmp_imap, tmp_inode_offset);
 
 		for (i = 0; i < MFS_INODES_PER_BLOCK; i++) {
 			tmp_imap->inodes[i] = -1;
@@ -218,32 +244,9 @@ main(int argc, char *argv[]) {
 				exit(0);
 			} else if(rx_protocol->cmd == MFS_CMD_LOOKUP){
 				printf("LOOKUP: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
-				rx_protocol->ret = -1;
 				MFS_DirEnt_t* entry;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
-				if(parent_inode != NULL && parent_inode->type == MFS_DIRECTORY){
-					i = 0;			
-					while(i < MFS_INODE_SIZE) {
-						if(parent_inode->data[i] != -1){
-							j = 0;
-							while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
-								//printf("Parent node %d %d\n", parent_inode->data[i], MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
-								entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
-								if(entry->inum != -1){
-									printf("%s\n",entry->name);
-									fflush(stdout);
-								}
-								if(entry->inum != -1 && strcmp(entry->name, rx_protocol->datachunk) == 0 ){
-									rx_protocol->ret = entry->inum;
-									break;
-								}
-								j++;
-							}
-							if(rx_protocol->ret != -1) break;
-						}
-						i++;
-					}
-				}
+				rx_protocol->ret = mfs_lookup(block_ptr, parent_inode, &(rx_protocol->datachunk[0]));
 
 				if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
 					error("Unable to send result");
@@ -275,7 +278,7 @@ main(int argc, char *argv[]) {
 							while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
 								entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
 								if(entry->inum == -1){
-									printf("Found space - %d %p\n", j, block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
+									//printf("Found space - %d %p\n", j, block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
 									//Copy the dir entry
 									memcpy(new_entry, block_ptr + parent_inode->data[i], MFS_BLOCK_SIZE);
 									new_inode->data[i] = entry_offset;
