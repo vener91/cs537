@@ -28,8 +28,14 @@ MFS_Inode_t* mfs_resolve_inode(MFS_Header_t* header, int inode_num){
 		//Check if inodes exist or not
 		if(imap->inodes[inode_num % MFS_INODES_PER_BLOCK] != -1){
 			return (MFS_Inode_t*)(header_ptr + sizeof(MFS_Header_t) + imap->inodes[inode_num % MFS_INODES_PER_BLOCK]); 	
+		}else{
+			printf("Can't find inode\n");
+			fflush(stdout);
+			return NULL;
 		}
 	}
+	printf("Can't find imap\n");
+	fflush(stdout);
 	return NULL;
 }
 
@@ -83,6 +89,8 @@ void mfs_update_inode(MFS_Header_t** header, int inode_num, int new_offset){
 	int offset;
 	MFS_InodeMap_t* imap = mfs_allocate_space(header, sizeof(MFS_InodeMap_t), &offset);
 	memcpy(imap, old_imap, sizeof(MFS_InodeMap_t));
+	printf("Inode: %d Old Offset: %d New Offset: %d\n", inode_num, imap->inodes[inode_num % MFS_INODES_PER_BLOCK], new_offset);
+	headerp->map[inode_num / MFS_INODES_PER_BLOCK] = offset;
 	imap->inodes[inode_num % MFS_INODES_PER_BLOCK] = new_offset; 	
 }
 
@@ -107,12 +115,10 @@ int mfs_lookup(void* block_ptr, MFS_Inode_t* inode, char* name){
 				while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
 					//printf("Parent node %d %d\n", inode->data[i], MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
 					MFS_DirEnt_t* entry = (MFS_DirEnt_t*)(block_ptr + inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
-					/*
 					if(entry->inum != -1 ){
 						printf("%s - %s\n", entry->name, name);
 						fflush(stdout);
 					}
-					*/
 					if(entry->inum != -1 && strcmp(entry->name, name) == 0 ){
 						return entry->inum;
 					}
@@ -135,7 +141,7 @@ int mfs_new_inum(MFS_Header_t** header, int offset){
 			tmp_imap = (MFS_InodeMap_t*)(block_ptr + (*header)->map[i]);			
 			for (j = 0; j < MFS_INODES_PER_BLOCK; j++) {
 				if(tmp_imap->inodes[j] == -1){
-					mfs_update_inode(header, mfs_calculate_inode(i,j), offset );
+					mfs_update_inode(header, mfs_calculate_inode(i,j), offset);
 					return mfs_calculate_inode(i,j);
 				}
 			}
@@ -288,12 +294,12 @@ main(int argc, char *argv[]) {
 					//New inode
 					memcpy(rx_protocol->datachunk, block_ptr + parent_inode->data[rx_protocol->block], MFS_BLOCK_SIZE);
 					mfs_flush(fd);
+					rx_protocol->ret = 0;
 				}
 			} else if(rx_protocol->cmd == MFS_CMD_WRITE){
 				printf("WRITE: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
-
 				int block_offset;
 				if(parent_inode != NULL && parent_inode->type == MFS_REGULAR_FILE && rx_protocol->block < MFS_INODE_SIZE){
 					//New inode
@@ -305,16 +311,18 @@ main(int argc, char *argv[]) {
 					mfs_init_inode(new_inode, 0, parent_inode);
 					mfs_update_inode(&header, rx_protocol->ipnum, inode_offset);
 					mfs_flush(fd);
+					rx_protocol->ret = 0;
 				}
 
 			} else if(rx_protocol->cmd == MFS_CMD_CREAT){
 				printf("CREAT: pinum: %d type:%d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk[0], rx_protocol->datachunk + sizeof(char));
 				rx_protocol->ret = -1;
-				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 
 				new_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &inode_offset);
 				mfs_init_inode(new_inode, rx_protocol->datachunk[0], NULL);
 				int new_inode_inum = mfs_new_inum(&header, inode_offset);
+
+				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 
 				if(parent_inode != NULL && parent_inode->type == MFS_DIRECTORY && strlen(&(rx_protocol->datachunk[1])) <= 28 && new_inode_inum != -1){
 					//Check if the dir is full
@@ -341,9 +349,8 @@ main(int argc, char *argv[]) {
 									//Copy the dir entry
 									memcpy(new_entry, block_ptr + parent_inode->data[i], MFS_BLOCK_SIZE);
 									new_parent_inode->data[i] = entry_offset;
-									entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));
-									entry->inum = new_inode_inum;	
-									strcpy(entry->name, &(rx_protocol->datachunk[1]));
+									new_entry[j].inum = new_inode_inum;	
+									strcpy(new_entry[j].name, &(rx_protocol->datachunk[1]));
 									//printf("Name: %s - %s\n",entry->name, &(rx_protocol->datachunk[1]));
 									done = 1;
 									break;

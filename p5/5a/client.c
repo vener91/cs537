@@ -23,7 +23,7 @@ main(int argc, char *argv[])
 
 	tx_protocol->cmd = MFS_CMD_CREAT;
 	tx_protocol->ipnum = 0;
-	tx_protocol->datachunk[0] = (char)MFS_DIRECTORY;
+	tx_protocol->datachunk[0] = (char)MFS_REGULAR_FILE;
 	strcpy(tx_protocol->datachunk + sizeof(char), name);
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
@@ -37,6 +37,9 @@ main(int argc, char *argv[])
 		}
 		//Does get something back
 		printf("%d\n", rx_protocol->ret);
+		if(rx_protocol->ret == -1){
+			exit(0);
+		}
 	}
 	
 	//LOOKUP
@@ -55,6 +58,31 @@ main(int argc, char *argv[])
 		}
 		//Does get something back
 		printf("%d\n", rx_protocol->ret);
+		if(rx_protocol->ret == -1){
+			exit(0);
+		}
+	}
+
+	tx_protocol->cmd = MFS_CMD_WRITE;
+	tx_protocol->ipnum = rx_protocol->ret;
+	tx_protocol->block = 0;
+	char* buffer = malloc(MFS_BLOCK_SIZE);
+	strcpy(buffer, "This is just a test!");
+	memcpy(tx_protocol->datachunk, buffer, MFS_BLOCK_SIZE);
+
+	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
+	if (rc > 0) {
+		int tries_left = 10;
+		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < -1){
+			tries_left--;
+			if(!tries_left){
+				return -1;
+			}
+		}
+		printf("%d\n", rx_protocol->ret);
+		if(rx_protocol->ret == -1){
+			exit(0);
+		}
 	}
 	return 0;
 }
