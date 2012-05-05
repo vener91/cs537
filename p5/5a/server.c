@@ -40,8 +40,7 @@ MFS_Inode_t* mfs_resolve_inode(MFS_Header_t* header, int inode_num){
 }
 
 void* mfs_allocate_space(MFS_Header_t** header, int size, int* offset){
-	printf("Allocating Bytes - left %d need %d\n", mfs_free_bytes, size);
-	fflush(stdout);
+	//printf("Allocating Bytes - left %d need %d\n", mfs_free_bytes, size);
 	void *ptr = *header;
 	if(mfs_bytes_not_written == 0){
 		mfs_bytes_start_ptr = ptr + sizeof(MFS_Header_t) + (*header)->byte_count;
@@ -116,7 +115,7 @@ int mfs_lookup(void* block_ptr, MFS_Inode_t* inode, char* name){
 					//printf("Parent node %d %d\n", inode->data[i], MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
 					MFS_DirEnt_t* entry = (MFS_DirEnt_t*)(block_ptr + inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
 					if(entry->inum != -1 ){
-						printf("%s - %s\n", entry->name, name);
+						printf("%s %d - %s\n", entry->name, entry->inum, name);
 						fflush(stdout);
 					}
 					if(entry->inum != -1 && strcmp(entry->name, name) == 0 ){
@@ -275,6 +274,7 @@ main(int argc, char *argv[]) {
 			//Special case for shutdown
 			if(rx_protocol->cmd == MFS_CMD_INIT){
 				printf("Server initialized\n");
+				rx_protocol->ret = 0;
 			} else if(rx_protocol->cmd == MFS_CMD_SHUTDOWN){
 				//Close file
 				rc = close(fd);
@@ -284,10 +284,11 @@ main(int argc, char *argv[]) {
 				exit(0);
 			} else if(rx_protocol->cmd == MFS_CMD_LOOKUP){
 				printf("LOOKUP: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
+				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				rx_protocol->ret = mfs_lookup(block_ptr, parent_inode, &(rx_protocol->datachunk[0]));
 			} else if(rx_protocol->cmd == MFS_CMD_READ){
-				printf("WRITE: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
+				printf("READ: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				if(parent_inode != NULL && parent_inode->type == MFS_REGULAR_FILE && rx_protocol->block < MFS_INODE_SIZE){
@@ -304,11 +305,11 @@ main(int argc, char *argv[]) {
 				if(parent_inode != NULL && parent_inode->type == MFS_REGULAR_FILE && rx_protocol->block < MFS_INODE_SIZE){
 					//New inode
 					new_inode = (MFS_Inode_t*)mfs_allocate_space(&header, sizeof(MFS_Inode_t), &inode_offset);
+					mfs_init_inode(new_inode, 0, parent_inode);
 					void* new_block = mfs_allocate_space(&header, MFS_BLOCK_SIZE, &block_offset);
 
-					memcpy(new_block, block_ptr + parent_inode->data[rx_protocol->block], MFS_BLOCK_SIZE);
+					memcpy(new_block, rx_protocol->datachunk, MFS_BLOCK_SIZE);
 					new_inode->data[rx_protocol->block] = block_offset;
-					mfs_init_inode(new_inode, 0, parent_inode);
 					mfs_update_inode(&header, rx_protocol->ipnum, inode_offset);
 					mfs_flush(fd);
 					rx_protocol->ret = 0;
@@ -367,7 +368,7 @@ main(int argc, char *argv[]) {
 							}
 							new_parent_inode->data[i] = entry_offset;
 							new_entry[0].inum = new_inode_inum;			
-							strcpy(new_entry[0].name, &(rx_protocol->datachunk[0]));
+							strcpy(new_entry[0].name, &(rx_protocol->datachunk[1]));
 							done = 1;
 							break;
 						}
@@ -376,7 +377,7 @@ main(int argc, char *argv[]) {
 					if(done){
 						//Actually create the inode
 						//Add .. and . dirs
-						if(rx_protocol->datachunk[0] == MFS_DIRECTORY){
+						if(new_inode->type == MFS_DIRECTORY){
 							MFS_DirEnt_t* new_dir_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &new_dir_offset);
 							for (i = 0; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
 								(new_dir_entry + i)->inum = -1;
@@ -404,7 +405,10 @@ main(int argc, char *argv[]) {
 
 			} else {
 				error("Unknown command");
+				continue;
 			}
+			printf("Sending Results %d\n", rx_protocol->ret);
+			fflush(stdout);
 			if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
 				error("Unable to send result");
 			}

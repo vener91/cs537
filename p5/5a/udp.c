@@ -57,39 +57,37 @@ UDP_FillSockAddr(struct sockaddr_in *addr, char *hostName, int port)
 int
 UDP_Write(int fd, struct sockaddr_in *addr, void *buffer, int n){
     int addrLen = sizeof(struct sockaddr_in);
-    int rc      = sendto(fd, buffer, n, 0, (struct sockaddr *) addr, addrLen);
+    int rc = sendto(fd, buffer, n, 0, (struct sockaddr *) addr, addrLen);
     return rc;
 }
 
 int UDP_Read(int fd, struct sockaddr_in *addr, void *buffer, int n, int timeout){
 	int len = sizeof(struct sockaddr_in); 
 	// added timeout code
-	int retval = 0;
 	fd_set rfds;	
 	struct timeval tv;
-	FD_ZERO(&rfds);
-	FD_SET(fd, &rfds);
 
 	tv.tv_sec = timeout;
 	tv.tv_usec = 0;
+	int rc = -1;
 
-	retval = select(fd+1, &rfds, NULL, NULL, &tv);
-	int rc = 0;
-	// check if the timeout occurs, if yes return -2;
-	if (retval == -1)
-		perror("select()");
-	else if (retval)
+	FD_ZERO(&rfds);
+	FD_SET(fd,&rfds);
+	if(select(fd+1, &rfds, NULL, NULL, &tv)){
 		rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
-	else
+		return rc;
+	}else {
+		//Timeout;
 		return -2;
-	// assert(len == sizeof(struct sockaddr_in)); 
+	}
+
 	return rc;
 }
 
 
-int
+	int
 UDP_Close(int fd)
 {
-    return close(fd);
+	return close(fd);
 }
 
