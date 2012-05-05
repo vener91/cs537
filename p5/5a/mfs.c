@@ -90,8 +90,8 @@ int MFS_Stat(int inum, MFS_Stat_t *m){
 				return -1;
 			}
 		}
-		m->type = (int)rx_protocol->datachunk[0];
-		m->size = (int)rx_protocol->datachunk[1];
+		m->type = rx_protocol->datachunk[0];
+		m->size = rx_protocol->block;
 		//Does get something back
 		return rx_protocol->ret;
 	}

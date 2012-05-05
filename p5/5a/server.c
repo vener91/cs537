@@ -287,14 +287,23 @@ main(int argc, char *argv[]) {
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				rx_protocol->ret = mfs_lookup(block_ptr, parent_inode, &(rx_protocol->datachunk[0]));
+			} else if(rx_protocol->cmd == MFS_CMD_STAT){
+				printf("STAT: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
+				rx_protocol->ret = -1;
+				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
+				if(parent_inode != NULL && rx_protocol->block >= 0 && rx_protocol->block < MFS_INODE_SIZE){
+					//New inode
+					rx_protocol->block = parent_inode->size;
+					rx_protocol->datachunk[0] = parent_inode->type;
+					rx_protocol->ret = 0;
+				}
 			} else if(rx_protocol->cmd == MFS_CMD_READ){
 				printf("READ: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
-				if(parent_inode != NULL && parent_inode->type == MFS_REGULAR_FILE && rx_protocol->block < MFS_INODE_SIZE){
+				if(parent_inode != NULL && parent_inode->type == MFS_REGULAR_FILE && rx_protocol->block >= 0 && rx_protocol->block < MFS_INODE_SIZE){
 					//New inode
 					memcpy(rx_protocol->datachunk, block_ptr + parent_inode->data[rx_protocol->block], MFS_BLOCK_SIZE);
-					mfs_flush(fd);
 					rx_protocol->ret = 0;
 				}
 			} else if(rx_protocol->cmd == MFS_CMD_WRITE){
@@ -302,13 +311,16 @@ main(int argc, char *argv[]) {
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				int block_offset;
-				if(parent_inode != NULL && parent_inode->type == MFS_REGULAR_FILE && rx_protocol->block < MFS_INODE_SIZE){
+				if(parent_inode != NULL && parent_inode->type == MFS_REGULAR_FILE && rx_protocol->block >= 0 && rx_protocol->block < MFS_INODE_SIZE){
 					//New inode
 					new_inode = (MFS_Inode_t*)mfs_allocate_space(&header, sizeof(MFS_Inode_t), &inode_offset);
 					mfs_init_inode(new_inode, 0, parent_inode);
 					void* new_block = mfs_allocate_space(&header, MFS_BLOCK_SIZE, &block_offset);
 
 					memcpy(new_block, rx_protocol->datachunk, MFS_BLOCK_SIZE);
+					if(new_inode->data[rx_protocol->block] == -1){
+						new_inode->size += MFS_BLOCK_SIZE;
+					}
 					new_inode->data[rx_protocol->block] = block_offset;
 					mfs_update_inode(&header, rx_protocol->ipnum, inode_offset);
 					mfs_flush(fd);
