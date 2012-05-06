@@ -7,8 +7,9 @@ all: server lib client
 server: server.o udp.o
 	$(CC) -o server server.o udp.o 
 
-client: client.o udp.o
+client: client.o client2.o udp.o
 	$(CC) -o client client.o udp.o 
+	$(CC) -o client2 client2.o udp.o 
 
 lib: mfs.o udp.o
 	$(CC) -Wall -Werror -shared -fPIC -g -o libmfs.so mfs.c udp.c
@@ -20,5 +21,5 @@ clean:
 	$(CC) $(OPTS) -c $< -o $@
 
 clean:
-	rm -f server.o client.o udp.o mfs.o server client lib
+	rm -f server.o client.o client2.o udp.o mfs.o server client client2 lib
 	rm libmfs.so

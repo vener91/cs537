@@ -300,6 +300,10 @@ main(int argc, char *argv[]) {
 				if(rc < 0){
 					error("Cannot open file");
 				}
+				rx_protocol->ret = 0;
+				if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
+					error("Unable to send result");
+				}
 				exit(0);
 			} else if(rx_protocol->cmd == MFS_CMD_LOOKUP){
 				printf("LOOKUP: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);

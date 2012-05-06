@@ -17,7 +17,6 @@ main(int argc, char *argv[])
 		exit(0);
 	}
 
-	exit(0);
 	rc = MFS_Creat(0, MFS_DIRECTORY, "test_dir");
 	if(rc < 0){
 		printf("Failed at Creat 2\n");
@@ -46,7 +45,8 @@ main(int argc, char *argv[])
 		printf("Failed at Lookup\n");
 		exit(0);
 	}
-	
+
+
 	char* tx_buffer = malloc(MFS_BLOCK_SIZE);
 	char* tx_buffer2 = malloc(MFS_BLOCK_SIZE);
 	char* rx_buffer = malloc(MFS_BLOCK_SIZE);
@@ -83,6 +83,7 @@ main(int argc, char *argv[])
 		printf("Failed at Write - Strings does not match\n");
 		exit(0);
 	}
+	exit(0);
 
 	rc = MFS_Unlink(0, "test");
 	if(rc == -1){
