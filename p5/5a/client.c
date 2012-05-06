@@ -11,11 +11,35 @@ main(int argc, char *argv[])
 
 	int rc = MFS_Creat(0, MFS_REGULAR_FILE, "test");
 	if(rc < 0){
-		printf("Failed at Creat\n");
+		printf("Failed at Creat 1\n");
 		exit(0);
 	}
+
+	rc = MFS_Creat(0, MFS_DIRECTORY, "test_dir");
+	if(rc < 0){
+		printf("Failed at Creat 2\n");
+	}
+
 	int inum = MFS_Lookup(0, "test");
 	if(inum < 0){
+		printf("Failed at Lookup\n");
+		exit(0);
+	}
+
+	int inum2 = MFS_Lookup(0, "test_dir");
+	if(inum2 < 0){
+		printf("Failed at Lookup\n");
+		exit(0);
+	}
+
+	rc = MFS_Creat(inum2, MFS_REGULAR_FILE, "test");
+	if(rc < 0){
+		printf("Failed at Creat 3\n");
+		exit(0);
+	}
+
+ 	inum2 = MFS_Lookup(inum2, "test");
+	if(inum2 < 0){
 		printf("Failed at Lookup\n");
 		exit(0);
 	}

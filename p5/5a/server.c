@@ -248,12 +248,16 @@ main(int argc, char *argv[]) {
 
 		//Add . dirs
 		tmp_entry = mfs_allocate_space(&header, MFS_BLOCK_SIZE, &tmp_offset);
-		tmp_entry->name[0] = '.';
-		tmp_entry->name[1] = '\0';
-		tmp_entry->inum = 0; 
-		for (i = 1; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
-			tmp_entry++;
-			tmp_entry->inum = -1;
+		tmp_entry[0].name[0] = '.';
+		tmp_entry[0].name[1] = '\0';
+		tmp_entry[0].inum = 0; 
+		tmp_entry[1].name[0] = '.';
+		tmp_entry[1].name[1] = '.';
+		tmp_entry[1].name[2] = '\0';
+		tmp_entry[1].inum = 0; 
+
+		for (i = 2; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
+			tmp_entry[i].inum = -1;
 		}
 		tmp_inode->data[0] = tmp_offset;
 		
@@ -282,7 +286,7 @@ main(int argc, char *argv[]) {
 		struct sockaddr_in s;
 		rc = UDP_Read(sd, &s, rx_protocol, sizeof(MFS_Protocol_t), 0);
 		if (rc > 0) {
-			printf("Response cmd: %d\n", rx_protocol->cmd);
+			//printf("Response cmd: %d\n", rx_protocol->cmd);
 			//Special case for shutdown
 			if(rx_protocol->cmd == MFS_CMD_INIT){
 				printf("Server initialized\n");
@@ -413,7 +417,7 @@ main(int argc, char *argv[]) {
 							if(new_inode->type == MFS_DIRECTORY){
 								MFS_DirEnt_t* new_dir_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &new_dir_offset);
 								for (i = 0; i < MFS_BLOCK_SIZE/sizeof(MFS_DirEnt_t); i++) {
-									(new_dir_entry + i)->inum = -1;
+									new_dir_entry[i].inum = -1;
 								}
 								new_dir_entry[0].name[0] = '.';
 								new_dir_entry[0].name[1] = '\0';
@@ -422,6 +426,7 @@ main(int argc, char *argv[]) {
 								new_dir_entry[1].name[1] = '.';
 								new_dir_entry[1].name[2] = '\0';
 								new_dir_entry[1].inum = rx_protocol->ipnum; 
+								new_inode->data[0] = new_dir_offset;
 							}	
 
 							//Write to block
@@ -443,8 +448,8 @@ main(int argc, char *argv[]) {
 				error("Unknown command");
 				continue;
 			}
-			printf("Sending Results %d\n", rx_protocol->ret);
-			fflush(stdout);
+			//printf("Sending Results %d\n", rx_protocol->ret);
+			//ifflush(stdout);
 			if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
 				error("Unable to send result");
 			}
