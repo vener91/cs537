@@ -21,5 +21,4 @@ clean:
 	$(CC) $(OPTS) -c $< -o $@
 
 clean:
-	rm -f server.o client.o client2.o udp.o mfs.o server client client2 lib
-	rm libmfs.so
+	rm -f server.o client.o client2.o udp.o mfs.o libmfs.so server client client2 lib
