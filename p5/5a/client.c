@@ -7,6 +7,8 @@ main(int argc, char *argv[])
 {
 	printf("Starting Client\n");
 
+	printf("Sizes %u %u %u\n", (unsigned int)sizeof(MFS_Header_t), (unsigned int)sizeof(MFS_InodeMap_t), (unsigned int)sizeof(MFS_Inode_t));
+
 	MFS_Init("localhost", 3000);
 
 	int rc = MFS_Creat(0, MFS_REGULAR_FILE, "test");
@@ -15,6 +17,7 @@ main(int argc, char *argv[])
 		exit(0);
 	}
 
+	exit(0);
 	rc = MFS_Creat(0, MFS_DIRECTORY, "test_dir");
 	if(rc < 0){
 		printf("Failed at Creat 2\n");

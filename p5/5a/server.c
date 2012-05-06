@@ -203,7 +203,7 @@ main(int argc, char *argv[]) {
 	assert(sd > -1);
 
 	//Open up the image file
-	int fd = open(image_path, O_WRONLY|O_CREAT|O_TRUNC, S_IRWXU);
+	int fd = open(image_path, O_RDWR|O_CREAT, S_IRWXU);
 	if (fd < 0) {
 		error("Cannot open file");
 	}
@@ -270,6 +270,7 @@ main(int argc, char *argv[]) {
 		printf("Initializing new file\n");
 	}else{
 		image_size = fileStat.st_size + MFS_BYTE_STEP_SIZE;
+		printf("Using old file of size %d\n", (int)fileStat.st_size);
 		header = (MFS_Header_t *)malloc(image_size);
 		// Put text in memory
 		rc = read(fd, header, fileStat.st_size);
@@ -336,7 +337,6 @@ main(int argc, char *argv[]) {
 											new_dir_entry[j].inum = -1;
 											mfs_update_inode(&header, exist, -1);
 											rx_protocol->ret = 0;
-											mfs_flush(fd);
 											new_parent_inode->size--;
 											done = 1;
 											break;
@@ -396,7 +396,6 @@ main(int argc, char *argv[]) {
 					}
 					new_inode->data[rx_protocol->block] = block_offset; 
 					mfs_update_inode(&header, rx_protocol->ipnum, inode_offset);
-					mfs_flush(fd);
 					rx_protocol->ret = 0;
 				}
 
@@ -482,9 +481,8 @@ main(int argc, char *argv[]) {
 							}	
 
 							//Write to block
-							new_inode->size++;
+							new_parent_inode->size++;
 							header->inode_count++;
-							mfs_flush(fd);
 							rx_protocol->ret = 0;
 						}else{
 							mfs_reset(header);
@@ -502,6 +500,7 @@ main(int argc, char *argv[]) {
 			}
 			//printf("Sending Results %d\n", rx_protocol->ret);
 			//ifflush(stdout);
+			mfs_flush(fd);
 			mfs_write_header(fd, header);
 			if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
 				error("Unable to send result");
