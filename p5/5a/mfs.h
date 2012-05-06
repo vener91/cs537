@@ -53,6 +53,7 @@ typedef struct __MFS_Header_t{
 	int inode_count;
 	int byte_count;
 	int map[MFS_MAX_INODES/MFS_INODES_PER_BLOCK];
+	int fmap[MFS_MAX_INODES];
 } MFS_Header_t;
 
 int MFS_Init(char *hostname, int port);

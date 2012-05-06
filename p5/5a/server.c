@@ -29,13 +29,9 @@ MFS_Inode_t* mfs_resolve_inode(MFS_Header_t* header, int inode_num){
 		if(imap->inodes[inode_num % MFS_INODES_PER_BLOCK] != -1){
 			return (MFS_Inode_t*)(header_ptr + sizeof(MFS_Header_t) + imap->inodes[inode_num % MFS_INODES_PER_BLOCK]); 	
 		}else{
-			printf("Can't find inode\n");
-			fflush(stdout);
 			return NULL;
 		}
 	}
-	printf("Can't find imap\n");
-	fflush(stdout);
 	return NULL;
 }
 
@@ -105,16 +101,8 @@ void mfs_update_inode(MFS_Header_t** header, int inode_num, int new_offset){
 	imap->inodes[inode_num % MFS_INODES_PER_BLOCK] = new_offset; 	
 }
 
-void mfs_write_block(int image_fd, void* start_ptr, int offset, int size){
-	int rc = pwrite(image_fd, start_ptr, size, sizeof(MFS_Header_t) + offset);	
-	if(rc < 0){
-		error("Error writing block");
-	}
-	fsync(image_fd);
-}
-
 int mfs_calculate_inode(int sliceIndex, int mapIndex){ //i, jj
-	return (sliceIndex * (MFS_MAX_INODES/MFS_INODES_PER_BLOCK)) + mapIndex;
+	return (sliceIndex * MFS_INODES_PER_BLOCK) + mapIndex;
 }
 
 int mfs_lookup(void* block_ptr, MFS_Inode_t* inode, char* name){
@@ -176,7 +164,10 @@ void mfs_reset(MFS_Header_t* header){
 }
 
 void mfs_flush(int image_fd){
-	mfs_write_block(image_fd, mfs_bytes_start_ptr, mfs_bytes_offset, mfs_bytes_not_written );
+	int rc = pwrite(image_fd, mfs_bytes_start_ptr, mfs_bytes_not_written, sizeof(MFS_Header_t) + mfs_bytes_offset);	
+	if(rc < 0){
+		error("Error writing block");
+	}
 	mfs_bytes_not_written = 0;
 }
 
@@ -305,12 +296,12 @@ main(int argc, char *argv[]) {
 				}
 				exit(0);
 			} else if(rx_protocol->cmd == MFS_CMD_LOOKUP){
-				printf("LOOKUP: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
+				//printf("LOOKUP: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				rx_protocol->ret = mfs_lookup(block_ptr, parent_inode, &(rx_protocol->datachunk[0]));
 			} else if(rx_protocol->cmd == MFS_CMD_UNLINK){
-				printf("UNLINK: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
+				//printf("UNLINK: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
 				mfs_ensure(&header, &block_ptr, 16384);
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
@@ -360,7 +351,7 @@ main(int argc, char *argv[]) {
 				}
 
 			} else if(rx_protocol->cmd == MFS_CMD_STAT){
-				printf("STAT: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
+				//printf("STAT: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				if(parent_inode != NULL && rx_protocol->block >= 0 && rx_protocol->block < MFS_INODE_SIZE){
@@ -370,7 +361,7 @@ main(int argc, char *argv[]) {
 					rx_protocol->ret = 0;
 				}
 			} else if(rx_protocol->cmd == MFS_CMD_READ){
-				printf("READ: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
+				//printf("READ: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				if(parent_inode != NULL && parent_inode->type == MFS_REGULAR_FILE && rx_protocol->block >= 0 && rx_protocol->block < MFS_INODE_SIZE){
@@ -379,7 +370,7 @@ main(int argc, char *argv[]) {
 					rx_protocol->ret = 0;
 				}
 			} else if(rx_protocol->cmd == MFS_CMD_WRITE){
-				printf("WRITE: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
+				//printf("WRITE: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
 				mfs_ensure(&header, &block_ptr, 16384);
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
@@ -403,7 +394,7 @@ main(int argc, char *argv[]) {
 				}
 
 			} else if(rx_protocol->cmd == MFS_CMD_CREAT){
-				printf("CREAT: pinum: %d type:%d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk[0], rx_protocol->datachunk + sizeof(char));
+				//printf("CREAT: pinum: %d type:%d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk[0], rx_protocol->datachunk + sizeof(char));
 				mfs_ensure(&header, &block_ptr, 16384);
 				rx_protocol->ret = -1;
 
