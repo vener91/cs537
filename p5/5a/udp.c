@@ -55,21 +55,26 @@ UDP_FillSockAddr(struct sockaddr_in *addr, char *hostName, int port)
 }
 
 int
-UDP_Write(int fd, struct sockaddr_in *addr, void *buffer, int n){
+UDP_Write(int fd, struct sockaddr_in *addr, char *buffer, int n)
+{
     int addrLen = sizeof(struct sockaddr_in);
-    int rc = sendto(fd, buffer, n, 0, (struct sockaddr *) addr, addrLen);
+    int rc      = sendto(fd, buffer, n, 0, (struct sockaddr *) addr, addrLen);
     return rc;
 }
 
-int UDP_Read(int fd, struct sockaddr_in *addr, void *buffer, int n){
-	int len = sizeof(struct sockaddr_in); 
-	int rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
-	return rc;
+int
+UDP_Read(int fd, struct sockaddr_in *addr, char *buffer, int n)
+{
+    int len = sizeof(struct sockaddr_in); 
+    int rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
+    // assert(len == sizeof(struct sockaddr_in)); 
+    return rc;
 }
 
-	int
+
+int
 UDP_Close(int fd)
 {
-	return close(fd);
+    return close(fd);
 }
 

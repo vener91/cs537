@@ -287,7 +287,7 @@ main(int argc, char *argv[]) {
 	printf("Server started listening at port %d\n", port);
 	while (1) {
 		struct sockaddr_in s;
-		rc = UDP_Read(sd, &s, rx_protocol, sizeof(MFS_Protocol_t));
+		rc = UDP_Read(sd, &s, (char*)rx_protocol, sizeof(MFS_Protocol_t));
 		if (rc > 0) {
 			//printf("Response cmd: %d\n", rx_protocol->cmd);
 			//Special case for shutdown
@@ -301,7 +301,7 @@ main(int argc, char *argv[]) {
 					error("Cannot open file");
 				}
 				rx_protocol->ret = 0;
-				if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
+				if(UDP_Write(sd, &s, (char*)rx_protocol, sizeof(MFS_Protocol_t)) < -1){
 					error("Unable to send result");
 				}
 				exit(0);
@@ -506,7 +506,7 @@ main(int argc, char *argv[]) {
 			//ifflush(stdout);
 			mfs_flush(fd);
 			mfs_write_header(fd, header);
-			if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
+			if(UDP_Write(sd, &s, (char*)rx_protocol, sizeof(MFS_Protocol_t)) < -1){
 				error("Unable to send result");
 			}
 		}
