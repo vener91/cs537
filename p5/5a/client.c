@@ -83,7 +83,7 @@ main(int argc, char *argv[])
 
 	rc = MFS_Unlink(0, "test");
 	if(rc == -1){
-		printf("Failed at Unlink\n");
+		printf("Failed at Unlink 1\n");
 		exit(0);
 	}
 
@@ -92,6 +92,41 @@ main(int argc, char *argv[])
 		printf("Failed at Lookup Ghost\n");
 		exit(0);
 	}
+	
+	rc = MFS_Unlink(0, "test");
+	if(rc == -1){
+		printf("failed at unlink 2\n");
+		exit(0);
+	}
 
+	rc = MFS_Unlink(0, "test_dir");
+	if(rc != -1){
+		printf("failed at unlink 3\n");
+		exit(0);
+	}
+
+	inum2 = MFS_Lookup(0, "test_dir");
+	if(inum2 < 0){
+		printf("Failed at Lookup\n");
+		exit(0);
+	}
+
+	rc = MFS_Unlink(inum2, "test");
+	if(rc == -1){
+		printf("failed at unlink 4\n");
+		exit(0);
+	}
+	
+	inum2 = MFS_Lookup(inum2, "test");
+	if(inum2 >= 0){
+		printf("Failed at Lookup\n");
+		exit(0);
+	}
+
+	rc = MFS_Unlink(0, "test_dir");
+	if(rc == -1){
+		printf("failed at unlink 5\n");
+		exit(0);
+	}
 	return 0;
 }

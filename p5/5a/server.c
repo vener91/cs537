@@ -337,6 +337,7 @@ main(int argc, char *argv[]) {
 											mfs_update_inode(&header, exist, -1);
 											rx_protocol->ret = 0;
 											mfs_flush(fd);
+											new_parent_inode->size--;
 											done = 1;
 											break;
 										}
@@ -484,7 +485,6 @@ main(int argc, char *argv[]) {
 							new_inode->size++;
 							header->inode_count++;
 							mfs_flush(fd);
-							mfs_write_header(fd, header);
 							rx_protocol->ret = 0;
 						}else{
 							mfs_reset(header);
@@ -502,6 +502,7 @@ main(int argc, char *argv[]) {
 			}
 			//printf("Sending Results %d\n", rx_protocol->ret);
 			//ifflush(stdout);
+			mfs_write_header(fd, header);
 			if(UDP_Write(sd, &s, rx_protocol, sizeof(MFS_Protocol_t)) < -1){
 				error("Unable to send result");
 			}
