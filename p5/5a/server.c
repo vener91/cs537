@@ -53,7 +53,7 @@ void* mfs_allocate_space(MFS_Header_t** header, int size, int* offset){
 		void* old_header = *header;
 		*header = realloc(*header, sizeof(MFS_Header_t) + (*header)->byte_count + size + mfs_free_bytes + MFS_BYTE_STEP_SIZE );
 		if (old_header != *header) {
-			printf("New header: %p\n", *header);
+			//printf("New header: %p\n", *header);
 		}
 		mfs_free_bytes = mfs_free_bytes + MFS_BYTE_STEP_SIZE;
 	}
@@ -73,7 +73,7 @@ void mfs_ensure(MFS_Header_t** header, void** block_ptr, int size){
 		mfs_free_bytes = mfs_free_bytes + MFS_BYTE_STEP_SIZE;
 		*block_ptr = (void*)(*header) + sizeof(MFS_Header_t);
 		if (old_header != *header) {
-			printf("New header: %p\n", *header);
+			//printf("New header: %p\n", *header);
 		}
 	}
 }
@@ -100,7 +100,7 @@ void mfs_update_inode(MFS_Header_t** header, int inode_num, int new_offset){
 	int offset;
 	MFS_InodeMap_t* imap = mfs_allocate_space(header, sizeof(MFS_InodeMap_t), &offset);
 	memcpy(imap, old_imap, sizeof(MFS_InodeMap_t));
-	printf("Inode: %d Old Offset: %d New Offset: %d\n", inode_num, imap->inodes[inode_num % MFS_INODES_PER_BLOCK], new_offset);
+	//printf("Inode: %d Old Offset: %d New Offset: %d\n", inode_num, imap->inodes[inode_num % MFS_INODES_PER_BLOCK], new_offset);
 	headerp->map[inode_num / MFS_INODES_PER_BLOCK] = offset;
 	imap->inodes[inode_num % MFS_INODES_PER_BLOCK] = new_offset; 	
 }
@@ -127,8 +127,7 @@ int mfs_lookup(void* block_ptr, MFS_Inode_t* inode, char* name){
 					//printf("Parent node %d %d\n", inode->data[i], MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
 					MFS_DirEnt_t* entry = (MFS_DirEnt_t*)(block_ptr + inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
 					if(entry->inum != -1 ){
-						printf("%s %d - %s\n", entry->name, entry->inum, name);
-						fflush(stdout);
+						//printf("%s %d - %s\n", entry->name, entry->inum, name);
 					}
 					if(entry->inum != -1 && strcmp(entry->name, name) == 0 ){
 						return entry->inum;
