@@ -80,5 +80,18 @@ main(int argc, char *argv[])
 		printf("Failed at Write - Strings does not match\n");
 		exit(0);
 	}
+
+	rc = MFS_Unlink(0, "test");
+	if(rc == -1){
+		printf("Failed at Unlink\n");
+		exit(0);
+	}
+
+	inum = MFS_Lookup(0, "test");
+	if(inum >= 0){
+		printf("Failed at Lookup Ghost\n");
+		exit(0);
+	}
+
 	return 0;
 }

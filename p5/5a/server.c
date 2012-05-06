@@ -224,6 +224,8 @@ main(int argc, char *argv[]) {
 	MFS_InodeMap_t* tmp_imap;
 	MFS_DirEnt_t* tmp_entry;
 	int entry_offset, inode_offset, new_dir_offset, parent_inode_offset, tmp_offset, tmp_inode_offset, tmp_imap_offset;
+	int done = 0;
+	
 	if(fileStat.st_size < sizeof(MFS_Header_t)){
 		//Initialize
 		image_size = sizeof(MFS_Header_t) + MFS_BYTE_STEP_SIZE;
@@ -303,6 +305,56 @@ main(int argc, char *argv[]) {
 				rx_protocol->ret = -1;
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				rx_protocol->ret = mfs_lookup(block_ptr, parent_inode, &(rx_protocol->datachunk[0]));
+			} else if(rx_protocol->cmd == MFS_CMD_UNLINK){
+				printf("UNLINK: pinum: %d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk);
+				mfs_ensure(&header, &block_ptr, 16384);
+				rx_protocol->ret = -1;
+				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
+				if(parent_inode != NULL && parent_inode->type == MFS_DIRECTORY){
+					int exist = mfs_lookup(block_ptr, parent_inode, &(rx_protocol->datachunk[0]));
+					if(exist != -1){
+						//Check if empty
+						MFS_Inode_t* this_inode = mfs_resolve_inode(header, exist);
+						if(!(this_inode->type == MFS_DIRECTORY && this_inode->size != 0)){
+							//Need to remove
+							MFS_DirEnt_t* new_dir_entry = mfs_allocate_space(&header, MFS_BLOCK_SIZE, &entry_offset);
+							MFS_Inode_t* new_parent_inode = mfs_allocate_space(&header, sizeof(MFS_Inode_t), &parent_inode_offset);
+
+							mfs_init_inode(new_parent_inode, 0, parent_inode);
+							mfs_update_inode(&header, rx_protocol->ipnum, parent_inode_offset);
+							i = 0, done = 0;
+							while(i < MFS_INODE_SIZE) {
+								if(parent_inode->data[i] != -1){
+									j = 0;
+									while(j < MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t)){
+										//printf("Parent node %d %d\n", inode->data[i], MFS_BLOCK_SIZE / sizeof(MFS_DirEnt_t) );
+										MFS_DirEnt_t* entry = (MFS_DirEnt_t*)(block_ptr + parent_inode->data[i] + (j * sizeof(MFS_DirEnt_t)));			
+										if(entry->inum != -1 && strcmp(entry->name, rx_protocol->datachunk) == 0 ){
+											memcpy(new_dir_entry, block_ptr + parent_inode->data[i] , MFS_BLOCK_SIZE);
+											//We now know which entry
+											new_parent_inode->data[i] = entry_offset;
+											new_dir_entry[j].inum = -1;
+											mfs_update_inode(&header, exist, -1);
+											rx_protocol->ret = 0;
+											mfs_flush(fd);
+											done = 1;
+											break;
+										}
+										j++;
+									}
+									if(done == 1) break;
+								}
+								i++;
+							}
+
+
+						}
+
+					}else{
+						rx_protocol->ret = 0;
+					}
+				}
+
 			} else if(rx_protocol->cmd == MFS_CMD_STAT){
 				printf("STAT: pinum: %d block:%d \n", rx_protocol->ipnum, rx_protocol->block);	
 				rx_protocol->ret = -1;
@@ -351,7 +403,7 @@ main(int argc, char *argv[]) {
 				printf("CREAT: pinum: %d type:%d name:%s \n", rx_protocol->ipnum, rx_protocol->datachunk[0], rx_protocol->datachunk + sizeof(char));
 				mfs_ensure(&header, &block_ptr, 16384);
 				rx_protocol->ret = -1;
-				
+
 				MFS_Inode_t* parent_inode = mfs_resolve_inode(header, rx_protocol->ipnum);
 				int exist = mfs_lookup(block_ptr, parent_inode, &(rx_protocol->datachunk[1]));
 
@@ -365,7 +417,6 @@ main(int argc, char *argv[]) {
 					if(parent_inode != NULL && parent_inode->type == MFS_DIRECTORY && strlen(&(rx_protocol->datachunk[1])) <= 28 && new_inode_inum != -1){
 						//Check if the dir is full
 						MFS_DirEnt_t* entry;
-						int done = 0;
 						//Initialize new data block for entries
 						MFS_DirEnt_t* new_entry =  mfs_allocate_space(&header, MFS_BLOCK_SIZE, &entry_offset);
 
@@ -430,6 +481,7 @@ main(int argc, char *argv[]) {
 							}	
 
 							//Write to block
+							new_inode->size++;
 							header->inode_count++;
 							mfs_flush(fd);
 							mfs_write_header(fd, header);

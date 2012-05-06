@@ -159,7 +159,23 @@ int MFS_Creat(int pinum, int type, char *name){
 }
 
 int MFS_Unlink(int pinum, char *name){
-	return 0;
+	tx_protocol->cmd = MFS_CMD_UNLINK;
+	tx_protocol->ipnum = pinum;
+	strcpy(tx_protocol->datachunk, name);
+
+	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
+	if (rc > 0) {
+		int tries_left = 10;
+		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+			tries_left--;
+			if(!tries_left){
+				return -1;
+			}
+		}
+		//Does get something back
+		return rx_protocol->ret;
+	}
+	return -1;
 }
 
 int MFS_Shutdown(){
