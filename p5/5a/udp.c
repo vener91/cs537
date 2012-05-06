@@ -61,29 +61,11 @@ UDP_Write(int fd, struct sockaddr_in *addr, void *buffer, int n){
     return rc;
 }
 
-int UDP_Read(int fd, struct sockaddr_in *addr, void *buffer, int n, int timeout){
+int UDP_Read(int fd, struct sockaddr_in *addr, void *buffer, int n){
 	int len = sizeof(struct sockaddr_in); 
-	// added timeout code
-	fd_set rfds;	
-	struct timeval tv;
-
-	tv.tv_sec = timeout;
-	tv.tv_usec = 0;
-	int rc = -1;
-
-	FD_ZERO(&rfds);
-	FD_SET(fd,&rfds);
-	if(select(fd+1, &rfds, NULL, NULL, &tv)){
-		rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
-		return rc;
-	}else {
-		//Timeout;
-		return -2;
-	}
-
+	int rc = recvfrom(fd, buffer, n, 0, (struct sockaddr *) addr, (socklen_t *) &len);
 	return rc;
 }
-
 
 	int
 UDP_Close(int fd)

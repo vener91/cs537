@@ -22,6 +22,28 @@ void error(char* msg){
 	exit(1);
 }
 
+int MFS_UDP_Read(int fd, struct sockaddr_in *addr, void *buffer, int n, int timeout){
+	// added timeout code
+	fd_set rfds;	
+	struct timeval tv;
+
+	tv.tv_sec = timeout;
+	tv.tv_usec = 0;
+	int rc = -1;
+
+	FD_ZERO(&rfds);
+	FD_SET(fd,&rfds);
+	if(select(fd+1, &rfds, NULL, NULL, &tv)){
+		rc = UDP_Read(fd, addr, buffer, n);
+		return rc;
+	}else {
+		//Timeout;
+		return -2;
+	}
+
+	return rc;
+}
+
 int MFS_Init(char *hostname, int port){
 	if(sd != -1){
 		//That means a previous sd exists
@@ -45,7 +67,7 @@ int MFS_Init(char *hostname, int port){
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
-		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+		while(MFS_UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
 			tries_left--;
 			if(!tries_left){
 				return -1;
@@ -65,7 +87,7 @@ int MFS_Lookup(int pinum, char *name){
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
-		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+		while(MFS_UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
 			tries_left--;
 			if(!tries_left){
 				return -1;
@@ -84,7 +106,7 @@ int MFS_Stat(int inum, MFS_Stat_t *m){
 	int rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
-		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+		while(MFS_UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
 			tries_left--;
 			if(!tries_left){
 				return -1;
@@ -107,7 +129,7 @@ int MFS_Write(int inum, char *buffer, int block){
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
-		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+		while(MFS_UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
 			tries_left--;
 			if(!tries_left){
 				return -1;
@@ -125,7 +147,7 @@ int MFS_Read(int inum, char *buffer, int block){
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
-		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+		while(MFS_UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
 			tries_left--;
 			if(!tries_left){
 				return -1;
@@ -146,7 +168,7 @@ int MFS_Creat(int pinum, int type, char *name){
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
-		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+		while(MFS_UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
 			tries_left--;
 			if(!tries_left){
 				return -1;
@@ -166,7 +188,7 @@ int MFS_Unlink(int pinum, char *name){
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
-		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+		while(MFS_UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
 			tries_left--;
 			if(!tries_left){
 				return -1;
@@ -184,7 +206,7 @@ int MFS_Shutdown(){
 	rc = UDP_Write(sd, &saddr, tx_protocol, sizeof(MFS_Protocol_t));
 	if (rc > 0) {
 		int tries_left = 10;
-		while(UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
+		while(MFS_UDP_Read(sd, &saddr, rx_protocol, sizeof(MFS_Protocol_t), 5) < 0){
 			tries_left--;
 			if(!tries_left){
 				return -1;
@@ -195,3 +217,5 @@ int MFS_Shutdown(){
 	}
 	return -1;
 }
+
+

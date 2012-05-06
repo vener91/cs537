@@ -287,7 +287,7 @@ main(int argc, char *argv[]) {
 	printf("Server started listening at port %d\n", port);
 	while (1) {
 		struct sockaddr_in s;
-		rc = UDP_Read(sd, &s, rx_protocol, sizeof(MFS_Protocol_t), 0);
+		rc = UDP_Read(sd, &s, rx_protocol, sizeof(MFS_Protocol_t));
 		if (rc > 0) {
 			//printf("Response cmd: %d\n", rx_protocol->cmd);
 			//Special case for shutdown
