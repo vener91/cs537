@@ -6,6 +6,7 @@
 #define T_DIR  1   // Directory
 #define T_FILE 2   // File
 #define T_DEV  3   // Special device
+#define T_CHECKED 4   // Checksum File
 
 struct stat {
   short type;  // Type of file
@@ -13,6 +14,7 @@ struct stat {
   uint ino;    // Inode number on device
   short nlink; // Number of links to file
   uint size;   // Size of file in bytes
+  uchar checksum;   // Size of file in bytes
 };
 
 #endif // _STAT_H_
