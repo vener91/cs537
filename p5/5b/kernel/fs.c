@@ -437,8 +437,6 @@ readi(struct inode *ip, char *dst, uint off, uint n)
   struct buf *bp;
   uint* a;
   int bn;
-  uchar cksum;
-  uchar cksum2;
 
   if(ip->type == T_DEV){
     if(ip->major < 0 || ip->major >= NDEV || !devsw[ip->major].read)
@@ -460,7 +458,7 @@ readi(struct inode *ip, char *dst, uint off, uint n)
 		bn = off/BSIZE;
 		//Compute checksum
 		bp = bread(ip->dev, bmap(ip, bn));
-		cksum = bp->data[0];
+		uchar cksum = bp->data[0];
 		int i;
 		for (i = 1; i < 512; i++) { //Since there is only 512 bytes in the block
 			cksum = cksum ^ bp->data[i];
@@ -475,27 +473,8 @@ readi(struct inode *ip, char *dst, uint off, uint n)
 			bn -= NDIRECT;
 			bp = bread(ip->dev, getptr(ip->addrs[NDIRECT]));
 			a = (uint*)bp->data;
-
-			cksum2 = bp->data[0];
-			//Set new checksum
-			for (i = 1; i < 512/sizeof(uint); i++) {
-				cksum2 = cksum2 ^ bp->data[i * sizeof(uint)];
-			}
-
-			if(cksum2 != getcksum(ip->addrs[NDIRECT])){
-				brelse(bp);
-				return -1;
-			}
-
+			brelse(bp);
 			if(cksum != getcksum(a[bn])){
-				brelse(bp);
-				//bp = bread(ip->dev, bmap(ip, off/BSIZE));
-				//for (i = 0; i < 512; i++) {
-				//	cprintf("%x ", bp->data[i]);
-				//}
-				//brelse(bp);
-				//cprintf("\n");
-				cprintf("Failed %d %d %x\n", cksum, getcksum(a[bn]), a[bn]);
 				return -1;
 			}
 		}
@@ -552,13 +531,6 @@ writei(struct inode *ip, char *src, uint off, uint n)
 		bp = bread(ip->dev, getptr(ip->addrs[NDIRECT]));
 		a = (uint*)bp->data;
 		a[bn] = getaddr(cksum, a[bn]);
-		cksum = bp->data[0];
-		//Set new checksum
-		for (i = 1; i < 512/sizeof(uint); i++) {
-			cksum = cksum ^ bp->data[i * sizeof(uint)];
-		}
-		ip->addrs[NDIRECT] = getaddr(cksum, ip->addrs[NDIRECT]);
-
 		bwrite(bp);
 		brelse(bp);
 	  }
