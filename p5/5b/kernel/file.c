@@ -91,7 +91,9 @@ filestat(struct file *f, struct stat *st)
 	bp = bread(f->ip->dev, getptr(f->ip->addrs[NDIRECT]));
 	uint *a;
 	a = (uint*)bp->data;
-
+	for(i = 0; i < 512/sizeof(uint); i++){
+		cksum = cksum ^ getcksum(a[i]);	
+	}
 
 	st->checksum = cksum;
     iunlock(f->ip);

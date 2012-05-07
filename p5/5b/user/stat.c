@@ -42,7 +42,7 @@ filestatus(char *path)
   }
   
   switch(st.type){
-  case T_FILE:
+  case T_CHECKED:
     printf(1, "filename: %s \nType: %d Size: %d Checksum: %s\n", fmtname(buf), st.type, st.size, st.checksum);
     break;
   

@@ -475,6 +475,7 @@ writei(struct inode *ip, char *src, uint off, uint n)
 {
   uint tot, m;
   struct buf *bp;
+  uint *a;
 
   if(ip->type == T_DEV){
     if(ip->major < 0 || ip->major >= NDEV || !devsw[ip->major].write)
@@ -501,10 +502,23 @@ writei(struct inode *ip, char *src, uint off, uint n)
 		for (i = 1; i < 512; i++) { //Since there is only 512 bytes in the block
 			cksum = cksum ^ bp->data[i];
 		}
+
+	  if(off/BSIZE < NDIRECT){
 		cprintf("BEFORE %x\n", ip->addrs[off/BSIZE] );
 		ip->addrs[off/BSIZE] = getaddr(cksum, ip->addrs[off/BSIZE]);	
 		cprintf("AFTER %x\n", ip->addrs[off/BSIZE] );
     	brelse(bp);
+	  }else{
+    	brelse(bp);
+		bp = bread(ip->dev, getptr(ip->addrs[NDIRECT]));
+		a = (uint*)bp->data;
+		for(i = 0; i < 512/sizeof(uint); i++){
+			cksum = cksum ^ getcksum(a[i]);	
+		}
+
+		brelse(bp);
+
+	  }
 	}
 	
   }
