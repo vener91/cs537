@@ -198,6 +198,8 @@ iupdate(struct inode *ip)
   dip->nlink = ip->nlink;
   dip->size = ip->size;
   memmove(dip->addrs, ip->addrs, sizeof(ip->addrs));
+ 
+
   bwrite(bp);
   brelse(bp);
 }
@@ -449,6 +451,7 @@ readi(struct inode *ip, char *dst, uint off, uint n)
   if(off + n > ip->size)
     n = ip->size - off;
 
+
   for(tot=0; tot<n; tot+=m, off+=m, dst+=m){
     bp = bread(ip->dev, bmap(ip, off/BSIZE));
     m = min(n - tot, BSIZE - off%BSIZE);
@@ -469,7 +472,7 @@ readi(struct inode *ip, char *dst, uint off, uint n)
 			if(cksum != getcksum(ip->addrs[bn])){
 				return -1;
 			}
-	  	}else{
+		}else{
 			bn -= NDIRECT;
 			bp = bread(ip->dev, getptr(ip->addrs[NDIRECT]));
 			a = (uint*)bp->data;
@@ -521,9 +524,7 @@ writei(struct inode *ip, char *src, uint off, uint n)
 		}
 
 	  if(bn < NDIRECT){
-		//cprintf("BEFORE %x\n", ip->addrs[off/BSIZE] );
 		ip->addrs[off/BSIZE] = getaddr(cksum, ip->addrs[off/BSIZE]);	
-		//cprintf("AFTER %x\n", ip->addrs[off/BSIZE] );
     	brelse(bp);
 	  }else{
 	  	bn -= NDIRECT;
@@ -540,8 +541,8 @@ writei(struct inode *ip, char *src, uint off, uint n)
 
   if(n > 0 && off > ip->size){
     ip->size = off;
-    iupdate(ip);
   }
+  iupdate(ip);
 
   return n;
 }

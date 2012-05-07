@@ -7,8 +7,6 @@ build xv6 using make
 **********************************************************************
 Trying to clean project using make clean
 make clean
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-		-M -MG kernel/fs.c -MF kernel/fs.d -MT kernel/fs.d -MT kernel/fs.o
 rm -rf kernel/bio.o kernel/console.o kernel/exec.o kernel/file.o kernel/fs.o kernel/ide.o kernel/ioapic.o kernel/kalloc.o kernel/kbd.o kernel/lapic.o kernel/main.o kernel/mp.o kernel/picirq.o kernel/pipe.o kernel/proc.o kernel/spinlock.o kernel/string.o kernel/swtch.o kernel/syscall.o kernel/sysfile.o kernel/sysproc.o kernel/timer.o kernel/trapasm.o kernel/trap.o kernel/uart.o kernel/vectors.o kernel/vm.o kernel/bootmain.o kernel/bootasm.o kernel/multiboot.o kernel/data.o kernel/bootother.o kernel/initcode.o kernel/bio.d kernel/console.d kernel/exec.d kernel/file.d kernel/fs.d kernel/ide.d kernel/ioapic.d kernel/kalloc.d kernel/kbd.d kernel/lapic.d kernel/main.d kernel/mp.d kernel/picirq.d kernel/pipe.d kernel/proc.d kernel/spinlock.d kernel/string.d kernel/swtch.d kernel/syscall.d kernel/sysfile.d kernel/sysproc.d kernel/timer.d kernel/trapasm.d kernel/trap.d kernel/uart.d kernel/vectors.d kernel/vm.d kernel/bootmain.d kernel/bootasm.d kernel/multiboot.d kernel/data.d kernel/bootother.d kernel/initcode.d kernel/vectors.S kernel/bootblock kernel/bootblock.out kernel/bootother.out kernel/initcode.out kernel/kernel bootother initcode xv6.img user/bin user/cat user/echo user/forktest user/grep user/init user/kill user/ln user/ls user/mkdir user/rm user/sh user/stressfs user/stat user/tester user/usertests user/wc user/zombie user/cat.o user/echo.o user/forktest.o user/grep.o user/init.o user/kill.o user/ln.o user/ls.o user/mkdir.o user/rm.o user/sh.o user/stressfs.o user/stat.o user/tester.o user/usertests.o user/wc.o user/zombie.o user/ulib.o user/usys.o user/printf.o user/umalloc.o user/cat.d user/echo.d user/forktest.d user/grep.d user/init.d user/kill.d user/ln.d user/ls.d user/mkdir.d user/rm.d user/sh.d user/stressfs.d user/stat.d user/tester.d user/usertests.d user/wc.d user/zombie.d user/ulib.d user/usys.d user/printf.d user/umalloc.d tools/mkfs tools/mkfs.o tools/mkfs.d fs fs.img .gdbinit .bochsrc dist
 Trying to build project using make
 make
@@ -233,15 +231,15 @@ ld  -m    elf_i386 -nostdlib --omagic \
 dd if=/dev/zero of=xv6.img count=10000
 10000+0 records in
 10000+0 records out
-5120000 bytes (5.1 MB) copied, 0.0211774 s, 242 MB/s
+5120000 bytes (5.1 MB) copied, 0.0212006 s, 242 MB/s
 dd if=kernel/bootblock of=xv6.img conv=notrunc
 1+0 records in
 1+0 records out
-512 bytes (512 B) copied, 2.9002e-05 s, 17.7 MB/s
+512 bytes (512 B) copied, 1.9266e-05 s, 26.6 MB/s
 dd if=kernel/kernel of=xv6.img seek=1 conv=notrunc
 255+1 records in
 255+1 records out
-130610 bytes (131 kB) copied, 0.00043133 s, 303 MB/s
+130610 bytes (131 kB) copied, 0.000401898 s, 325 MB/s
 gcc -c  -iquote include -Wall -Werror -ggdb  -o tools/mkfs.o tools/mkfs.c
 gcc  tools/mkfs.o -o tools/mkfs
 mkdir -p fs
@@ -780,14 +778,10 @@ reopening write only
 writing file
 reopening read only
 reading file
-user/corrupt3.c: 64 assert failed (r == size)
-TEST FAILED
-test corrupt3 FAILED
+TEST PASSED
 
-
-test corrupt3 FAILED
+test corrupt3 PASSED
  (overwrite corrupt data)
- tester failed
 
 
 **********************************************************************
@@ -843,11 +837,54 @@ bigarg test: ok
 bss test: ok
 sbrk test
 pid 6 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xa0000--kill proc
-pid 7 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xac350--kill proc
+pid 7 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xac350--kill proc
 pid 8 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xb86a0--kill proc
 pid 9 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xc49f0--kill proc
 pid 10 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xd0d40--kill proc
-test usertests FAILED
+pid 11 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xdd090--kill proc
+pid 12 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xe93e0--kill proc
+pid 13 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xf5730--kill proc
+pid 14 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x101a80--kill proc
+pid 15 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x10ddd0--kill proc
+pid 16 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x11a120--kill proc
+pid 17 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x126470--kill proc
+pid 18 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1327c0--kill proc
+pid 19 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x13eb10--kill proc
+pid 20 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x14ae60--kill proc
+pid 21 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1571b0--kill proc
+pid 22 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x163500--kill proc
+pid 23 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x16f850--kill proc
+pid 24 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x17bba0--kill proc
+pid 25 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x187ef0--kill proc
+pid 26 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x194240--kill proc
+pid 27 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1a0590--kill proc
+pid 28 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1ac8e0--kill proc
+pid 29 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1b8c30--kill proc
+pid 30 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1c4f80--kill proc
+pid 31 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1d12d0--kill proc
+pid 32 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1dd620--kill proc
+sbrk test ok
+validate test: ok
+open test: ok
+small file test: ok
+big files test: ok
+create test: ok
+mem test: ok
+pipe1: ok
+preempt: kill... wait... ok
+exitwait: ok
+rmdot test: ok
+fourteen test: ok
+bigfile test: ok
+subdir test: ok
+concreate test: ok
+linktest: ok
+unlinkread test: ok
+createdelete test: ok
+twofiles test: ok
+sharedfd: ok
+dir vs file: ok
+empty file name: test usertests FAILED
 test usertests FAILED
 
 
@@ -887,13 +924,12 @@ test corrupt1 PASSED
 test corrupt2 PASSED
  (13th block of file is corrupt)
 
-test corrupt3 FAILED
+test corrupt3 PASSED
  (overwrite corrupt data)
- tester failed
 
 test usertests FAILED
  (check for regressions)
  User interrupted test
 
-Passed 10 of 12 tests.
-Overall 10 of 12
+Passed 11 of 12 tests.
+Overall 11 of 12
