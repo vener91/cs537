@@ -22,7 +22,7 @@
 #include "file.h"
 
 uint getaddr(uchar cksum, uint addr){
-	return (cksum << 8*3) | addr;
+	return (cksum << 8*3) | getptr(addr);
 }
 
 uint getptr(uint addr){
@@ -340,20 +340,20 @@ bmap(struct inode *ip, uint bn)
 
   if(ip->type == T_CHECKED){
 	  if(bn < NDIRECT){
-		  if((addr = ip->addrs[bn]) == 0)
-			  ip->addrs[bn] = addr = balloc(ip->dev);
+		  if((addr = getptr(ip->addrs[bn])) == 0)
+			  ip->addrs[bn] = addr = getptr(balloc(ip->dev));
 		  return addr;
 	  }
 	  bn -= NDIRECT;
 
 	  if(bn < NINDIRECT){
 		  // Load indirect block, allocating if necessary.
-		  if((addr = ip->addrs[NDIRECT]) == 0)
-			  ip->addrs[NDIRECT] = addr = balloc(ip->dev);
+		  if((addr = getptr(ip->addrs[NDIRECT])) == 0)
+			  ip->addrs[NDIRECT] = addr = getptr(balloc(ip->dev));
 		  bp = bread(ip->dev, addr);
 		  a = (uint*)bp->data;
-		  if((addr = a[bn]) == 0){
-			  a[bn] = addr = balloc(ip->dev);
+		  if((addr = getptr(a[bn])) == 0){
+			  a[bn] = addr = getptr(balloc(ip->dev));
 			  bwrite(bp);
 		  }
 		  brelse(bp);
@@ -452,6 +452,19 @@ readi(struct inode *ip, char *dst, uint off, uint n)
     m = min(n - tot, BSIZE - off%BSIZE);
     memmove(dst, bp->data + off%BSIZE, m);
     brelse(bp);
+	if(ip->type == T_CHECKED){
+		//Compute checksum
+		bp = bread(ip->dev, bmap(ip, off/BSIZE));
+		uchar cksum = bp->data[0];
+		int i;
+		for (i = 1; i < 512; i++) { //Since there is only 512 bytes in the block
+			cksum = cksum ^ bp->data[i];
+		}
+    	brelse(bp);
+		if(cksum != getcksum(ip->addrs[off/BSIZE])){
+			return -1;
+		}
+	}
   }
   return n;
 }
@@ -480,6 +493,20 @@ writei(struct inode *ip, char *src, uint off, uint n)
     memmove(bp->data + off%BSIZE, src, m);
     bwrite(bp);
     brelse(bp);
+	if(ip->type == T_CHECKED){
+		//Compute checksum
+		bp = bread(ip->dev, bmap(ip, off/BSIZE));
+		uchar cksum = bp->data[0];
+		int i;
+		for (i = 1; i < 512; i++) { //Since there is only 512 bytes in the block
+			cksum = cksum ^ bp->data[i];
+		}
+		cprintf("BEFORE %x\n", ip->addrs[off/BSIZE] );
+		ip->addrs[off/BSIZE] = getaddr(cksum, ip->addrs[off/BSIZE]);	
+		cprintf("AFTER %x\n", ip->addrs[off/BSIZE] );
+    	brelse(bp);
+	}
+	
   }
 
   if(n > 0 && off > ip->size){
