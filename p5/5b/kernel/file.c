@@ -1,6 +1,8 @@
 #include "types.h"
 #include "defs.h"
 #include "param.h"
+#include "stat.h"
+#include "buf.h"
 #include "fs.h"
 #include "file.h"
 #include "spinlock.h"
@@ -75,9 +77,23 @@ fileclose(struct file *f)
 int
 filestat(struct file *f, struct stat *st)
 {
+	uchar cksum;
+	struct buf *bp;
+	int i;
+	
   if(f->type == FD_INODE){
     ilock(f->ip);
     stati(f->ip, st);
+	cksum = getcksum(f->ip->addrs[0]);
+  	for(i = 1; i < NDIRECT; i++){
+		cksum =  cksum ^ getcksum(f->ip->addrs[i]);
+	}
+	bp = bread(f->ip->dev, getptr(f->ip->addrs[NDIRECT]));
+	uint *a;
+	a = (uint*)bp->data;
+
+
+	st->checksum = cksum;
     iunlock(f->ip);
     return 0;
   }
