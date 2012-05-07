@@ -226,6 +226,8 @@ create(char *path, short type, short major, short minor)
     ilock(ip);
     if(type == T_FILE && ip->type == T_FILE)
       return ip;
+    if(type == T_CHECKED && ip->type == T_CHECKED)
+	  return ip;
     iunlockput(ip);
     return 0;
   }
@@ -265,8 +267,13 @@ sys_open(void)
   if(argstr(0, &path) < 0 || argint(1, &omode) < 0)
     return -1;
   if(omode & O_CREATE){
-    if((ip = create(path, T_FILE, 0, 0)) == 0)
-      return -1;
+	if(omode & O_CHECKED){
+		if((ip = create(path, T_CHECKED, 0, 0)) == 0)
+			return -1;
+	}else{
+		if((ip = create(path, T_FILE, 0, 0)) == 0)
+			return -1;
+	}
   } else {
     if((ip = namei(path)) == 0)
       return -1;

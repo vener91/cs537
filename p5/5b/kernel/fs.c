@@ -21,6 +21,22 @@
 #include "fs.h"
 #include "file.h"
 
+uint getaddr(uchar cksum, uint addr){
+	return (cksum << 8*3) | addr;
+}
+
+uint getptr(uint addr){
+	return (addr & 0x00ffffff);
+}
+
+uchar getcksum(uint addr){
+	return ((addr & 0xff000000) >> 8*3);
+}
+
+uchar getbcksum(uint addr){
+	return 0x00;
+}
+
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode*);
 
@@ -322,25 +338,48 @@ bmap(struct inode *ip, uint bn)
   uint addr, *a;
   struct buf *bp;
 
-  if(bn < NDIRECT){
-    if((addr = ip->addrs[bn]) == 0)
-      ip->addrs[bn] = addr = balloc(ip->dev);
-    return addr;
-  }
-  bn -= NDIRECT;
+  if(ip->type == T_CHECKED){
+	  if(bn < NDIRECT){
+		  if((addr = ip->addrs[bn]) == 0)
+			  ip->addrs[bn] = addr = balloc(ip->dev);
+		  return addr;
+	  }
+	  bn -= NDIRECT;
 
-  if(bn < NINDIRECT){
-    // Load indirect block, allocating if necessary.
-    if((addr = ip->addrs[NDIRECT]) == 0)
-      ip->addrs[NDIRECT] = addr = balloc(ip->dev);
-    bp = bread(ip->dev, addr);
-    a = (uint*)bp->data;
-    if((addr = a[bn]) == 0){
-      a[bn] = addr = balloc(ip->dev);
-      bwrite(bp);
-    }
-    brelse(bp);
-    return addr;
+	  if(bn < NINDIRECT){
+		  // Load indirect block, allocating if necessary.
+		  if((addr = ip->addrs[NDIRECT]) == 0)
+			  ip->addrs[NDIRECT] = addr = balloc(ip->dev);
+		  bp = bread(ip->dev, addr);
+		  a = (uint*)bp->data;
+		  if((addr = a[bn]) == 0){
+			  a[bn] = addr = balloc(ip->dev);
+			  bwrite(bp);
+		  }
+		  brelse(bp);
+		  return addr;
+	  }
+  }else{
+	  if(bn < NDIRECT){
+		  if((addr = ip->addrs[bn]) == 0)
+			  ip->addrs[bn] = addr = balloc(ip->dev);
+		  return addr;
+	  }
+	  bn -= NDIRECT;
+
+	  if(bn < NINDIRECT){
+		  // Load indirect block, allocating if necessary.
+		  if((addr = ip->addrs[NDIRECT]) == 0)
+			  ip->addrs[NDIRECT] = addr = balloc(ip->dev);
+		  bp = bread(ip->dev, addr);
+		  a = (uint*)bp->data;
+		  if((addr = a[bn]) == 0){
+			  a[bn] = addr = balloc(ip->dev);
+			  bwrite(bp);
+		  }
+		  brelse(bp);
+		  return addr;
+	  }
   }
 
   panic("bmap: out of range");
@@ -447,6 +486,7 @@ writei(struct inode *ip, char *src, uint off, uint n)
     ip->size = off;
     iupdate(ip);
   }
+
   return n;
 }
 

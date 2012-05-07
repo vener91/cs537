@@ -52,6 +52,11 @@ int             readi(struct inode*, char*, uint, uint);
 void            stati(struct inode*, struct stat*);
 int             writei(struct inode*, char*, uint, uint);
 
+//Additional functions
+uchar			getcksum(uint addr);
+uint			getptr(uint addr);
+uint			getaddr(uchar chsum, uint addr);
+
 // ide.c
 void            ideinit(void);
 void            ideintr(void);
