@@ -429,6 +429,14 @@ stati(struct inode *ip, struct stat *st)
   st->size = ip->size;
 }
 
+//static *uchar 
+//getChecksum () 
+//{
+//	uchar *checksum;
+//	for 
+//	return checksum;
+//}
+
 // Read data from inode.
 int
 readi(struct inode *ip, char *dst, uint off, uint n)

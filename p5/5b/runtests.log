@@ -231,15 +231,15 @@ ld  -m    elf_i386 -nostdlib --omagic \
 dd if=/dev/zero of=xv6.img count=10000
 10000+0 records in
 10000+0 records out
-5120000 bytes (5.1 MB) copied, 0.0213533 s, 240 MB/s
+5120000 bytes (5.1 MB) copied, 0.0212006 s, 242 MB/s
 dd if=kernel/bootblock of=xv6.img conv=notrunc
 1+0 records in
 1+0 records out
-512 bytes (512 B) copied, 3.2689e-05 s, 15.7 MB/s
+512 bytes (512 B) copied, 2.6625e-05 s, 19.2 MB/s
 dd if=kernel/kernel of=xv6.img seek=1 conv=notrunc
-253+1 records in
-253+1 records out
-129627 bytes (130 kB) copied, 0.000378041 s, 343 MB/s
+254+1 records in
+254+1 records out
+130402 bytes (130 kB) copied, 0.000404075 s, 323 MB/s
 gcc -c  -iquote include -Wall -Werror -ggdb  -o tools/mkfs.o tools/mkfs.c
 gcc  tools/mkfs.o -o tools/mkfs
 mkdir -p fs
@@ -302,25 +302,25 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/zombie fs/zombie
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-wc
-stressfs
-cat
-rm
-README
 ln
-ls
-zombie
-stat
 grep
 kill
-usertests
-mkdir
-sh
 tester
-init
+sh
+usertests
+stat
+mkdir
+zombie
+rm
 echo
+wc
+stressfs
+README
+ls
 forktest
-balloc: first 489 blocks have been allocated
+init
+cat
+balloc: first 442 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/stressfs user/bin/grep user/bin/tester user/bin/kill user/bin/cat user/bin/mkdir user/bin/init user/bin/rm user/bin/echo user/bin/ls user/bin/ln user/bin/usertests user/bin/sh user/bin/wc user/bin/stat user/bin/zombie
 
@@ -345,25 +345,25 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-wc
-stressfs
-cat
-rm
-README
 ln
-ls
-zombie
-stat
 grep
 kill
-usertests
-mkdir
-sh
 tester
-init
+sh
+usertests
+stat
+mkdir
+zombie
+rm
 echo
+wc
+stressfs
+README
+ls
 forktest
-balloc: first 492 blocks have been allocated
+init
+cat
+balloc: first 445 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
 make qemu-nox
@@ -406,25 +406,25 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-wc
-stressfs
-cat
-rm
-README
 ln
-ls
-zombie
-stat
 grep
 kill
-usertests
-mkdir
-sh
 tester
-init
+sh
+usertests
+stat
+mkdir
+zombie
+rm
 echo
+wc
+stressfs
+README
+ls
 forktest
-balloc: first 492 blocks have been allocated
+init
+cat
+balloc: first 445 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
 make qemu-nox
@@ -467,25 +467,25 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-wc
-stressfs
-cat
-rm
-README
 ln
-ls
-zombie
-stat
 grep
 kill
-usertests
-mkdir
-sh
 tester
-init
+sh
+usertests
+stat
+mkdir
+zombie
+rm
 echo
+wc
+stressfs
+README
+ls
 forktest
-balloc: first 492 blocks have been allocated
+init
+cat
+balloc: first 445 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
 make qemu-nox
@@ -528,25 +528,25 @@ ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --o
 cp user/bin/tester fs/tester
 ./tools/mkfs fs.img fs
 used 29 (bit 1 ninode 26) free 29 total 1024
-wc
-stressfs
-cat
-rm
-README
 ln
-ls
-zombie
-stat
 grep
 kill
-usertests
-mkdir
-sh
 tester
-init
+sh
+usertests
+stat
+mkdir
+zombie
+rm
 echo
+wc
+stressfs
+README
+ls
 forktest
-balloc: first 492 blocks have been allocated
+init
+cat
+balloc: first 445 blocks have been allocated
 balloc: write bitmap block at sector 28
 rm user/bin/tester
 make qemu-nox
@@ -564,344 +564,12 @@ buffer size: 1000
 file size: 71000
 create checked file
 writing file
-reopening read only
-reading file
-TEST PASSED
+test write4 FAILED
+test write4 FAILED
 
 
-test write4 PASSED
+test write4 FAILED
  (write then read, buffer larger than one block)
-
-
-**********************************************************************
-
-Test write5
-check the correct image is produced after writing
-
-**********************************************************************
-Trying to build project using make
-make
-make: Nothing to be done for `all'.
-Using image /u/c/s/cs537-1/ta/tests/5b/write5-before.img
-make qemu-nox
-Ctrl+a h for help
-/u/c/s/cs537-1/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 2
-Could not open option rom 'sgabios.bin': No such file or directory
-xv6...
-lapicinit: 1 0xfee00000
-cpu1: starting
-cpu0: starting
-init: starting sh
-$ write5
-write5
-buffer size: 512
-file size: 71680
-create checked file
-writing file
-reopening read only
-reading file
-TEST PASSED
-Comparing actual image with expected image
-test write5 FAILED
-
-
-test write5 FAILED
- (check the correct image is produced after writing)
- Block 5 of fs.img does not match expected
-
-
-**********************************************************************
-
-Test checksum1
-check that stat gives the correct checksum
-
-**********************************************************************
-Running xv6 user progam /u/c/s/cs537-1/ta/tests/5b/checksum1.c
-Trying to build project using make
-make
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-		-M -MG user/tester.c -MF user/tester.d -MT user/tester.d -MT user/tester.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o user/tester.o user/tester.c
-ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --output=user/bin/tester user/tester.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
-cp user/bin/tester fs/tester
-./tools/mkfs fs.img fs
-used 29 (bit 1 ninode 26) free 29 total 1024
-wc
-stressfs
-cat
-rm
-README
-ln
-ls
-zombie
-stat
-grep
-kill
-usertests
-mkdir
-sh
-tester
-init
-echo
-forktest
-balloc: first 492 blocks have been allocated
-balloc: write bitmap block at sector 28
-rm user/bin/tester
-make qemu-nox
-Ctrl+a h for help
-/u/c/s/cs537-1/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 2
-Could not open option rom 'sgabios.bin': No such file or directory
-xv6...
-lapicinit: 1 0xfee00000
-cpu1: starting
-cpu0: starting
-init: starting sh
-$ tester
-tester
-buffer size: 1000
-file size: 70000
-create checked file
-writing file
-stat checksum: 0 actual: 199
-user/tester.c: 53 assert failed (st.checksum == checksum)
-TEST FAILED
-test checksum1 FAILED
-
-
-test checksum1 FAILED
- (check that stat gives the correct checksum)
- tester failed
-
-
-**********************************************************************
-
-Test checksum2
-check that stat gives the correct checksum
-
-**********************************************************************
-Trying to build project using make
-make
-make: Nothing to be done for `all'.
-Using image /u/c/s/cs537-1/ta/tests/5b/checksum2.img
-make qemu-nox
-Ctrl+a h for help
-/u/c/s/cs537-1/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 2
-Could not open option rom 'sgabios.bin': No such file or directory
-xv6...
-lapicinit: 1 0xfee00000
-cpu1: starting
-cpu0: starting
-init: starting sh
-$ checksum2
-checksum2
-user/checksum2.c: 35 assert failed (r == -1)
-TEST FAILED
-test checksum2 FAILED
-
-
-test checksum2 FAILED
- (check that stat gives the correct checksum)
- tester failed
-
-
-**********************************************************************
-
-Test corrupt1
-first block of file is corrupt
-
-**********************************************************************
-Trying to build project using make
-make
-make: Nothing to be done for `all'.
-Using image /u/c/s/cs537-1/ta/tests/5b/corrupt1.img
-make qemu-nox
-Ctrl+a h for help
-/u/c/s/cs537-1/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 2
-Could not open option rom 'sgabios.bin': No such file or directory
-xv6...
-lapicinit: 1 0xfee00000
-cpu1: starting
-cpu0: starting
-init: starting sh
-$ corrupt1
-corrupt1
-user/corrupt1.c: 28 assert failed (r == -1)
-TEST FAILED
-test corrupt1 FAILED
-
-
-test corrupt1 FAILED
- (first block of file is corrupt)
- tester failed
-
-
-**********************************************************************
-
-Test corrupt2
-13th block of file is corrupt
-
-**********************************************************************
-Trying to build project using make
-make
-make: Nothing to be done for `all'.
-Using image /u/c/s/cs537-1/ta/tests/5b/corrupt2.img
-make qemu-nox
-Ctrl+a h for help
-/u/c/s/cs537-1/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 2
-Could not open option rom 'sgabios.bin': No such file or directory
-xv6...
-lapicinit: 1 0xfee00000
-cpu1: starting
-cpu0: starting
-init: starting sh
-$ corrupt2
-corrupt2
-user/corrupt2.c: 36 assert failed (r == -1)
-TEST FAILED
-test corrupt2 FAILED
-
-
-test corrupt2 FAILED
- (13th block of file is corrupt)
- tester failed
-
-
-**********************************************************************
-
-Test corrupt3
-overwrite corrupt data
-
-**********************************************************************
-Trying to build project using make
-make
-make: Nothing to be done for `all'.
-Using image /u/c/s/cs537-1/ta/tests/5b/corrupt3.img
-make qemu-nox
-Ctrl+a h for help
-/u/c/s/cs537-1/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 2
-Could not open option rom 'sgabios.bin': No such file or directory
-xv6...
-lapicinit: 1 0xfee00000
-cpu1: starting
-cpu0: starting
-init: starting sh
-$ corrupt3
-corrupt3
-user/corrupt3.c: 38 assert failed (r == -1)
-TEST FAILEDtest corrupt3 FAILED
-
-
-test corrupt3 FAILED
- (overwrite corrupt data)
- tester failed
-
-
-**********************************************************************
-
-Test usertests
-check for regressions
-
-**********************************************************************
-Running xv6 user progam /u/c/s/cs537-1/ta/tests/5b/usertests.c
-Trying to build project using make
-make
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 \
-		-M -MG user/tester.c -MF user/tester.d -MT user/tester.d -MT user/tester.o
-gcc  -I include -nostdinc -Wall -Werror -ggdb -fno-pic -fno-builtin -fno-strict-aliasing -fno-stack-protector -m32 -c -o user/tester.o user/tester.c
-ld  -m    elf_i386 -nostdlib --omagic --entry=main --section-start=.text=0x0 --output=user/bin/tester user/tester.o user/ulib.o user/usys.o user/printf.o user/umalloc.o
-cp user/bin/tester fs/tester
-./tools/mkfs fs.img fs
-used 29 (bit 1 ninode 26) free 29 total 1024
-wc
-stressfs
-cat
-rm
-README
-ln
-ls
-zombie
-stat
-grep
-kill
-usertests
-mkdir
-sh
-tester
-init
-echo
-forktest
-balloc: first 539 blocks have been allocated
-balloc: write bitmap block at sector 28
-rm user/bin/tester
-make qemu-nox
-Ctrl+a h for help
-/u/c/s/cs537-1/ta/tools/qemu -nographic -hdb fs.img xv6.img -smp 2
-Could not open option rom 'sgabios.bin': No such file or directory
-xv6...
-lapicinit: 1 0xfee00000
-cpu1: starting
-cpu0: starting
-init: starting sh
-$ tester
-tester
-usertests starting
-bigarg test: ok
-bss test: ok
-sbrk test
-pid 6 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xa0000--kill proc
-pid 7 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xac350--kill proc
-pid 8 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xb86a0--kill proc
-pid 9 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xc49f0--kill proc
-pid 10 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0xd0d40--kill proc
-pid 11 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xdd090--kill proc
-pid 12 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xe93e0--kill proc
-pid 13 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0xf5730--kill proc
-pid 14 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x101a80--kill proc
-pid 15 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x10ddd0--kill proc
-pid 16 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x11a120--kill proc
-pid 17 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x126470--kill proc
-pid 18 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1327c0--kill proc
-pid 19 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x13eb10--kill proc
-pid 20 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x14ae60--kill proc
-pid 21 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1571b0--kill proc
-pid 22 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x163500--kill proc
-pid 23 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x16f850--kill proc
-pid 24 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x17bba0--kill proc
-pid 25 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x187ef0--kill proc
-pid 26 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x194240--kill proc
-pid 27 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1a0590--kill proc
-pid 28 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1ac8e0--kill proc
-pid 29 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1b8c30--kill proc
-pid 30 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1c4f80--kill proc
-pid 31 tester: trap 14 err 5 on cpu 1 eip 0x2eb9 addr 0x1d12d0--kill proc
-pid 32 tester: trap 14 err 5 on cpu 0 eip 0x2eb9 addr 0x1dd620--kill proc
-sbrk test ok
-validate test: ok
-open test: ok
-small file test: ok
-big files test: ok
-create test: ok
-mem test: ok
-pipe1: ok
-preempt: kill... wait... ok
-exitwait: ok
-rmdot test: ok
-fourteen test: ok
-bigfile test: ok
-subdir test: ok
-concreate test: ok
-linktest: ok
-unlinkread test: ok
-createdelete test: ok
-twofiles test: ok
-sharedfd: ok
-dir vs file: ok
-empty file name: test usertests FAILED
-test usertests FAILED
-
-
-test usertests FAILED
- (check for regressions)
  User interrupted test
 
 **********************************************************************
@@ -918,36 +586,10 @@ test write2 PASSED
 test write3 PASSED
  (write then read, buffer smaller than one block)
 
-test write4 PASSED
+test write4 FAILED
  (write then read, buffer larger than one block)
-
-test write5 FAILED
- (check the correct image is produced after writing)
- Block 5 of fs.img does not match expected
-
-test checksum1 FAILED
- (check that stat gives the correct checksum)
- tester failed
-
-test checksum2 FAILED
- (check that stat gives the correct checksum)
- tester failed
-
-test corrupt1 FAILED
- (first block of file is corrupt)
- tester failed
-
-test corrupt2 FAILED
- (13th block of file is corrupt)
- tester failed
-
-test corrupt3 FAILED
- (overwrite corrupt data)
- tester failed
-
-test usertests FAILED
- (check for regressions)
  User interrupted test
 
-Passed 5 of 12 tests.
-Overall 5 of 12
+Passed 4 of 5 tests.
+Skipped 7 tests.
+Overall 4 of 12
